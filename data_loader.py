@@ -42,7 +42,7 @@ def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
     print(f"Successfully loaded daily data for {loaded_count} dates.")
     return daily_data
 
-def load_multi_year_data(years, data_path="../BaseballTracker/build/data/2025"):
+def load_multi_year_data(years, data_path="../BaseballTracker/build/data/stats/"):
     """
     Load historical CSV data for multiple years.
     Returns a dictionary with years as keys and data types as sub-keys.
