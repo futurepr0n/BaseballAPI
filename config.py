@@ -7,7 +7,7 @@ Contains weights, thresholds, and constants used throughout the analysis.
 YEARS = [2022, 2023, 2024, 2025]
 
 # Data path
-DATA_PATH = "./data/"
+DATA_PATH = "../BaseballTracker/build/data/"
 
 # Thresholds
 K_CONFIDENCE_PA = 100  # Plate appearances needed for full confidence in stats

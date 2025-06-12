@@ -58,9 +58,9 @@ def robust_csv_load(filename, year=None,
     """
     if year:
         base_name = filename.replace('2025', str(year))
-        file_path = os.path.join("./data/", base_name)
+        file_path = os.path.join("../BaseballTracker/build//data/", base_name)
     else:
-        file_path = os.path.join("./data/", filename)
+        file_path = os.path.join("../BaseballTracker/build/data/", filename)
     
     if not os.path.exists(file_path):
         print(f"Warning: CSV File not found - {file_path}")

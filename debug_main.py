@@ -746,7 +746,7 @@ def main():
     parser.add_argument('--detailed', action='store_true', help='Show detailed analysis information')
     parser.add_argument('--all', action='store_true', help='Show all predictions, not just top ones')
     parser.add_argument('--limit', type=int, default=15, help='Limit the number of predictions displayed')
-    parser.add_argument('--data-path', type=str, default='./data/', help='Path to data directory')
+    parser.add_argument('--data-path', type=str, default='../BaseballTracker/build/data/', help='Path to data directory')
     
     # Hitter filtering (only if available)
     if hitter_filtering_available:

@@ -592,7 +592,7 @@ async def initialize_app_data():
         logger.info("Initializing baseball analysis data...")
         
         # Set data path (adjust as needed)
-        data_path = os.environ.get('BASEBALL_DATA_PATH', './data')
+        data_path = os.environ.get('BASEBALL_DATA_PATH', '../BaseballTracker/build/data')
         years = [2022, 2023, 2024, 2025]
         
         if not os.path.exists(data_path):
