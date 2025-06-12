@@ -22,26 +22,33 @@ def download_mlb_stats():
         }
     ]
     
-    for stat in stats_files:
-        try:
-            # Send GET request to download the file
-            response = requests.get(stat["url"])
-            response.raise_for_status()  # Raise an error for bad status codes
-            
-            # Save the file
-            with open(stat["filename"], 'wb') as f:
-                f.write(response.content)
+    # Define the target directories relative to the script's location
+    target_dirs = [
+        "../BaseballTracker/public/data/stats",
+        "../BaseballTracker/build/data/stats"
+    ]
+    
+    for target_dir in target_dirs:
+        # Create directory if it doesn't exist
+        os.makedirs(target_dir, exist_ok=True)
+        
+        for stat in stats_files:
+            try:
+                # Send GET request to download the file
+                response = requests.get(stat["url"])
+                response.raise_for_status()  # Raise an error for bad status codes
                 
-            print(f"Successfully downloaded and saved as {stat['filename']}")
-            
-        except requests.RequestException as e:
-            print(f"Error downloading {stat['filename']}: {e}")
-        except IOError as e:
-            print(f"Error saving {stat['filename']}: {e}")
+                # Save the file to the target directory
+                file_path = os.path.join(target_dir, stat["filename"])
+                with open(file_path, 'wb') as f:
+                    f.write(response.content)
+                    
+                print(f"Successfully downloaded and saved as {file_path}")
+                
+            except requests.RequestException as e:
+                print(f"Error downloading {stat['filename']} to {target_dir}: {e}")
+            except IOError as e:
+                print(f"Error saving {stat['filename']} to {target_dir}: {e}")
 
 if __name__ == "__main__":
-    # Create directory if it doesn't exist
-    os.makedirs("mlb_stats", exist_ok=True)
-    os.chdir("mlb_stats")
-    
     download_mlb_stats()
