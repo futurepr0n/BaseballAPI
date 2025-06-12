@@ -8,7 +8,7 @@ from utils import (
     get_approximated_pa, adjust_stat_with_confidence, calculate_metric_ranges
 )
 
-def load_daily_game_data(data_path="./data/"):
+def load_daily_game_data(data_path="../BaseballTracker/build/data/"):
     """
     Load all available daily game JSON files from the data directory.
     Returns a dictionary with dates as keys and game data as values.
@@ -42,7 +42,7 @@ def load_daily_game_data(data_path="./data/"):
     print(f"Successfully loaded daily data for {loaded_count} dates.")
     return daily_data
 
-def load_multi_year_data(years, data_path="./data/"):
+def load_multi_year_data(years, data_path="../BaseballTracker/build/data/"):
     """
     Load historical CSV data for multiple years.
     Returns a dictionary with years as keys and data types as sub-keys.
@@ -242,7 +242,7 @@ def calculate_league_averages_2025(master_player_data, k_pa_threshold=30):
     
     return league_avg_stats
 
-def initialize_data(data_path="./data/", years=None):
+def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
     """
     Initialize all data for analysis.
     Returns master_player_data, name mapping dictionaries, and other required global data.
