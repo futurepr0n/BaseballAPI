@@ -15,6 +15,7 @@ from datetime import datetime
 import uvicorn
 import logging
 
+
 # Import your existing modules (adjust paths as needed)
 try:
     from utils import find_player_id_by_name, clean_player_name, match_player_name_to_roster
@@ -47,7 +48,7 @@ app = FastAPI(
 # Add CORS middleware for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # Add your React dev server ports
+    allow_origins=["http://localhost:3000", "http://localhost:5173", "https://capping.pro", "https://www.capping.pro"],  # Add your React dev server ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -145,7 +146,7 @@ class PitcherVsTeamResponse(BaseModel):
     team_abbr: str
     total_predictions: int
     predictions: List[PlayerPrediction]
-    sort_info: Dict[str, str]
+    sort_info: Dict[str, Any]
     timestamp: str
 
 class BatchMatchupRequest(BaseModel):
@@ -592,7 +593,7 @@ async def initialize_app_data():
         logger.info("Initializing baseball analysis data...")
         
         # Set data path (adjust as needed)
-        data_path = os.environ.get('BASEBALL_DATA_PATH', '../BaseballTracker/build/data')
+        data_path = os.environ.get('BASEBALL_DATA_PATH', '/app/BaseballTracker/build/data')
         years = [2022, 2023, 2024, 2025]
         
         if not os.path.exists(data_path):

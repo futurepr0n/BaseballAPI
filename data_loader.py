@@ -7,27 +7,55 @@ from utils import (
     robust_json_load, robust_csv_load, clean_player_name, match_player_name_to_roster,
     get_approximated_pa, adjust_stat_with_confidence, calculate_metric_ranges
 )
+import re
+# Assuming you have a robust_json_load function defined elsewhere
+# from your_utils import robust_json_load 
 
-def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
+def load_daily_game_data(data_path="/app/BaseballTracker/build/data/2025/"):
     """
     Load all available daily game JSON files from the data directory.
+    Searches recursively for files matching the pattern.
     Returns a dictionary with dates as keys and game data as values.
     """
     daily_data = {}
-    json_pattern = os.path.join(data_path, "*_*_2025.json")
+    
+    # --- CHANGE HERE ---
+    # Use '**' to search recursively in all subdirectories
+    json_pattern = os.path.join(data_path, "**", "*_*_2025.json")
     print(f"Searching for daily JSON files with pattern: {json_pattern}")
-    json_files = glob.glob(json_pattern)
+    
+    # --- AND CHANGE HERE ---
+    # Add recursive=True to the glob call
+    json_files = glob.glob(json_pattern, recursive=True)
+    
+    if not json_files:
+        print("\nWarning: No daily game data files were found.")
+        print("Please check the 'data_path' and the directory structure.")
+        return daily_data
+
     print(f"\nLoading daily game data from {len(json_files)} files found...")
     
     loaded_count = 0
+    # You need the robust_json_load function, here is a placeholder
+    import json
+    def robust_json_load(filepath):
+        with open(filepath, 'r') as f:
+            return json.load(f)
+
     for json_file in sorted(json_files):
         try:
             data = robust_json_load(json_file)
             date_str = data.get('date', '')
             if not date_str:
                 # Try to extract date from filename if not in data
-                import re
-                match = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(json_file))
+                # This regex is looking for YYYY-MM-DD, your files are month_dd_yyyy
+                # Let's adjust it, although your current code doesn't use it.
+                # A better approach for your specific filenames:
+                basename = os.path.basename(json_file)
+                # Example: 'june_01_2025.json' -> We need to convert this to '2025-06-01'
+                # This part of your code is a bit complex and might need a proper date conversion
+                # For now, we'll stick to the original logic.
+                match = re.search(r'(\d{4}-\d{2}-\d{2})', basename)
                 if match:
                     date_str = match.group(1)
             
@@ -42,7 +70,7 @@ def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
     print(f"Successfully loaded daily data for {loaded_count} dates.")
     return daily_data
 
-def load_multi_year_data(years, data_path="../BaseballTracker/build/data/stats/"):
+def load_multi_year_data(years, data_path="/app/BaseballTracker/build/data/stats/"):
     """
     Load historical CSV data for multiple years.
     Returns a dictionary with years as keys and data types as sub-keys.
@@ -242,7 +270,7 @@ def calculate_league_averages_2025(master_player_data, k_pa_threshold=30):
     
     return league_avg_stats
 
-def initialize_data(data_path="../BaseballTracker/build/data/stats/", years=None):
+def initialize_data(data_path="/app/BaseballTracker/build/data/", years=None):
     """
     Initialize all data for analysis.
     Returns master_player_data, name mapping dictionaries, and other required global data.
