@@ -11,7 +11,7 @@ import re
 # Assuming you have a robust_json_load function defined elsewhere
 # from your_utils import robust_json_load 
 
-def load_daily_game_data(data_path="/app/BaseballTracker/build/data/2025/"):
+def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
     """
     Load all available daily game JSON files from the data directory.
     Searches recursively for files matching the pattern.
@@ -70,7 +70,7 @@ def load_daily_game_data(data_path="/app/BaseballTracker/build/data/2025/"):
     print(f"Successfully loaded daily data for {loaded_count} dates.")
     return daily_data
 
-def load_multi_year_data(years, data_path="/app/BaseballTracker/build/data/stats/"):
+def load_multi_year_data(years, data_path="../BaseballTracker/build/data/stats/"):
     """
     Load historical CSV data for multiple years.
     Returns a dictionary with years as keys and data types as sub-keys.
@@ -270,7 +270,7 @@ def calculate_league_averages_2025(master_player_data, k_pa_threshold=30):
     
     return league_avg_stats
 
-def initialize_data(data_path="/app/BaseballTracker/build/data/", years=None):
+def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
     """
     Initialize all data for analysis.
     Returns master_player_data, name mapping dictionaries, and other required global data.

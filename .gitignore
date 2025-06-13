@@ -1,1 +1,11 @@
 venv/
+__pycache__/analyzer.cpython-312.pyc
+__pycache__/data_loader.cpython-312.pyc
+__pycache__/debug_main.cpython-312.pyc
+__pycache__/filter_utils.cpython-312.pyc
+__pycache__/main.cpython-312.pyc
+__pycache__/reporter.cpython-312.pyc
+__pycache__/sort_utils.cpython-312.pyc
+__pycache__/sorting_help.cpython-312.pyc
+__pycache__/utils.cpython-312.pyc
+__pycache__/

@@ -48,7 +48,7 @@ app = FastAPI(
 # Add CORS middleware for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173", "https://capping.pro", "https://www.capping.pro"],  # Add your React dev server ports
+    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # Add your React dev server ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -593,7 +593,7 @@ async def initialize_app_data():
         logger.info("Initializing baseball analysis data...")
         
         # Set data path (adjust as needed)
-        data_path = os.environ.get('BASEBALL_DATA_PATH', '/app/BaseballTracker/build/data')
+        data_path = os.environ.get('BASEBALL_DATA_PATH', '../BaseballTracker/build/data')
         years = [2022, 2023, 2024, 2025]
         
         if not os.path.exists(data_path):
