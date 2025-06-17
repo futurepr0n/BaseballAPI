@@ -26,7 +26,7 @@ def download_mlb_stats():
         },
         {
             "url": "https://baseballsavant.mlb.com/leaderboard/batted-ball?batSide=L&gameType=Regular&minSwings=q&minGroupSwings=1&pitchHand=R&pitchType=FF%7CSI%7CFC%7CCH%7CFS%7CFO%7CSC%7CCU%7CSL%7CST%7CSV%7CKN&seasonStart=2025&seasonEnd=2025&type=batter&csv=true",
-            "filename": "batters-batted-ball-bat-left-pitch-hand-right-2025"
+            "filename": "batters-batted-ball-bat-left-pitch-hand-right-2025.csv"
         },
         {
             "url": "https://baseballsavant.mlb.com/leaderboard/batted-ball?batSide=R&gameType=Regular&minSwings=q&minGroupSwings=1&pitchHand=L&pitchType=FF%7CSI%7CFC%7CCH%7CFS%7CFO%7CSC%7CCU%7CKC%7CCS%7CSL%7CST%7CSV%7CKN&seasonStart=2025&seasonEnd=2025&type=batter&csv=true",
@@ -36,7 +36,6 @@ def download_mlb_stats():
             "url": "https://baseballsavant.mlb.com/leaderboard/batted-ball?batSide=R&gameType=Regular&minSwings=q&minGroupSwings=1&pitchHand=R&pitchType=FF%7CSI%7CFC%7CCH%7CFS%7CFO%7CSC%7CCU%7CSL%7CST%7CSV%7CKN&seasonStart=2025&seasonEnd=2025&type=batter&csv=true",
             "filename": "batters-batted-ball-bat-right-pitch-hand-right-2025.csv"
         }
-
     ]
     
     # Define the target directories relative to the script's location
@@ -67,4 +66,5 @@ def download_mlb_stats():
             except IOError as e:
                 print(f"Error saving {stat['filename']} to {target_dir}: {e}")
 
+if __name__ == "__main__":
     download_mlb_stats()
