@@ -31,7 +31,7 @@ app = FastAPI(title="Batch Fixed Real Data Baseball API", version="1.2.0-batch-f
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "http://localhost:5173", "https://capping.pro", "https://www.capping.pro"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
