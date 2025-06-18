@@ -312,4 +312,133 @@ python test_enhanced_api.py
 - Validate enhanced feature integration
 - Monitor API response times for batch operations
 
+## Pitcher Vulnerability Analysis (Current Implementation)
+
+### Core Vulnerability Calculation System
+
+The BaseballAPI uses a sophisticated 6-component weighted scoring system implemented in `enhanced_analyzer.py` to assess pitcher vulnerability and batter matchup potential.
+
+**Component Weight Distribution:**
+- **Arsenal Matchup** (40%): Batter performance vs pitcher's specific pitch types
+- **Contextual Factors** (20%): Due factors, hot/cold streaks, exit velocity matchups
+- **Batter Overall Quality** (15%): Player quality metrics with confidence adjustments
+- **Recent Daily Games** (10%): Last N games performance trends
+- **Pitcher Overall Vulnerability** (10%): Pitcher weakness analysis across all batters
+- **Historical Year-over-Year** (5%): Performance changes over time
+
+**Enhanced Weight Factors (27 specific metrics):**
+```python
+ENHANCED_WEIGHTS = {
+    'batter_vs_pitch_hr': 2.0,           # Highest weight - HR vs specific pitches
+    'batter_overall_brl_percent': 2.5,    # Barrel rate importance
+    'pitcher_vulnerability_hr': 1.8,      # Pitcher HR vulnerability
+    'batter_vs_pitch_slg': 1.5,          # Slugging vs pitch types
+    'recent_performance_bonus': 1.5,      # Recent form importance
+    'batter_overall_iso': 1.5,           # Power metrics
+    # ... 21 additional factors
+}
+```
+
+**Fallback Weight Adjustment:**
+When pitcher arsenal data is missing, component weights automatically adjust:
+- Arsenal Matchup: 40% → 25% (reduced, using league averages)
+- Batter Overall: 15% → 25% (increased to compensate)
+- Pitcher Overall: 10% → 15% (increased)
+- Recent Daily: 10% → 15% (increased)
+- Historical: 5% → 10% (increased)
+- Contextual: 20% (unchanged)
+
+### League Average Fallback System
+
+**Pitch Type Distribution (when pitcher data unavailable):**
+```python
+LEAGUE_AVERAGE_PITCH_DISTRIBUTION = {
+    'FF': {'usage': 35.5, 'name': 'Four-Seam Fastball'},
+    'SI': {'usage': 18.2, 'name': 'Sinker'},
+    'SL': {'usage': 15.8, 'name': 'Slider'},
+    'CH': {'usage': 12.1, 'name': 'Changeup'},
+    'CU': {'usage': 8.7, 'name': 'Curveball'},
+    # ... 3 additional pitch types
+}
+```
+
+**Performance Metrics Per Pitch Type:**
+- **BA/SLG/wOBA**: Contact quality against each pitch
+- **Hard Hit %**: Hard contact rate (>95 mph exit velocity)
+- **K%**: Strikeout rate for each pitch type
+- **Run Value**: Expected run contribution per 100 pitches
+
+**Real-time League Average Calculation:**
+- Minimum 50+ PA threshold for individual data inclusion
+- Automatic fallback hierarchy: Individual → Team → League → Defaults
+- Confidence scoring (0.0-1.0) based on data completeness and sample size
+
+### Current Methodology Limitations
+
+**Missing Recent Form Analysis:**
+- Season-long statistics treated with equal weight regardless of recency
+- No consideration of pitcher's last 5 starts vs full season performance
+- Recent struggles or improvements not factored into vulnerability assessment
+
+**Absent Team Context Integration:**
+- No analysis of opposing team's recent offensive surge/slump
+- Missing consideration of key lineup changes or injury impacts
+- Series momentum and head-to-head recent history not included
+
+**Limited Situational Factors:**
+- Home/away performance splits not weighted differently
+- Ballpark HR factors available but not integrated into vulnerability calculation
+- Weather impact (wind, temperature) not considered in pitcher assessment
+- No pitcher fatigue indicators (rest days, recent pitch counts)
+
+**Basic HR Rate Calculation:**
+- Simple HR totals divided by games played
+- No adjustment for quality of opposition faced
+- Recent vs season-long HR trends not differentiated
+
+### Enhancement Opportunities
+
+**Identified Areas for Improvement:**
+1. **Recent Performance Weighting**: Last 5 starts should carry 60% weight vs season 40%
+2. **Team Offensive Context**: Integrate opponent's last 10 games scoring and power metrics
+3. **Ballpark Integration**: Include stadium HR factors from existing stadiumContextService
+4. **Pitcher Fatigue**: Add rest days, pitch count trends, and workload analysis
+5. **Opposition Quality**: Adjust metrics based on strength of recent opponents faced
+
+## Development Guidelines for Future Enhancements
+
+### Critical Analysis Patterns to Maintain
+
+**Avoid Infinite Positive Expectation Loops:**
+- Always track failed attempts when analyzing bounce back or recovery patterns
+- Implement rolling expectations that decrease with repeated failures
+- Use historical pattern matching rather than treating each opportunity as independent
+- Include confidence decay for extended negative streaks
+
+**Enhanced Vulnerability Assessment:**
+- Consider recent form (last 5 starts) more heavily than season-long averages
+- Integrate opposing team's offensive trends and momentum
+- Factor in contextual elements (ballpark, weather, rest, fatigue)
+- Provide explanatory reasoning for vulnerability/dominance classifications
+
+**Data Quality and Confidence Scoring:**
+- Every prediction should include confidence assessment based on data completeness
+- Implement graceful degradation when individual data is missing
+- Use team/league averages as fallbacks with appropriate confidence adjustments
+- Monitor and validate fallback usage patterns in production
+
+### Future Integration Points
+
+**BaseballTracker Integration:**
+- Enhanced pitcher intelligence should feed into strategic recommendations
+- Bounce back analysis requires failure tracking across multiple prediction cycles
+- Team performance trends should influence individual player analysis
+- Stadium and weather context services ready for integration
+
+**Performance Monitoring:**
+- Track confidence score distributions to validate prediction quality
+- Monitor bounce back success rates vs predictions to calibrate penalty factors
+- Validate that enhanced vulnerability calculations correlate with actual outcomes
+- Regular assessment of fallback strategy effectiveness
+
 The BaseballAPI serves as the analytical foundation for BaseballTracker's strategic intelligence system, providing sophisticated pitcher vs batter analysis with comprehensive fallback strategies and real-time dashboard integration.
