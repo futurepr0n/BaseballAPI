@@ -908,6 +908,100 @@ async def get_sort_options():
         ]
     }
 
+@app.post("/refresh-lineups")
+async def refresh_lineups():
+    """
+    Fetch fresh starting lineup data from MLB Stats API
+    Calls the BaseballScraper Python script to update lineup files
+    """
+    import os
+    import subprocess
+    
+    try:
+        logger.info("🔄 Starting lineup refresh request")
+        
+        # Path to the baseball scraper script (relative to current working directory)
+        scraper_dir = "../BaseballScraper"
+        script_path = "fetch_starting_lineups.py"
+        venv_python_path = "venv/bin/python"
+        
+        # Check if we can use the venv python from the scraper directory
+        full_venv_path = os.path.join(scraper_dir, venv_python_path)
+        if os.path.exists(full_venv_path):
+            python_cmd = venv_python_path  # Use relative path within scraper_dir
+        else:
+            python_cmd = "python3"  # Fallback to system python
+        
+        # Run the lineup fetching script with proper environment
+        logger.info(f"🐍 Executing: {python_cmd} {script_path} (cwd: {scraper_dir})")
+        
+        # Set environment to prevent .pyc files and use venv
+        env = os.environ.copy()
+        env['PYTHONDONTWRITEBYTECODE'] = '1'
+        
+        result = subprocess.run(
+            [python_cmd, script_path],
+            cwd=scraper_dir,
+            capture_output=True,
+            text=True,
+            timeout=120,  # 2 minute timeout
+            env=env
+        )
+        
+        if result.returncode == 0:
+            logger.info("✅ Lineup refresh completed successfully")
+            
+            # Parse output for game count
+            output = result.stdout
+            games_found = 0
+            lineups_found = 0
+            
+            # Extract game count from output
+            for line in output.split('\n'):
+                if "Found" in line and "games" in line:
+                    try:
+                        parts = line.split()
+                        games_found = int([p for p in parts if p.isdigit()][0])
+                    except (IndexError, ValueError):
+                        pass
+                if "lineup info" in line:
+                    try:
+                        parts = line.split()
+                        lineups_found = int([p for p in parts if p.isdigit()][0])
+                    except (IndexError, ValueError):
+                        pass
+            
+            return {
+                "success": True,
+                "message": f"Successfully fetched {games_found} games with {lineups_found} lineup confirmations",
+                "games_found": games_found,
+                "lineups_found": lineups_found,
+                "timestamp": datetime.now().isoformat(),
+                "output": output
+            }
+        else:
+            logger.error(f"❌ Lineup refresh failed with code {result.returncode}")
+            logger.error(f"Stdout: {result.stdout}")
+            logger.error(f"Stderr: {result.stderr}")
+            
+            raise HTTPException(
+                status_code=500,
+                detail=f"Lineup fetch failed: {result.stderr or 'Unknown error'}"
+            )
+            
+    except subprocess.TimeoutExpired:
+        logger.error("❌ Lineup refresh timed out after 2 minutes")
+        raise HTTPException(
+            status_code=408,
+            detail="Lineup refresh timed out - MLB API may be slow"
+        )
+    except Exception as e:
+        logger.error(f"❌ Unexpected error during lineup refresh: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Lineup refresh error: {str(e)}"
+        )
+
 if __name__ == "__main__":
     print("🎯 Starting BATCH FIXED REAL DATA ONLY Baseball Analysis API")
     print("🚫 ZERO tolerance for mock data - real files only!")
