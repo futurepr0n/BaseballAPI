@@ -15,6 +15,7 @@ from datetime import datetime
 import uvicorn
 import logging
 import traceback
+import subprocess
 
 # Import enhanced modules
 try:
@@ -508,6 +509,89 @@ async def legacy_pitcher_vs_team(
     except Exception as e:
         logger.error(f"Error in legacy analysis: {e}")
         raise HTTPException(status_code=500, detail=f"Legacy analysis error: {str(e)}")
+
+@app.post("/refresh-lineups")
+async def refresh_lineups():
+    """
+    Fetch fresh starting lineup data from MLB Stats API
+    Calls the BaseballScraper Python script to update lineup files
+    """
+    try:
+        logger.info("🔄 Starting lineup refresh request")
+        
+        # Path to the baseball scraper script (relative to current working directory)
+        scraper_dir = "../BaseballScraper"
+        script_path = "fetch_starting_lineups.py"
+        venv_python_path = "venv/bin/python"
+        
+        # Check if we can use the venv python from the scraper directory
+        full_venv_path = os.path.join(scraper_dir, venv_python_path)
+        if os.path.exists(full_venv_path):
+            python_cmd = venv_python_path  # Use relative path within scraper_dir
+        else:
+            python_cmd = "python3"  # Fallback to system python
+        
+        # Run the lineup fetching script with proper environment
+        logger.info(f"🐍 Executing: {python_cmd} {script_path} (cwd: {scraper_dir})")
+        
+        # Set environment to prevent .pyc files and use venv
+        env = os.environ.copy()
+        env['PYTHONDONTWRITEBYTECODE'] = '1'
+        
+        result = subprocess.run(
+            [python_cmd, script_path],
+            cwd=scraper_dir,
+            capture_output=True,
+            text=True,
+            timeout=120,  # 2 minute timeout
+            env=env
+        )
+        
+        if result.returncode == 0:
+            logger.info("✅ Lineup refresh completed successfully")
+            
+            # Parse output for game count
+            output = result.stdout
+            games_found = 0
+            lineups_found = 0
+            
+            # Extract game count from output
+            for line in output.split('\n'):
+                if "Found" in line and "games" in line:
+                    try:
+                        parts = line.split()
+                        games_found = int([p for p in parts if p.isdigit()][0])
+                    except:
+                        pass
+                if "having lineup info" in line:
+                    try:
+                        parts = line.split()
+                        lineups_found = int([p for p in parts if p.isdigit()][1])
+                    except:
+                        pass
+            
+            return {
+                "success": True,
+                "message": "Starting lineups refreshed successfully",
+                "timestamp": datetime.now().isoformat(),
+                "games_found": games_found,
+                "lineups_found": lineups_found,
+                "output": output.strip()
+            }
+        else:
+            logger.error(f"❌ Lineup refresh failed with return code {result.returncode}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Script failed: {result.stderr.strip() or result.stdout.strip()}"
+            )
+            
+    except subprocess.TimeoutExpired:
+        logger.error("⏰ Lineup refresh timed out")
+        raise HTTPException(status_code=408, detail="Lineup refresh timed out after 2 minutes")
+    
+    except Exception as e:
+        logger.error(f"❌ Lineup refresh error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to refresh lineups: {str(e)}")
 
 if __name__ == "__main__":
     import argparse
