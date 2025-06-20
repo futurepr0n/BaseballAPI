@@ -363,6 +363,56 @@ async def get_data_quality_info(include_stats: bool = Query(True), include_recom
         logger.error(f"Error getting data quality info: {e}")
         raise HTTPException(status_code=500, detail=f"Data quality error: {str(e)}")
 
+@app.get("/sort-options")
+async def get_sort_options():
+    """
+    Get available sorting options for predictions
+    """
+    return {
+        "options": [
+            {
+                "key": "score",
+                "label": "Overall HR Score", 
+                "description": "Overall home run likelihood score (0-100)"
+            },
+            {
+                "key": "hr",
+                "label": "HR Probability",
+                "description": "Home run probability percentage"
+            },
+            {
+                "key": "hit", 
+                "label": "Hit Probability",
+                "description": "Hit probability percentage"
+            },
+            {
+                "key": "reach_base",
+                "label": "Reach Base Probability", 
+                "description": "Reach base probability percentage"
+            },
+            {
+                "key": "strikeout",
+                "label": "Strikeout Probability",
+                "description": "Strikeout probability (lower is better)"
+            },
+            {
+                "key": "confidence",
+                "label": "Confidence",
+                "description": "Data quality confidence level (0.0-1.0)"
+            },
+            {
+                "key": "enhanced_confidence",
+                "label": "Enhanced Confidence", 
+                "description": "Enhanced confidence with dashboard context boost"
+            },
+            {
+                "key": "standout_score",
+                "label": "Standout Score",
+                "description": "Enhanced HR score with dashboard context"
+            }
+        ]
+    }
+
 @app.post("/analyze/generate-report")
 async def generate_analysis_report(request: PredictionRequest):
     """
