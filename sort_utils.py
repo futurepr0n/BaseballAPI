@@ -1,6 +1,9 @@
 """
 Utilities for sorting prediction results by different criteria.
 """
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_sort_key(prediction, sort_by='score'):
     """
@@ -23,15 +26,55 @@ def get_sort_key(prediction, sort_by='score'):
         return prediction.get('score', 0)
         
     # Outcome probabilities
-    elif sort_by == 'hr' or sort_by == 'homerun':
-        return prediction.get('outcome_probabilities', {}).get('homerun', 0)
-    elif sort_by == 'hit':
-        return prediction.get('outcome_probabilities', {}).get('hit', 0)
-    elif sort_by == 'base' or sort_by == 'reach_base':
-        return prediction.get('outcome_probabilities', {}).get('reach_base', 0)
-    elif sort_by == 'k' or sort_by == 'strikeout':
+    elif sort_by == 'hr' or sort_by == 'homerun' or sort_by == 'hr_probability':
+        # Try multiple possible locations for HR probability
+        hr_prob = prediction.get('outcome_probabilities', {}).get('homerun', None)
+        if hr_prob is not None:
+            return hr_prob
+        # Try flat structure
+        hr_prob = prediction.get('hr_probability', None)
+        if hr_prob is not None:
+            return hr_prob
+        # Fallback to 0
+        return 0
+    elif sort_by == 'hit' or sort_by == 'hit_probability':
+        # Try multiple possible locations for hit probability
+        # First try the nested structure
+        hit_prob = prediction.get('outcome_probabilities', {}).get('hit', None)
+        if hit_prob is not None:
+            logger.debug(f"Found hit probability in nested structure: {hit_prob} for player {prediction.get('batter_name', 'unknown')}")
+            return hit_prob
+        # Then try the flat structure that frontend might use
+        hit_prob = prediction.get('hit_probability', None)
+        if hit_prob is not None:
+            logger.debug(f"Found hit probability in flat structure: {hit_prob} for player {prediction.get('batter_name', 'unknown')}")
+            return hit_prob
+        # Fallback to 0
+        logger.warning(f"No hit probability found for player {prediction.get('batter_name', 'unknown')}, using 0")
+        return 0
+    elif sort_by == 'base' or sort_by == 'reach_base' or sort_by == 'reach_base_probability':
+        # Try multiple possible locations for reach base probability
+        reach_prob = prediction.get('outcome_probabilities', {}).get('reach_base', None)
+        if reach_prob is not None:
+            return reach_prob
+        # Try flat structure
+        reach_prob = prediction.get('reach_base_probability', None)
+        if reach_prob is not None:
+            return reach_prob
+        # Fallback to 0
+        return 0
+    elif sort_by == 'k' or sort_by == 'strikeout' or sort_by == 'strikeout_probability':
         # For strikeout, lower is better for batters, so return negative value for proper sorting
-        return -prediction.get('outcome_probabilities', {}).get('strikeout', 0)
+        # Try multiple possible locations for strikeout probability
+        strikeout_prob = prediction.get('outcome_probabilities', {}).get('strikeout', None)
+        if strikeout_prob is not None:
+            return -strikeout_prob
+        # Try flat structure
+        strikeout_prob = prediction.get('strikeout_probability', None)
+        if strikeout_prob is not None:
+            return -strikeout_prob
+        # Fallback to 0
+        return 0
         
     # Component scores
     elif sort_by == 'arsenal' or sort_by == 'arsenal_matchup':
@@ -125,11 +168,15 @@ def get_sort_description(sort_by):
         'score': 'Overall HR Score',
         'homerun': 'HR Probability',
         'hr': 'HR Probability',
+        'hr_probability': 'HR Probability',
         'hit': 'Hit Probability',
+        'hit_probability': 'Hit Probability',
         'base': 'Reach Base Probability',
         'reach_base': 'Reach Base Probability',
+        'reach_base_probability': 'Reach Base Probability',
         'k': 'Strikeout Probability (lowest first)',
         'strikeout': 'Strikeout Probability (lowest first)',
+        'strikeout_probability': 'Strikeout Probability (lowest first)',
         'arsenal': 'Arsenal Matchup Component',
         'arsenal_matchup': 'Arsenal Matchup Component',
         'batter': 'Batter Overall Component',

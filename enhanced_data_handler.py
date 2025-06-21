@@ -132,22 +132,10 @@ class EnhancedDataHandler:
                 self.analysis_stats['failed_analyses'] += 1
                 continue
         
-        # Sort results
+        # Sort results using the unified sort utility
         if batter_analyses:
-            reverse_sort = sort_by not in ['strikeout']  # Strikeout probability - lower is better
-            
-            if sort_by == 'score':
-                batter_analyses.sort(key=lambda x: x.get('score', 0), reverse=reverse_sort)
-            elif sort_by in ['hr', 'homerun']:
-                batter_analyses.sort(key=lambda x: x.get('outcome_probabilities', {}).get('homerun', 0), reverse=reverse_sort)
-            elif sort_by == 'hit':
-                batter_analyses.sort(key=lambda x: x.get('outcome_probabilities', {}).get('hit', 0), reverse=reverse_sort)
-            elif sort_by == 'reach_base':
-                batter_analyses.sort(key=lambda x: x.get('outcome_probabilities', {}).get('reach_base', 0), reverse=reverse_sort)
-            elif sort_by == 'strikeout':
-                batter_analyses.sort(key=lambda x: x.get('outcome_probabilities', {}).get('strikeout', 100), reverse=False)
-            elif sort_by == 'confidence':
-                batter_analyses.sort(key=lambda x: x.get('confidence', 0), reverse=True)
+            from sort_utils import sort_predictions
+            batter_analyses = sort_predictions(batter_analyses, sort_by=sort_by, ascending=False)
         
         # Calculate overall analysis quality metrics
         avg_confidence = total_confidence / len(batter_analyses) if batter_analyses else 0

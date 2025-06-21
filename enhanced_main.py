@@ -370,6 +370,7 @@ async def get_sort_options():
     """
     return {
         "options": [
+            # Core Scores
             {
                 "key": "score",
                 "label": "Overall HR Score", 
@@ -381,9 +382,19 @@ async def get_sort_options():
                 "description": "Home run probability percentage"
             },
             {
+                "key": "hr_probability",
+                "label": "HR Probability (Alt)",
+                "description": "Home run probability percentage (alternative key)"
+            },
+            {
                 "key": "hit", 
                 "label": "Hit Probability",
                 "description": "Hit probability percentage"
+            },
+            {
+                "key": "hit_probability", 
+                "label": "Hit Probability (Alt)",
+                "description": "Hit probability percentage (alternative key)"
             },
             {
                 "key": "reach_base",
@@ -391,9 +402,19 @@ async def get_sort_options():
                 "description": "Reach base probability percentage"
             },
             {
+                "key": "reach_base_probability",
+                "label": "Reach Base Probability (Alt)",
+                "description": "Reach base probability percentage (alternative key)"
+            },
+            {
                 "key": "strikeout",
                 "label": "Strikeout Probability",
                 "description": "Strikeout probability (lower is better)"
+            },
+            {
+                "key": "strikeout_probability",
+                "label": "Strikeout Probability (Alt)",
+                "description": "Strikeout probability (lower is better, alternative key)"
             },
             {
                 "key": "confidence",
@@ -409,6 +430,144 @@ async def get_sort_options():
                 "key": "standout_score",
                 "label": "Standout Score",
                 "description": "Enhanced HR score with dashboard context"
+            },
+            
+            # Component Scores
+            {
+                "key": "arsenal",
+                "label": "Arsenal Matchup",
+                "description": "Arsenal matchup component score"
+            },
+            {
+                "key": "arsenal_matchup",
+                "label": "Arsenal Matchup (Alt)",
+                "description": "Arsenal matchup component score (alternative key)"
+            },
+            {
+                "key": "batter",
+                "label": "Batter Overall",
+                "description": "Batter overall component score"
+            },
+            {
+                "key": "batter_overall",
+                "label": "Batter Overall (Alt)",
+                "description": "Batter overall component score (alternative key)"
+            },
+            {
+                "key": "pitcher",
+                "label": "Pitcher Overall",
+                "description": "Pitcher overall component score"
+            },
+            {
+                "key": "pitcher_overall",
+                "label": "Pitcher Overall (Alt)",
+                "description": "Pitcher overall component score (alternative key)"
+            },
+            {
+                "key": "historical",
+                "label": "Historical Trend",
+                "description": "Historical trend component score"
+            },
+            {
+                "key": "historical_yoy_csv",
+                "label": "Historical Trend (Alt)",
+                "description": "Historical trend component score (alternative key)"
+            },
+            {
+                "key": "recent",
+                "label": "Recent Performance",
+                "description": "Recent performance component score"
+            },
+            {
+                "key": "recent_daily_games",
+                "label": "Recent Performance (Alt)",
+                "description": "Recent performance component score (alternative key)"
+            },
+            {
+                "key": "contextual",
+                "label": "Contextual Factors",
+                "description": "Contextual factors component score"
+            },
+            
+            # Recent Performance Stats
+            {
+                "key": "recent_avg",
+                "label": "Recent Batting Average",
+                "description": "Recent batting average"
+            },
+            {
+                "key": "avg",
+                "label": "Recent Batting Average (Alt)",
+                "description": "Recent batting average (alternative key)"
+            },
+            {
+                "key": "recent_hr_rate",
+                "label": "Recent HR Rate",
+                "description": "Recent home run rate"
+            },
+            {
+                "key": "hr_rate",
+                "label": "Recent HR Rate (Alt)",
+                "description": "Recent home run rate (alternative key)"
+            },
+            {
+                "key": "recent_obp",
+                "label": "Recent On-Base Percentage",
+                "description": "Recent on-base percentage"
+            },
+            {
+                "key": "obp",
+                "label": "Recent On-Base Percentage (Alt)",
+                "description": "Recent on-base percentage (alternative key)"
+            },
+            
+            # Due Factors & Trends
+            {
+                "key": "due_ab",
+                "label": "Due for HR (AB-based)",
+                "description": "Due for home run based on at-bats"
+            },
+            {
+                "key": "ab_due",
+                "label": "Due for HR (AB-based Alt)",
+                "description": "Due for home run based on at-bats (alternative key)"
+            },
+            {
+                "key": "due_hits",
+                "label": "Due for HR (Hits-based)",
+                "description": "Due for home run based on hits"
+            },
+            {
+                "key": "hits_due",
+                "label": "Due for HR (Hits-based Alt)",
+                "description": "Due for home run based on hits (alternative key)"
+            },
+            {
+                "key": "contact_heat",
+                "label": "Heating Up Contact",
+                "description": "Heating up contact score"
+            },
+            {
+                "key": "heating_up",
+                "label": "Heating Up Contact (Alt)",
+                "description": "Heating up contact score (alternative key)"
+            },
+            {
+                "key": "cold",
+                "label": "Cold Batter Score",
+                "description": "Cold batter score (higher = more concerning)"
+            },
+            
+            # Arsenal Analysis
+            {
+                "key": "hitter_slg",
+                "label": "Hitter SLG vs Arsenal",
+                "description": "Hitter slugging percentage vs pitcher's arsenal"
+            },
+            {
+                "key": "pitcher_slg",
+                "label": "Pitcher SLG Allowed",
+                "description": "Pitcher slugging percentage allowed"
             }
         ]
     }
