@@ -426,6 +426,7 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
     batter_stats_2025_agg = batter_data.get('stats_2025_aggregated', {})
     batter_pa_2025 = batter_stats_2025_agg.get('PA_approx', 0)
     
+    
     # Enhanced arsenal analysis with fallbacks
     arsenal_analysis = enhanced_arsenal_matchup_with_fallbacks(
         batter_mlbam_id, pitcher_mlbam_id, master_player_data, league_avg_by_pitch_type
@@ -450,8 +451,36 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
         component_weights['recent_daily_games'] += weight_to_redistribute * 0.3
         component_weights['contextual'] += weight_to_redistribute * 0.3
     
+    # Calculate hitter and pitcher SLG for details
+    hitter_slg = batter_stats_2025_agg.get('SLG', 0)
+    if hitter_slg == 0:
+        # Calculate from basic stats if not directly available
+        h = batter_stats_2025_agg.get('H', 0)
+        doubles = batter_stats_2025_agg.get('2B', 0)
+        triples = batter_stats_2025_agg.get('3B', 0)
+        hr = batter_stats_2025_agg.get('HR', 0)
+        ab = batter_stats_2025_agg.get('AB', 0)
+        if ab > 0:
+            # Correct SLG calculation: singles + 2*2B + 3*3B + 4*HR
+            singles = h - doubles - triples - hr
+            total_bases = singles + (2 * doubles) + (3 * triples) + (4 * hr)
+            hitter_slg = total_bases / ab
+    
+    # Get pitcher SLG against (if available from pitcher stats)
+    pitcher_stats_2025 = pitcher_data.get('stats_2025_aggregated', {})
+    
+    
+    pitcher_slg = pitcher_stats_2025.get('SLG_against', 0)
+    if pitcher_slg == 0:
+        pitcher_slg = pitcher_stats_2025.get('SLG', 0)  # Fallback to regular SLG
+    
     details_dict = {
         'batter_pa_2025': batter_pa_2025,
+        'hitter_slg': round(hitter_slg, 3),
+        'pitcher_slg': round(pitcher_slg, 3),
+        # Placeholders for weather data (filled by dashboard context)
+        'weather_factor': 1.0,
+        'wind_factor': 1.0,
         'data_source': data_source,
         'overall_confidence': overall_confidence,
         'component_weights_used': component_weights,
@@ -482,8 +511,20 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
     hitter_ev_stats = batter_data.get('hitter_overall_ev_stats', {})
     
     if isinstance(hitter_ev_stats, dict):
+        # ISO is not directly in exit velocity stats - calculate from aggregated stats or CSV
+        iso_from_csv = hitter_ev_stats.get('iso_percent')  # This field doesn't exist in current CSV
+        if not pd.notna(iso_from_csv):
+            # Calculate ISO from our aggregated stats or from SLG/AVG in CSV
+            slg_from_csv = hitter_ev_stats.get('slg_percent')
+            avg_from_csv = hitter_ev_stats.get('batting_avg')
+            if pd.notna(slg_from_csv) and pd.notna(avg_from_csv):
+                iso_from_csv = slg_from_csv - avg_from_csv
+            else:
+                # Use our calculated ISO from aggregated stats
+                iso_from_csv = batter_stats_2025_agg.get('ISO', 0)
+        
         iso_adj = adjust_stat_with_confidence(
-            hitter_ev_stats.get('iso_percent'),
+            iso_from_csv,
             batter_pa_2025,
             'ISO',
             league_avg_stats,
@@ -549,8 +590,28 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
     )
     historical_score = calculate_general_historical_bonus(historical_trends)
     
-    # 5. Recent performance (unchanged)
+    # 5. Recent performance (enhanced with proper data structure)
     recent_score = calculate_recent_performance_bonus(recent_batter_stats, 'hitter')
+    
+    # Create proper recent games data structure for sorting compatibility
+    recent_N_games_raw_data = {}
+    if recent_batter_stats:
+        recent_N_games_raw_data = {
+            'games_list': [],  # Would be populated with actual daily games if available
+            'trends_summary_obj': {
+                'total_games': recent_batter_stats.get('total_games', 0),
+                'avg_avg': recent_batter_stats.get('avg_avg', 0),
+                'hr_rate': recent_batter_stats.get('hr_per_pa', 0),
+                'hr_per_pa': recent_batter_stats.get('hr_per_pa', 0),
+                'obp_calc': recent_batter_stats.get('hit_rate', 0),  # Approximation
+                'trend_direction': recent_batter_stats.get('trend_direction', 'stable'),
+                'trend_magnitude': recent_batter_stats.get('trend_magnitude', 0.0),
+                'trend_early_val': recent_batter_stats.get('trend_early_val', 0),
+                'trend_recent_val': recent_batter_stats.get('trend_recent_val', 0),
+                'trend_metric': 'HR_per_PA'
+            },
+            'at_bats': []  # Would be populated with detailed at-bat data if available
+        }
     
     # 6. Contextual factors (enhanced with missing data awareness)
     contextual_score = 0
@@ -569,8 +630,119 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
     
     contextual_score += ENHANCED_WEIGHTS['ev_matchup_bonus'] * (ev_matchup_score / 50 if ev_matchup_score != 0 else 0)
     
-    # Due for HR calculations (unchanged)
-    # [Previous due for HR logic remains the same]
+    # Store EV matchup score in details
+    details_dict['ev_matchup_score'] = round(ev_matchup_score, 1)
+    
+    # Due for HR calculations - AB-based
+    due_for_hr_ab_score = 0
+    stats_2024_hitter = batter_data.get('stats_2024', {})
+    hr_2024_val, ab_2024_val = stats_2024_hitter.get('HR', 0), stats_2024_hitter.get('AB', 0)
+    hr_2025_agg_val, ab_2025_agg_val = batter_stats_2025_agg.get('HR', 0), batter_stats_2025_agg.get('AB', 0)
+    
+    # Calculate expected HR per AB
+    expected_hr_per_ab_val = 0
+    if hr_2024_val > 0 and ab_2024_val >= 50:
+        expected_hr_per_ab_val = hr_2024_val / ab_2024_val
+    elif hr_2025_agg_val > 0 and ab_2025_agg_val >= 30:
+        expected_hr_per_ab_val = hr_2025_agg_val / ab_2025_agg_val
+    else:
+        expected_hr_per_ab_val = 1 / 45.0  # League average
+    
+    if expected_hr_per_ab_val > 0:
+        ab_needed_for_hr_val = 1 / expected_hr_per_ab_val
+        current_ab_since_hr_val = batter_stats_2025_agg.get('current_AB_since_last_HR', 0)
+        
+        details_dict.update({
+            'ab_since_last_hr': current_ab_since_hr_val,
+            'expected_ab_per_hr': round(ab_needed_for_hr_val, 1)
+        })
+        
+        if current_ab_since_hr_val > ab_needed_for_hr_val * 1.25:
+            due_for_hr_ab_score = min((current_ab_since_hr_val / ab_needed_for_hr_val - 1.25) * 20, 25)
+    
+    contextual_score += ENHANCED_WEIGHTS['due_for_hr_factor'] * (due_for_hr_ab_score / 25 if due_for_hr_ab_score != 0 else 0)
+    
+    # Due for HR calculations - Hits-based
+    due_for_hr_hits_score = 0
+    current_h_since_hr_val = batter_stats_2025_agg.get('current_H_since_last_HR', 0)
+    expected_h_per_hr_from_stats = stats_2024_hitter.get('H_per_HR')
+    
+    if not pd.notna(expected_h_per_hr_from_stats) or expected_h_per_hr_from_stats <= 0:
+        h_2025_agg = batter_stats_2025_agg.get('H', 0)
+        hr_2025_agg = batter_stats_2025_agg.get('HR', 0)
+        
+        if hr_2025_agg > 0:
+            expected_h_per_hr_from_stats = h_2025_agg / hr_2025_agg
+        else:
+            expected_h_per_hr_from_stats = 10.0  # Default
+    
+    details_dict.update({
+        'h_since_last_hr': current_h_since_hr_val,
+        'expected_h_per_hr': round(expected_h_per_hr_from_stats, 1)
+    })
+    
+    if expected_h_per_hr_from_stats > 0 and current_h_since_hr_val > expected_h_per_hr_from_stats * 1.5:
+        due_for_hr_hits_score = min(((current_h_since_hr_val / expected_h_per_hr_from_stats) - 1.5) * 15, 20)
+    
+    contextual_score += ENHANCED_WEIGHTS['due_for_hr_hits_factor'] * (due_for_hr_hits_score / 20 if due_for_hr_hits_score != 0 else 0)
+    
+    # ISO trend 2024 vs 2025
+    trend_2025v2024_score = 0
+    iso_2025_adj_for_trend_val = details_dict.get('batter_iso_adj', -1)
+    
+    K_PA_THRESHOLD_FOR_LEAGUE_AVG = 30
+    if ab_2024_val >= K_PA_THRESHOLD_FOR_LEAGUE_AVG and batter_pa_2025 >= K_PA_THRESHOLD_FOR_LEAGUE_AVG / 2:
+        iso_2024_val = (stats_2024_hitter.get('SLG', 0) - stats_2024_hitter.get('AVG', 0)) if ('SLG' in stats_2024_hitter and 'AVG' in stats_2024_hitter and stats_2024_hitter.get('AB', 0) > 0) else -1
+        
+        if iso_2024_val > -0.5 and iso_2025_adj_for_trend_val > -0.5:
+            iso_change_from_last_year = iso_2025_adj_for_trend_val - iso_2024_val
+            trend_2025v2024_score = iso_change_from_last_year * 150
+            
+            details_dict.update({
+                'iso_2024': round(iso_2024_val, 3),
+                'iso_2025_adj_for_trend': round(iso_2025_adj_for_trend_val, 3),
+                'iso_trend_2025v2024': round(iso_change_from_last_year, 3)
+            })
+    
+    contextual_score += ENHANCED_WEIGHTS['trend_2025_vs_2024_bonus'] * (trend_2025v2024_score / 20 if trend_2025v2024_score != 0 else 0)
+    
+    # Contact quality trend factors
+    heating_up_contact_score = 0
+    cold_batter_contact_score = 0
+    MIN_RECENT_PA_FOR_CONTACT_EVAL = 20
+    
+    if recent_batter_stats and recent_batter_stats.get('total_pa_approx', 0) >= MIN_RECENT_PA_FOR_CONTACT_EVAL:
+        recent_hit_rate = recent_batter_stats.get('hit_rate', -1)
+        recent_hr_per_pa = recent_batter_stats.get('hr_per_pa', -1)
+        
+        if recent_hit_rate != -1:
+            lg_avg_batting = league_avg_stats.get('AVG', 0.245)
+            player_expected_hr_rate_for_comparison = expected_hr_per_ab_val
+            
+            # The player is making good contact but not getting HRs - could be due
+            if (recent_hit_rate > (lg_avg_batting + 0.050) and
+                recent_hr_per_pa != -1 and player_expected_hr_rate_for_comparison > 0 and
+                recent_hr_per_pa < (player_expected_hr_rate_for_comparison * 0.4)):
+                heating_up_contact_score = 15
+                details_dict['contact_trend'] = 'Heating Up (High Contact, Low Recent Power)'
+            # Player in cold streak, less likely for HR
+            elif recent_hit_rate < (lg_avg_batting - 0.060):
+                cold_batter_contact_score = -20
+                details_dict['contact_trend'] = 'Cold Batter (Low Recent Contact)'
+                
+            # Apply modifiers
+            if heating_up_contact_score > 0:
+                contextual_score += ENHANCED_WEIGHTS['heating_up_contact_factor'] * (heating_up_contact_score / 15)
+            if cold_batter_contact_score < 0:
+                contextual_score += ENHANCED_WEIGHTS['cold_batter_factor'] * (cold_batter_contact_score / 20)
+    
+    details_dict.update({
+        'heating_up_contact_raw_score': round(heating_up_contact_score, 1),
+        'cold_batter_contact_raw_score': round(cold_batter_contact_score, 1),
+        'due_for_hr_ab_raw_score': round(due_for_hr_ab_score, 1),
+        'due_for_hr_hits_raw_score': round(due_for_hr_hits_score, 1),
+        'trend_2025v2024_raw_score': round(trend_2025v2024_score, 1)
+    })
     
     # 7. Calculate final score with dynamic weights
     final_score = (
@@ -586,6 +758,64 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
     confidence_adjusted_score = final_score * overall_confidence + (45 * (1 - overall_confidence))
     
     base_prob_factor = confidence_adjusted_score / 100.0
+    
+    # Calculate pitcher per-game stats for display
+    pitcher_stats_2025 = pitcher_data.get('stats_2025_aggregated', {})
+    pitcher_games_2025 = pitcher_stats_2025.get('G', 1)  # Avoid division by zero
+    
+    # Check custom pitcher data for detailed stats first, then fallback to aggregated stats
+    custom_pitcher_data = pitcher_data.get('custom_pitcher_stats', {})
+    pitcher_overall_ev_data = pitcher_data.get('pitcher_overall_ev_stats', {})
+    
+    # Get detailed stats from custom data
+    custom_games = custom_pitcher_data.get('p_game', pitcher_games_2025)
+    custom_strikeouts = custom_pitcher_data.get('strikeout', pitcher_stats_2025.get('K', 0))
+    custom_hits = custom_pitcher_data.get('hit', pitcher_stats_2025.get('H', 0))
+    custom_walks = custom_pitcher_data.get('walk', pitcher_stats_2025.get('BB', 0))
+    custom_ip_str = custom_pitcher_data.get('p_formatted_ip', '0.0')
+    
+    # Parse innings pitched (format like "27.2" = 27.67 innings)
+    try:
+        if '.' in str(custom_ip_str):
+            ip_parts = str(custom_ip_str).split('.')
+            innings = float(ip_parts[0]) + (float(ip_parts[1]) / 3.0) if len(ip_parts) > 1 else float(ip_parts[0])
+        else:
+            innings = float(custom_ip_str) if custom_ip_str else 1.0
+    except:
+        innings = 1.0
+    
+    # Pitcher per-game calculations using custom data when available
+    pitcher_h_per_game = custom_hits / max(custom_games, 1)
+    pitcher_hr_per_game = pitcher_stats_2025.get('HR', 0) / max(pitcher_games_2025, 1)
+    pitcher_k_per_game = custom_strikeouts / max(custom_games, 1)
+    
+    # ERA from custom data
+    pitcher_era = (custom_pitcher_data.get('p_era') or 
+                   pitcher_overall_ev_data.get('p_era') or 
+                   pitcher_stats_2025.get('ERA', 4.50))  # Default to league average ERA
+    
+    # Calculate WHIP from custom data: (Walks + Hits) / Innings Pitched
+    if innings > 0 and (custom_hits > 0 or custom_walks > 0):
+        pitcher_whip = (custom_walks + custom_hits) / innings
+    else:
+        pitcher_whip = (custom_pitcher_data.get('whip') or 
+                        pitcher_overall_ev_data.get('whip') or 
+                        pitcher_stats_2025.get('WHIP', 1.30))  # Default to league average WHIP
+    
+    # Pitcher home stats - estimate from total stats since we don't have home/road splits
+    # Note: In real implementation, would need to aggregate daily games by venue
+    total_games = pitcher_games_2025
+    estimated_home_games = max(total_games * 0.5, 1)  # Assume roughly half games at home
+    
+    # Estimate home stats proportionally
+    pitcher_home_h_total = round(pitcher_stats_2025.get('H', 0) * 0.5)
+    pitcher_home_hr_total = round(pitcher_stats_2025.get('HR', 0) * 0.5)  
+    pitcher_home_k_total = round(pitcher_stats_2025.get('K', 0) * 0.5)
+    pitcher_home_games = round(estimated_home_games)
+    
+    # Recent ERA (last 5 starts) - would need more detailed game-by-game data
+    # For now, use current season ERA as approximation
+    pitcher_recent_era = pitcher_era
     
     return {
         'batter_name': batter_name,
@@ -607,6 +837,14 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
             'recent_daily_games': round(recent_score, 1),
             'contextual': round(contextual_score, 1)
         },
+        'matchup_components': {
+            'arsenal_matchup': round(arsenal_score, 1),
+            'batter_overall': round(batter_overall_score, 1),
+            'pitcher_overall': round(pitcher_overall_score, 1),
+            'historical_yoy_csv': round(historical_score, 1),
+            'recent_daily_games': round(recent_score, 1),
+            'contextual': round(contextual_score, 1)
+        },
         'weights_used': component_weights,
         'outcome_probabilities': {
             'homerun': min(40, max(0.5, base_prob_factor * 10 + batter_pa_2025 * 0.005)),
@@ -614,11 +852,23 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
             'reach_base': min(70, max(8, base_prob_factor * 25 + batter_pa_2025 * 0.03)),
             'strikeout': max(10, min(80, 70 - base_prob_factor * 15 + batter_pa_2025 * 0.01))
         },
+        'recent_N_games_raw_data': recent_N_games_raw_data,
         'data_quality_summary': {
             'pitcher_arsenal_availability': 'full' if overall_confidence >= 0.8 else 'partial' if overall_confidence >= 0.5 else 'minimal',
             'fallback_strategy': data_source,
             'reliability_indicator': 'high' if overall_confidence >= 0.7 else 'medium' if overall_confidence >= 0.4 else 'low'
-        }
+        },
+        # Pitcher stats for UI display
+        'pitcher_h_per_game': round(pitcher_h_per_game, 1),
+        'pitcher_hr_per_game': round(pitcher_hr_per_game, 1),
+        'pitcher_k_per_game': round(pitcher_k_per_game, 1),
+        'pitcher_era': round(pitcher_era, 2),
+        'pitcher_whip': round(pitcher_whip, 2),
+        'pitcher_recent_era': round(pitcher_recent_era, 2),
+        'pitcher_home_h_total': round(pitcher_home_h_total, 0),
+        'pitcher_home_hr_total': round(pitcher_home_hr_total, 0),
+        'pitcher_home_k_total': round(pitcher_home_k_total, 0),
+        'pitcher_home_games': round(pitcher_home_games, 0)
     }
 
 def analyze_historical_trends_general(player_id, historical_data, data_source_key, 

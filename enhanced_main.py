@@ -133,7 +133,9 @@ async def initialize_enhanced_data():
         enhanced_handler = EnhancedDataHandler(
             master_player_data=master_player_data,
             league_avg_stats=league_avg_stats,
-            metric_ranges=metric_ranges
+            metric_ranges=metric_ranges,
+            daily_data=daily_game_data,
+            roster_data=roster_data
         )
         
         global_data['enhanced_data_handler'] = enhanced_handler
@@ -362,6 +364,7 @@ async def get_data_quality_info(include_stats: bool = Query(True), include_recom
     except Exception as e:
         logger.error(f"Error getting data quality info: {e}")
         raise HTTPException(status_code=500, detail=f"Data quality error: {str(e)}")
+
 
 @app.get("/sort-options")
 async def get_sort_options():

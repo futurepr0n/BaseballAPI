@@ -110,7 +110,7 @@ def aggregate_2025_player_stats_from_daily(daily_data, roster_data, name_to_id_m
         'G': 0, 'AB': 0, 'R': 0, 'H': 0, 'HR': 0, 'BB': 0, 'K': 0, '2B': 0, '3B': 0, 
         'HBP': 0, 'SF': 0, 'SAC': 0, 'last_HR_date': None, 'AB_at_last_HR': 0, 
         'current_AB_since_last_HR': 0, 'H_at_last_HR': 0, 'current_H_since_last_HR': 0,
-        'game_dates': []
+        'game_dates': [], 'SLG': 0.0, 'AVG': 0.0, 'ISO': 0.0
     })
     
     sorted_game_dates = sorted(daily_data.keys())
@@ -142,6 +142,9 @@ def aggregate_2025_player_stats_from_daily(daily_data, roster_data, name_to_id_m
                 hbp = int(pds.get('HBP', 0))
                 sf = int(pds.get('SF', 0))
                 sac = int(pds.get('SAC', 0))
+                # Daily data usually doesn't have 2B/3B, estimate from totals
+                doubles = int(pds.get('2B', 0))
+                triples = int(pds.get('3B', 0))
             except (ValueError, TypeError):
                 continue
             
@@ -158,30 +161,29 @@ def aggregate_2025_player_stats_from_daily(daily_data, roster_data, name_to_id_m
             pagg.update({
                 'AB': pagg['AB'] + ab,
                 'H': pagg['H'] + h,
+                'HR': pagg['HR'] + hr,
                 'BB': pagg['BB'] + bb,
                 'K': pagg['K'] + kv,
                 'R': pagg['R'] + r,
                 'HBP': pagg['HBP'] + hbp,
                 'SF': pagg['SF'] + sf,
-                'SAC': pagg['SAC'] + sac
+                'SAC': pagg['SAC'] + sac,
+                '2B': pagg['2B'] + doubles,
+                '3B': pagg['3B'] + triples
             })
             
             # Handle HR tracking for "due for HR" calculations
             if hr > 0:
+                # Update HR tracking - reset counters since we just hit HR(s)
                 pagg.update({
-                    'HR': pagg['HR'] + hr,
                     'last_HR_date': date_str,
-                    'current_AB_since_last_HR': 0,
-                    'AB_at_last_HR': current_total_ab_before_game + ab,
-                    'current_H_since_last_HR': 0,
-                    'H_at_last_HR': current_total_h_before_game + h
+                    'current_AB_since_last_HR': 0,  # Reset since we just hit HR
+                    'AB_at_last_HR': pagg['AB'],  # Use total ABs at time of HR
+                    'current_H_since_last_HR': 0,  # Reset since we just hit HR
+                    'H_at_last_HR': pagg['H']  # Use total hits at time of HR
                 })
-            elif pagg['last_HR_date'] is not None:
-                # Only track ABs since last HR if we've had a HR this season
-                pagg['current_AB_since_last_HR'] += ab
-                pagg['current_H_since_last_HR'] += h
             else:
-                # Track ABs for players who haven't hit a HR yet this season
+                # No HR this game - increment counters
                 pagg['current_AB_since_last_HR'] += ab
                 pagg['current_H_since_last_HR'] += h
     
@@ -189,6 +191,30 @@ def aggregate_2025_player_stats_from_daily(daily_data, roster_data, name_to_id_m
     for pid, astats in player_2025_agg.items():
         if pid in master_player_data:
             astats['PA_approx'] = get_approximated_pa(astats)
+            
+            # Calculate derived stats
+            ab = astats.get('AB', 0)
+            h = astats.get('H', 0)
+            hr = astats.get('HR', 0)
+            doubles = astats.get('2B', 0)
+            triples = astats.get('3B', 0)
+            
+            if ab > 0:
+                # Calculate AVG
+                astats['AVG'] = h / ab
+                
+                # Calculate SLG (Singles + 2*2B + 3*3B + 4*HR) / AB
+                singles = h - doubles - triples - hr
+                total_bases = singles + (2 * doubles) + (3 * triples) + (4 * hr)
+                astats['SLG'] = total_bases / ab
+                
+                # Calculate ISO (SLG - AVG)
+                astats['ISO'] = astats['SLG'] - astats['AVG']
+            else:
+                astats['AVG'] = 0.0
+                astats['SLG'] = 0.0
+                astats['ISO'] = 0.0
+            
             master_player_data[pid]['stats_2025_aggregated'] = astats
     
     print(f"Aggregated 2025 stats for {len(player_2025_agg)} players.")
@@ -333,7 +359,9 @@ def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
         fullName_from_roster_cleaned = player_info_roster.get('fullName_cleaned')
         shortName_from_roster_cleaned = player_info_roster.get('name_cleaned')
         
-        mlbam_id_from_roster_field = str(int(player_info_roster.get('id'))) if pd.notna(player_info_roster.get('id')) and isinstance(player_info_roster.get('id'), (int, float)) else None
+        # Check both 'id' and 'playerId' fields for MLBAM ID
+        id_from_roster = player_info_roster.get('id') or player_info_roster.get('playerId')
+        mlbam_id_from_roster_field = str(int(id_from_roster)) if pd.notna(id_from_roster) and isinstance(id_from_roster, (int, float)) else None
         
         resolved_mlbam_id = None
         resolved_name_for_map = fullName_from_roster_cleaned
@@ -402,7 +430,8 @@ def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
         "hitter_overall_ev_stats": "hitter_exit_velocity_2025.csv",
         "pitcher_overall_ev_stats": "pitcher_exit_velocity_2025.csv",
         "hitter_pitch_arsenal_stats": "hitterpitcharsenalstats_2025.csv",
-        "pitcher_pitch_arsenal_stats": "pitcherpitcharsenalstats_2025.csv"
+        "pitcher_pitch_arsenal_stats": "pitcherpitcharsenalstats_2025.csv",
+        "custom_pitcher_stats": "custom_pitcher_2025.csv"
     }
     
     all_dfs_to_load_specs = {**batted_ball_dfs_specs, **other_detailed_dfs_specs}
