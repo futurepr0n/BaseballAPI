@@ -442,3 +442,116 @@ LEAGUE_AVERAGE_PITCH_DISTRIBUTION = {
 - Regular assessment of fallback strategy effectiveness
 
 The BaseballAPI serves as the analytical foundation for BaseballTracker's strategic intelligence system, providing sophisticated pitcher vs batter analysis with comprehensive fallback strategies and real-time dashboard integration.
+
+## Critical Field Mapping Reference
+
+### API Response → Frontend Field Mappings
+
+**CRITICAL:** When adding new fields to API responses, they must match the exact field names expected by the PinheadsPlayhouse frontend. Mismatched field names will result in 0.0 values displayed in the UI.
+
+#### Hitter Comprehensive Stats Field Mappings
+
+| Frontend Column | Frontend Field Key | API Response Field | Status |
+|----------------|--------------------|--------------------|--------|
+| **AB Since HR** | `ab_since_last_hr` | `ab_since_last_hr` | ✅ Fixed |
+| **Exp AB/HR** | `expected_ab_per_hr` | `expected_ab_per_hr` | ✅ Fixed |
+| **H Since HR** | `h_since_last_hr` | `h_since_last_hr` | ✅ Fixed |
+| **Exp H/HR** | `expected_h_per_hr` | `expected_h_per_hr` | ✅ Fixed |
+| **Hitter SLG** | `hitter_slg` | `hitter_slg` | ✅ Working |
+| **ISO 2024** | `iso_2024` | `iso_2024` | ✅ Fixed |
+| **ISO 2025** | `iso_2025` | `iso_2025` | ✅ Fixed |
+
+#### Pitcher Stats Field Mappings
+
+| Frontend Column | Frontend Field Key | API Response Field | Status |
+|----------------|--------------------|--------------------|--------|
+| **Pitcher SLG** | `pitcher_slg` | `pitcher_slg` | ✅ Fixed |
+| **P Home H Total** | `pitcher_home_h_total` | `pitcher_home_h_total` | ✅ Working |
+| **P Home HR Total** | `pitcher_home_hr_total` | `pitcher_home_hr_total` | ✅ Working |
+| **P Home K Total** | `pitcher_home_k_total` | `pitcher_home_k_total` | ✅ Working |
+
+### Field Mapping Verification Process
+
+**Before adding new fields to API responses:**
+
+1. **Check Frontend Expectations:**
+   ```bash
+   grep -r "New Field Name" ../BaseballTracker/src/components/PinheadsPlayhouse/
+   ```
+
+2. **Verify Field Keys in PinheadsPlayhouse.js:**
+   ```javascript
+   // Look for this pattern in ../BaseballTracker/src/components/PinheadsPlayhouse/PinheadsPlayhouse.js
+   { key: 'expected_field_name', label: 'Display Name' }
+   ```
+
+3. **Add to enhanced_analyzer.py with exact field name:**
+   ```python
+   # In enhanced_hr_score_with_missing_data_handling() return object
+   'expected_field_name': calculated_value,  # Must match frontend key exactly
+   ```
+
+4. **Test API Response:**
+   ```bash
+   curl -X POST "http://localhost:8000/analyze/pitcher-vs-team" \
+   -H "Content-Type: application/json" \
+   -d '{"pitcher_name": "Test Pitcher", "team": "DET", "max_results": 1}' | \
+   python -c "import json, sys; data=json.load(sys.stdin); print(data['predictions'][0]['expected_field_name'])"
+   ```
+
+### Common Field Mapping Mistakes
+
+1. **Snake_case vs camelCase**: Frontend expects `snake_case` for field keys
+2. **Partial name matching**: `h_since_hr` vs `h_since_last_hr` - they're different!
+3. **Missing field calculations**: Field exists in frontend but not calculated in API
+4. **Data type mismatches**: Frontend expects numbers, API returns strings or vice versa
+
+### Name Matching System for Daily Data Lookups
+
+#### Hitter Name Conversion Chain
+
+**Daily JSON files use format: "A. Lastname" (e.g., "P. Alonso")**
+
+```python
+# In _calculate_comprehensive_hitter_stats():
+if roster_full_name and ' ' in roster_full_name:
+    name_parts = roster_full_name.split(' ')
+    if len(name_parts) >= 2:
+        initial_lastname_format = f"{name_parts[0][0]}. {name_parts[-1]}"  # "P. Alonso"
+
+hitter_names_to_check = [
+    batter_name.lower(),                    # API request name
+    roster_short_name.lower(),              # "p. alonso" from roster
+    roster_full_name.lower(),               # "pete alonso" from roster  
+    csv_format_name.lower(),                # "alonso, pete" (CSV format)
+    initial_lastname_format.lower(),        # "p. alonso" (daily JSON format) - CRITICAL
+]
+```
+
+#### Pitcher Name Conversion Chain
+
+**Same pattern applies to pitcher lookups in daily data for trend analysis and home game stats.**
+
+### Data Source Hierarchy
+
+1. **Roster Data**: `fullName` field used for API requests
+2. **Daily JSON**: `name` field in "A. Lastname" format for game-by-game stats
+3. **CSV Import**: "Lastname, Firstname" format from external sources
+
+### Development Debugging
+
+**When hitter stats show 0.0 values:**
+
+1. Check field name mapping first (most common issue)
+2. Verify hitter name matching in logs: `🏏 HITTER STATS: [Name] - [stats]`
+3. Confirm comprehensive stats calculation: `🔍 HITTER NAME MATCH: [results]`
+4. Test individual field calculations in isolation
+
+**Server restart required after field mapping changes:**
+```bash
+# Kill existing server
+ps aux | grep enhanced_main | grep -v grep | awk '{print $2}' | xargs kill
+
+# Restart with venv
+source venv/bin/activate && python enhanced_main.py --port 8000 &
+```
