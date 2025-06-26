@@ -97,6 +97,82 @@ class PlayerSearchRequest(BaseModel):
     name: str
     player_type: Optional[str] = None  # "hitter" or "pitcher"
 
+# Helper function to transform predictions for UI compatibility
+def transform_prediction_for_ui(prediction):
+    """Transform API prediction to match Pinhead-Claude baseline format"""
+    from pinhead_ported_scoring import format_pinhead_baseline_compatible_result, calculate_due_factors_exact_pinhead
+    
+    # Get enhanced recent performance data if available
+    recent_N_games_raw_data = prediction.get('recent_N_games_raw_data', {})
+    trends_summary_obj = recent_N_games_raw_data.get('trends_summary_obj', {})
+    
+    # Extract Pinhead-Claude compatible data
+    recent_stats = None
+    if 'pinhead_trends_full' in trends_summary_obj:
+        recent_stats = trends_summary_obj['pinhead_trends_full']
+    elif trends_summary_obj:
+        # Fallback: use trends_summary_obj directly if it contains pinhead data
+        recent_stats = trends_summary_obj
+    
+    # Debug logging
+    logger.info(f"🔍 TRANSFORM DEBUG: recent_stats keys: {list(recent_stats.keys()) if recent_stats else 'None'}")
+    logger.info(f"🔍 TRANSFORM DEBUG: trends_summary_obj keys: {list(trends_summary_obj.keys())}")
+    
+    # Calculate due factors using exact Pinhead-Claude logic
+    batter_stats_2025_agg = prediction.get('batter_2025_stats', {})
+    stats_2024_hitter = prediction.get('batter_2024_stats', {})
+    due_factors = calculate_due_factors_exact_pinhead(batter_stats_2025_agg, stats_2024_hitter)
+    
+    # Calculate contact quality factors
+    contact_factors = {'heating_up_factor': 0, 'cold_factor': 0, 'contact_trend_description': 'N/A'}
+    
+    # Apply Pinhead-Claude baseline formatting
+    formatted_prediction = format_pinhead_baseline_compatible_result(
+        prediction, recent_stats, due_factors, contact_factors
+    )
+    
+    # Ensure UI compatibility by maintaining expected nested structure
+    if 'recent_N_games_raw_data' not in formatted_prediction:
+        formatted_prediction['recent_N_games_raw_data'] = {}
+    
+    if 'trends_summary_obj' not in formatted_prediction['recent_N_games_raw_data']:
+        formatted_prediction['recent_N_games_raw_data']['trends_summary_obj'] = {}
+    
+    if 'details' not in formatted_prediction:
+        formatted_prediction['details'] = {}
+    
+    # Map key values to expected UI locations
+    trends_obj = formatted_prediction['recent_N_games_raw_data']['trends_summary_obj']
+    
+    # Recent trend direction
+    if 'recent_trend_dir' in formatted_prediction:
+        trends_obj['trend_direction'] = formatted_prediction['recent_trend_dir']
+    
+    # Recent average - use exact Pinhead-Claude calculation
+    if 'recent_avg' in formatted_prediction:
+        trends_obj['avg_avg'] = formatted_prediction['recent_avg']
+    
+    # HR rate - keep as decimal for baseline compatibility
+    if 'hr_rate' in formatted_prediction:
+        # Baseline expects decimal format (0.100 not 10.0%)
+        hr_rate_decimal = formatted_prediction['hr_rate']
+        trends_obj['hr_rate'] = hr_rate_decimal  # Keep as decimal
+        formatted_prediction['hr_rate'] = hr_rate_decimal  # Baseline format
+    
+    # AB Due factor
+    if 'ab_due' in formatted_prediction:
+        formatted_prediction['details']['due_for_hr_ab_raw_score'] = formatted_prediction['ab_due']
+    
+    # H Due factor  
+    if 'h_due' in formatted_prediction:
+        formatted_prediction['details']['due_for_hr_hits_raw_score'] = formatted_prediction['h_due']
+    
+    # Recent games count
+    if 'recent_games' in formatted_prediction:
+        trends_obj['recent_games'] = formatted_prediction['recent_games']
+    
+    return formatted_prediction
+
 # Startup event
 @app.on_event("startup")
 async def startup_event():
@@ -129,11 +205,13 @@ async def initialize_enhanced_data():
             'metric_ranges': metric_ranges
         })
         
-        # Initialize enhanced data handler
+        # Initialize enhanced data handler with comprehensive lookup data
         enhanced_handler = EnhancedDataHandler(
             master_player_data=master_player_data,
             league_avg_stats=league_avg_stats,
-            metric_ranges=metric_ranges
+            metric_ranges=metric_ranges,
+            roster_data=roster_data,
+            daily_game_data=daily_game_data
         )
         
         global_data['enhanced_data_handler'] = enhanced_handler
@@ -227,6 +305,10 @@ async def analyze_pitcher_vs_team(request: PredictionRequest):
         
         if not result.get('success', False):
             raise HTTPException(status_code=404, detail=result.get('error', 'Analysis failed'))
+        
+        # Transform predictions to match UI expectations
+        if result.get('predictions'):
+            result['predictions'] = [transform_prediction_for_ui(pred) for pred in result['predictions']]
         
         # Limit results if requested
         if request.max_results and result.get('predictions'):
@@ -510,6 +592,41 @@ async def legacy_pitcher_vs_team(
         logger.error(f"Error in legacy analysis: {e}")
         raise HTTPException(status_code=500, detail=f"Legacy analysis error: {str(e)}")
 
+# Sort options endpoint - matches comprehensive sorting from other API versions
+@app.get("/sort-options")
+async def get_sort_options():
+    """Get comprehensive list of available sorting options for predictions"""
+    return {
+        "options": [
+            {"key": "score", "label": "Overall HR Score", "description": "Overall HR likelihood score"},
+            {"key": "hr", "label": "HR Probability", "description": "Home run probability percentage"},
+            {"key": "hit", "label": "Hit Probability", "description": "Hit probability percentage"},
+            {"key": "reach_base", "label": "Reach Base Probability", "description": "Reach base probability percentage"},
+            {"key": "strikeout", "label": "Strikeout Probability (lowest first)", "description": "Strikeout probability (lower is better)"},
+            {"key": "arsenal_matchup", "label": "Arsenal Matchup Component", "description": "Arsenal vs batter matchup score"},
+            {"key": "batter_overall", "label": "Batter Overall Component", "description": "Batter overall performance component"},
+            {"key": "pitcher_overall", "label": "Pitcher Overall Component", "description": "Pitcher overall performance component"},
+            {"key": "historical_yoy_csv", "label": "Historical Trend Component", "description": "Historical year-over-year performance"},
+            {"key": "recent_daily_games", "label": "Recent Performance Component", "description": "Recent daily games performance"},
+            {"key": "contextual", "label": "Contextual Factors Component", "description": "Contextual factors score"},
+            {"key": "recent_avg", "label": "Recent Batting Average", "description": "Recent batting average"},
+            {"key": "hr_rate", "label": "Recent HR Rate", "description": "Recent home run rate"},
+            {"key": "obp", "label": "Recent On-Base Percentage", "description": "Recent on-base percentage"},
+            {"key": "ab_due", "label": "Due for HR (AB-based)", "description": "At-bats based due factor"},
+            {"key": "hits_due", "label": "Due for HR (hits-based)", "description": "Hits based due factor"},
+            {"key": "heating_up", "label": "Heating Up Contact", "description": "Heating up trend indicator"},
+            {"key": "cold", "label": "Cold Batter Score", "description": "Cold streak indicator"},
+            {"key": "hitter_slg", "label": "Hitter SLG vs Arsenal", "description": "Hitter slugging vs pitcher arsenal"},
+            {"key": "pitcher_slg", "label": "Pitcher SLG Allowed", "description": "Pitcher slugging allowed"},
+            {"key": "recent_trend_dir", "label": "Recent Trend Direction", "description": "Batter's recent performance trend"},
+            {"key": "pitcher_trend_dir", "label": "Pitcher Trend Direction", "description": "Pitcher's recent performance trend"},
+            {"key": "pitcher_home_h_total", "label": "Pitcher Home H Total", "description": "Total hits allowed at home"},
+            {"key": "pitcher_home_hr_total", "label": "Pitcher Home HR Total", "description": "Total home runs allowed at home"},
+            {"key": "pitcher_home_k_total", "label": "Pitcher Home K Total", "description": "Total strikeouts at home"},
+            {"key": "confidence", "label": "Confidence", "description": "Analysis confidence level"}
+        ]
+    }
+
 @app.post("/refresh-lineups")
 async def refresh_lineups():
     """
@@ -646,6 +763,7 @@ if __name__ == "__main__":
     print(f"🔗 API will be available at: http://{args.host}:{args.port}")
     print(f"📚 Documentation at: http://{args.host}:{args.port}/docs")
     print("⚡ Enhanced features: Missing data fallbacks, confidence scoring, team-based estimates")
+    print("📋 Comprehensive sorting: 26+ sorting options available")
     
     uvicorn.run(
         "enhanced_main:app",

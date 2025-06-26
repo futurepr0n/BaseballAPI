@@ -19,7 +19,6 @@ def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
     """
     daily_data = {}
     
-    # --- CHANGE HERE ---
     # Use '**' to search recursively in all subdirectories
     json_pattern = os.path.join(data_path, "**", "*_*_2025.json")
     print(f"Searching for daily JSON files with pattern: {json_pattern}")
@@ -323,7 +322,20 @@ def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
     print(f"Built Initial ID Map: {len(name_to_player_id_map)} name->ID entries, {len(player_id_to_name_map)} ID->name entries.")
     
     # Load daily game data
-    daily_game_data = load_daily_game_data(data_path)
+    # Fix: load_daily_game_data expects path to include 2025/ subdirectory
+    daily_data_path = os.path.join(data_path, "2025/")
+    daily_game_data = load_daily_game_data(daily_data_path)
+    
+    # Debug: verify daily data loaded with player statistics
+    if daily_game_data:
+        sample_date = list(daily_game_data.keys())[0] if daily_game_data else None
+        if sample_date:
+            sample_players = daily_game_data[sample_date].get('players', [])
+            print(f"✅ Daily data loaded: {len(daily_game_data)} dates, sample date {sample_date} has {len(sample_players)} players")
+        else:
+            print("⚠️ Daily data loaded but no valid dates found")
+    else:
+        print("❌ NO daily game data loaded - this will cause 0.000 stats in recent performance!")
     
     # Initialize master player data structure
     master_player_data = {}
@@ -483,6 +495,10 @@ def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
     
     print("\n--- Data Initialization Complete ---")
     
+    # Test comprehensive lookup with sample players (optional)
+    if rosters_list_raw and daily_game_data and len(rosters_list_raw) > 0:
+        print("🧪 Comprehensive lookup testing: Available but skipped during startup")
+    
     return (
         master_player_data,
         player_id_to_name_map,
@@ -494,37 +510,170 @@ def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
         metric_ranges
     )
 
+def validate_comprehensive_lookup_chain(player_full_name, roster_data_list, daily_data):
+    """
+    Validates the comprehensive stat lookup chain works correctly.
+    Returns: (success, roster_entry, daily_name, validation_notes)
+    """
+    validation_notes = []
+    
+    # Step 1: Find in rosters.json by fullName
+    matched_roster = None
+    for roster_entry in roster_data_list:
+        fullnames_to_check = [
+            roster_entry.get('fullName'),
+            roster_entry.get('fullName_cleaned'),
+            roster_entry.get('fullName_resolved')
+        ]
+        
+        for fullname in fullnames_to_check:
+            if fullname == player_full_name:
+                matched_roster = roster_entry
+                validation_notes.append(f"✅ Found in roster: fullName='{fullname}'")
+                break
+        
+        if matched_roster:
+            break
+    
+    if not matched_roster:
+        validation_notes.append(f"❌ NOT found in roster - will show FALLBACK badge")
+        return False, None, None, validation_notes
+    
+    # Step 2: Get name field from roster
+    daily_lookup_name = matched_roster.get('name')
+    if not daily_lookup_name:
+        validation_notes.append(f"❌ Roster entry missing 'name' field")
+        return False, matched_roster, None, validation_notes
+    
+    validation_notes.append(f"✅ Roster name field: '{daily_lookup_name}'")
+    
+    # Step 3: Check if name exists in daily data
+    daily_match_found = False
+    if daily_data:
+        recent_date = max(daily_data.keys())
+        daily_players = daily_data[recent_date].get('players', [])
+        
+        for daily_player in daily_players:
+            if daily_player.get('name') == daily_lookup_name:
+                daily_match_found = True
+                validation_notes.append(f"✅ Found in daily data ({recent_date}): name='{daily_lookup_name}'")
+                break
+    
+    if not daily_match_found:
+        validation_notes.append(f"⚠️ Daily data lookup may fail: name='{daily_lookup_name}' not found")
+    
+    return daily_match_found, matched_roster, daily_lookup_name, validation_notes
+
 def get_last_n_games_performance(player_full_name_resolved, daily_data, roster_data_list, n_games=7):
     """
     Get the performance data for a player's last N games.
     Returns a list of game statistics in reverse chronological order (most recent first).
+    COMPREHENSIVE: Ensures proper fullName → rosters.json name → daily JSON lookup chain.
     """
-    # Find player's name as used in daily data
+    # COMPREHENSIVE STRATEGY: Always use rosters.json name field for daily lookups
     daily_player_json_name = None
+    matched_roster_entry = None
+    
+    # Strategy 1: MANDATORY rosters.json fullName lookup (NEVER bypass this step)
     for p_info_roster in roster_data_list:
-        if p_info_roster.get('fullName_cleaned') == player_full_name_resolved:
-            daily_player_json_name = p_info_roster.get('name')
+        full_names_to_check = [
+            p_info_roster.get('fullName'),  # Primary: exact roster fullName
+            p_info_roster.get('fullName_cleaned'),  # Secondary: cleaned version
+            p_info_roster.get('fullName_resolved')  # Tertiary: resolved version (CSV-derived)
+        ]
+        
+        for full_name_check in full_names_to_check:
+            if full_name_check == player_full_name_resolved:
+                matched_roster_entry = p_info_roster
+                daily_player_json_name = p_info_roster.get('name')  # ALWAYS use roster's name field
+                break
+        
+        if matched_roster_entry:
             break
     
-    # If not found via roster match, search in daily data
-    if not daily_player_json_name:
-        if len(daily_data) > 0:
-            temp_dates = sorted(daily_data.keys(), reverse=True)[:5]  # Check recent games
-            for date_str_rev in temp_dates:
-                day_data_rev = daily_data[date_str_rev]
-                for player_daily_stat_rev in day_data_rev.get('players', []):
-                    resolved_daily_to_full = match_player_name_to_roster(
-                        clean_player_name(player_daily_stat_rev.get('name')), 
-                        roster_data_list
-                    )
-                    if resolved_daily_to_full == player_full_name_resolved:
-                        daily_player_json_name = player_daily_stat_rev.get('name')
-                        break
-                if daily_player_json_name:
+    # Strategy 2: Case-insensitive rosters.json fullName lookup
+    if not matched_roster_entry:
+        for p_info_roster in roster_data_list:
+            full_names_to_check = [
+                p_info_roster.get('fullName', '').lower(),  # Primary: exact roster fullName
+                p_info_roster.get('fullName_cleaned', '').lower(),  # Secondary: cleaned version
+                p_info_roster.get('fullName_resolved', '').lower()  # Tertiary: resolved version
+            ]
+            
+            for full_name_check in full_names_to_check:
+                if full_name_check == player_full_name_resolved.lower():
+                    matched_roster_entry = p_info_roster
+                    daily_player_json_name = p_info_roster.get('name')  # ALWAYS use roster's name field
                     break
+            
+            if matched_roster_entry:
+                break
     
-    if not daily_player_json_name:
-        return [], []
+    # Strategy 3: Fuzzy rosters.json fullName matching (maintain roster-first approach)
+    if not matched_roster_entry:
+        # Try fuzzy matching on fullName fields in rosters.json only
+        from difflib import get_close_matches
+        
+        all_roster_fullnames = []
+        roster_fullname_to_entry = {}
+        
+        for p_info_roster in roster_data_list:
+            for field in ['fullName', 'fullName_cleaned', 'fullName_resolved']:
+                fullname_val = p_info_roster.get(field, '')
+                if fullname_val:
+                    all_roster_fullnames.append(fullname_val)
+                    roster_fullname_to_entry[fullname_val] = p_info_roster
+        
+        # Find close matches for the input fullName
+        close_matches = get_close_matches(player_full_name_resolved, all_roster_fullnames, n=1, cutoff=0.8)
+        
+        if close_matches:
+            matched_fullname = close_matches[0]
+            matched_roster_entry = roster_fullname_to_entry[matched_fullname]
+            daily_player_json_name = matched_roster_entry.get('name')
+            print(f"🔍 FUZZY MATCH: '{player_full_name_resolved}' → '{matched_fullname}'")
+    
+    # Strategy 4: Last resort - partial name matching in rosters.json
+    if not matched_roster_entry:
+        # Split input name into parts for partial matching
+        input_parts = player_full_name_resolved.lower().split()
+        
+        for p_info_roster in roster_data_list:
+            for field in ['fullName', 'fullName_cleaned', 'fullName_resolved']:
+                roster_fullname = p_info_roster.get(field, '').lower()
+                if roster_fullname:
+                    roster_parts = roster_fullname.split()
+                    
+                    # Check if all input parts are in roster name (order doesn't matter)
+                    if all(any(input_part in roster_part for roster_part in roster_parts) for input_part in input_parts):
+                        matched_roster_entry = p_info_roster
+                        daily_player_json_name = p_info_roster.get('name')
+                        print(f"🔍 PARTIAL MATCH: '{player_full_name_resolved}' → '{p_info_roster.get(field)}'")
+                        break
+            
+            if matched_roster_entry:
+                break
+    
+    # COMPREHENSIVE VALIDATION: Check if roster lookup succeeded
+    if not matched_roster_entry or not daily_player_json_name:
+        print(f"❌ COMPREHENSIVE LOOKUP FAILED for: '{player_full_name_resolved}'")
+        print(f"   🏷️ This SHOULD show FALLBACK badge with league averages")
+        
+        # Run validation to show why it failed
+        success, roster_entry, daily_name, notes = validate_comprehensive_lookup_chain(
+            player_full_name_resolved, roster_data_list, daily_data
+        )
+        for note in notes:
+            print(f"   {note}")
+        
+        return [], []  # Return empty - this should trigger FALLBACK badge
+    
+    # COMPREHENSIVE SUCCESS: Show complete lookup chain
+    print(f"✅ COMPREHENSIVE LOOKUP SUCCESS:")
+    print(f"   Input fullName: '{player_full_name_resolved}'")
+    print(f"   Matched roster fullName: '{matched_roster_entry.get('fullName')}'")
+    print(f"   Using roster name for daily lookup: '{daily_player_json_name}'")
+    print(f"   Player team: {matched_roster_entry.get('team', 'Unknown')}")
     
     # Collect games in chronological order
     games_performance_chrono = []
@@ -597,5 +746,8 @@ def get_last_n_games_performance(player_full_name_resolved, daily_data, roster_d
             })
     
     last_n_games_data = games_performance_chrono[-n_games:]
+    # Debug: Show how many games were found
+    print(f"📈 Found {len(games_performance_chrono)} total games for '{daily_player_json_name}', returning last {len(last_n_games_data)} games")
+    
     # Return in reverse chronological order (most recent first)
     return last_n_games_data[::-1], at_bats_details

@@ -399,7 +399,7 @@ def enhanced_arsenal_matchup_with_fallbacks(batter_id, pitcher_id, master_player
 
 def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_id, master_player_data, 
                                                historical_data, metric_ranges, league_avg_stats, 
-                                               league_avg_by_pitch_type, recent_batter_stats=None):
+                                               league_avg_by_pitch_type, recent_batter_stats=None, pitcher_trend_data=None, pitcher_home_stats=None, hitter_comprehensive_stats=None):
     """
     Enhanced HR likelihood calculation that gracefully handles missing pitcher data.
     Automatically adjusts component weights and provides confidence indicators.
@@ -599,6 +599,44 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
         'confidence': round(overall_confidence, 3),
         'data_source': data_source,
         'details': details_dict,
+        # CRITICAL FIX: Use field names that PinheadsPlayhouse expects
+        'recent_avg': recent_batter_stats.get('avg_avg', 0) if recent_batter_stats else 0,  # Direct field for Recent Avg column
+        'hr_rate': (recent_batter_stats.get('hr_per_pa', 0) * 100) if recent_batter_stats else 0,  # Direct field for HR Rate % column (as percentage)
+        'recent_N_games_raw_data': {
+            'trends_summary_obj': {
+                'avg_avg': recent_batter_stats.get('avg_avg', 0) if recent_batter_stats else 0,  # Alternative mapping for Recent Avg
+                'hr_per_pa': (recent_batter_stats.get('hr_per_pa', 0) * 100) if recent_batter_stats else 0,  # Alternative mapping for HR Rate %
+                'hr_rate': recent_batter_stats.get('hr_rate', 0) if recent_batter_stats else 0,  # FIXED: Use hr_rate as decimal from Pinhead-Claude
+                'total_games': recent_batter_stats.get('total_games', 0) if recent_batter_stats else 0,
+                'total_ab': recent_batter_stats.get('total_ab', 0) if recent_batter_stats else 0,
+                'total_hits': recent_batter_stats.get('total_hits', 0) if recent_batter_stats else 0,
+                'total_hrs': recent_batter_stats.get('total_hrs', 0) if recent_batter_stats else 0,
+                'ab_due': max(0, (recent_batter_stats.get('total_ab', 0) - recent_batter_stats.get('total_hits', 0))) if recent_batter_stats else 0,
+                'trend_direction': recent_batter_stats.get('trend_direction', 'stable') if recent_batter_stats else 'stable',  # CRITICAL FIX: Add trend direction
+                'pinhead_trends_full': recent_batter_stats.get('pinhead_trends_full', {}) if recent_batter_stats else {},  # CRITICAL FIX: Pass through Pinhead-Claude data
+                'data_source': recent_batter_stats.get('data_source', 'comprehensive_lookup') if recent_batter_stats else 'none'
+            }
+        },
+        # CRITICAL FIX: Add pitcher trend data (shared across all hitters vs same pitcher)
+        'p_trend_dir': pitcher_trend_data.get('trend_direction', 'stable') if pitcher_trend_data else 'stable',
+        'p_trend_magnitude': pitcher_trend_data.get('trend_magnitude', 0.0) if pitcher_trend_data else 0.0,
+        'p_recent_era': pitcher_trend_data.get('recent_era', 0.0) if pitcher_trend_data else 0.0,
+        'p_early_era': pitcher_trend_data.get('early_era', 0.0) if pitcher_trend_data else 0.0,
+        'p_games_analyzed': pitcher_trend_data.get('p_games_found', 0) if pitcher_trend_data else 0,
+        # NEW: Add pitcher home game stats (shared across all hitters vs same pitcher)
+        'pitcher_home_games': pitcher_home_stats.get('pitcher_home_games', 0) if pitcher_home_stats else 0,
+        'pitcher_home_h_total': pitcher_home_stats.get('pitcher_home_h_total', 0) if pitcher_home_stats else 0,
+        'pitcher_home_hr_total': pitcher_home_stats.get('pitcher_home_hr_total', 0) if pitcher_home_stats else 0,
+        'pitcher_home_k_total': pitcher_home_stats.get('pitcher_home_k_total', 0) if pitcher_home_stats else 0,
+        # NEW: Add comprehensive hitter stats (individual for each hitter)
+        'hitter_slg': hitter_comprehensive_stats.get('hitter_slg', 0) if hitter_comprehensive_stats else 0,
+        'h_since_hr': hitter_comprehensive_stats.get('h_since_hr', 0) if hitter_comprehensive_stats else 0,
+        'heating_up': hitter_comprehensive_stats.get('heating_up', 0) if hitter_comprehensive_stats else 0,
+        'cold': hitter_comprehensive_stats.get('cold', 0) if hitter_comprehensive_stats else 0,
+        'hitter_total_games': hitter_comprehensive_stats.get('hitter_total_games', 0) if hitter_comprehensive_stats else 0,
+        'hitter_total_ab': hitter_comprehensive_stats.get('hitter_total_ab', 0) if hitter_comprehensive_stats else 0,
+        'hitter_total_h': hitter_comprehensive_stats.get('hitter_total_h', 0) if hitter_comprehensive_stats else 0,
+        'hitter_total_hr': hitter_comprehensive_stats.get('hitter_total_hr', 0) if hitter_comprehensive_stats else 0,
         'component_breakdown': {
             'arsenal_matchup': round(arsenal_score, 1),
             'batter_overall': round(batter_overall_score, 1),

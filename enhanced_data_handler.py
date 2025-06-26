@@ -26,10 +26,13 @@ class EnhancedDataHandler:
     Handles missing pitcher data scenarios with multiple fallback strategies.
     """
     
-    def __init__(self, master_player_data: Dict, league_avg_stats: Dict, metric_ranges: Dict):
+    def __init__(self, master_player_data: Dict, league_avg_stats: Dict, metric_ranges: Dict, 
+                 roster_data: List = None, daily_game_data: Dict = None):
         self.master_player_data = master_player_data
         self.league_avg_stats = league_avg_stats
         self.metric_ranges = metric_ranges
+        self.roster_data = roster_data or []
+        self.daily_game_data = daily_game_data or {}
         
         # Calculate real-time league averages by pitch type
         self.league_avg_by_pitch_type = calculate_league_averages_by_pitch_type(master_player_data)
@@ -73,6 +76,15 @@ class EnhancedDataHandler:
             }
         
         pitcher_id = pitcher_data['pitcher_id']
+        logger.info(f"✅ PITCHER FOUND: {pitcher_data.get('name', 'Unknown')} (ID: {pitcher_id}, Team: {pitcher_data.get('team', 'Unknown')})")
+        
+        # CRITICAL FIX: Calculate pitcher trend direction ONCE and share across all hitters
+        pitcher_trend_data = self._get_pitcher_trend_analysis(pitcher_id, pitcher_data.get('name', 'Unknown'))
+        logger.info(f"📈 PITCHER TREND: {pitcher_data.get('name', 'Unknown')} - Direction: {pitcher_trend_data.get('trend_direction', 'unknown')}")
+        
+        # CALCULATE PITCHER HOME GAME STATS ONCE and share across all hitters
+        pitcher_home_stats = self._calculate_comprehensive_pitcher_stats(pitcher_id, pitcher_data.get('name', 'Unknown'))
+        logger.info(f"🏠 PITCHER HOME STATS: {pitcher_data.get('name', 'Unknown')} - {pitcher_home_stats.get('pitcher_home_games', 0)} home games")
         
         # Find team batters
         team_batters = self._find_team_batters(team_abbr)
@@ -94,7 +106,10 @@ class EnhancedDataHandler:
                 # Get recent performance for this batter
                 recent_stats = self._get_recent_batter_performance(batter['batter_id'])
                 
-                # Perform enhanced analysis
+                # NEW: Calculate comprehensive hitter stats from ALL daily data
+                hitter_comprehensive_stats = self._calculate_comprehensive_hitter_stats(batter['batter_id'], batter['name'])
+                
+                # Perform enhanced analysis with shared pitcher data and individual hitter stats
                 analysis = enhanced_hr_score_with_missing_data_handling(
                     batter['batter_id'],
                     pitcher_id,
@@ -103,7 +118,10 @@ class EnhancedDataHandler:
                     self.metric_ranges,
                     self.league_avg_stats,
                     self.league_avg_by_pitch_type,
-                    recent_stats
+                    recent_stats,
+                    pitcher_trend_data,  # CRITICAL FIX: Pass shared pitcher trend data
+                    pitcher_home_stats,  # Pass pitcher home game stats
+                    hitter_comprehensive_stats  # NEW: Pass comprehensive hitter stats
                 )
                 
                 if analysis.get('score', 0) >= min_score:
@@ -191,25 +209,63 @@ class EnhancedDataHandler:
         return result
     
     def _find_pitcher_by_name(self, pitcher_name: str) -> Optional[Dict[str, Any]]:
-        """Find pitcher by name in master player data."""
+        """Find pitcher by name in master player data with comprehensive matching."""
+        from utils import clean_player_name
+        from difflib import get_close_matches
+        
+        pitcher_clean = clean_player_name(pitcher_name)
+        
+        # Strategy 1: Exact matching (original approach)
         for pid, pdata in self.master_player_data.items():
             roster_info = pdata.get('roster_info', {})
             if roster_info.get('type') == 'pitcher':
                 names_to_check = [
                     roster_info.get('fullName_resolved', ''),
-                    roster_info.get('fullName_cleaned', ''),
+                    roster_info.get('fullName_cleaned', ''), 
+                    roster_info.get('fullName', ''),
                     roster_info.get('name_cleaned', ''),
                     roster_info.get('name', '')
                 ]
                 
                 for name in names_to_check:
-                    if name and name.lower() == pitcher_name.lower():
+                    if name and (name.lower() == pitcher_name.lower() or 
+                               name.lower() == pitcher_clean.lower()):
                         return {
                             'pitcher_id': pid,
                             'name': roster_info.get('fullName_resolved', pitcher_name),
                             'team': roster_info.get('team', 'UNK')
                         }
         
+        # Strategy 2: Fuzzy matching for accented characters and variations
+        all_pitcher_names = []
+        pitcher_name_to_data = {}
+        
+        for pid, pdata in self.master_player_data.items():
+            roster_info = pdata.get('roster_info', {})
+            if roster_info.get('type') == 'pitcher':
+                for field in ['fullName_resolved', 'fullName_cleaned', 'fullName', 'name_cleaned', 'name']:
+                    name = roster_info.get(field, '')
+                    if name:
+                        all_pitcher_names.append(name)
+                        pitcher_name_to_data[name] = {
+                            'pitcher_id': pid,
+                            'name': roster_info.get('fullName_resolved', name),
+                            'team': roster_info.get('team', 'UNK')
+                        }
+        
+        # Try fuzzy matching
+        close_matches = get_close_matches(pitcher_name, all_pitcher_names, n=1, cutoff=0.8)
+        if close_matches:
+            matched_name = close_matches[0]
+            logger.info(f"🔍 FUZZY PITCHER MATCH: '{pitcher_name}' → '{matched_name}'")
+            return pitcher_name_to_data[matched_name]
+        
+        # Strategy 3: Handle accented characters
+        pitcher_ascii = pitcher_name.encode('ascii', 'ignore').decode('ascii')
+        if pitcher_ascii != pitcher_name:
+            return self._find_pitcher_by_name(pitcher_ascii)  # Recursive call with ASCII version
+        
+        logger.warning(f"❌ Pitcher not found: '{pitcher_name}'")
         return None
     
     def _find_team_batters(self, team_abbr: str) -> List[Dict[str, Any]]:
@@ -223,7 +279,7 @@ class EnhancedDataHandler:
                 
                 batters.append({
                     'batter_id': pid,
-                    'name': roster_info.get('fullName_resolved', f"Player_{pid}"),
+                    'name': roster_info.get('fullName', f"Player_{pid}"),  # FIXED: Use roster fullName, not CSV-derived
                     'team': team_abbr.upper(),
                     'bats': roster_info.get('bats', 'R')
                 })
@@ -231,35 +287,444 @@ class EnhancedDataHandler:
         return batters
     
     def _get_recent_batter_performance(self, batter_id: str) -> Optional[Dict[str, Any]]:
-        """Get recent performance stats for a batter."""
-        # This would integrate with the daily game data loading
-        # For now, return basic aggregated stats
+        """Get recent performance stats for a batter using comprehensive lookup chain."""
+        from data_loader import get_last_n_games_performance
+        
+        # Get batter info
         batter_data = self.master_player_data.get(batter_id, {})
-        stats_2025 = batter_data.get('stats_2025_aggregated', {})
+        roster_info = batter_data.get('roster_info', {})
         
-        if not stats_2025:
+        if not roster_info:
+            logger.warning(f"No roster info found for batter {batter_id}")
             return None
         
-        # Simulate recent performance calculation
-        total_games = stats_2025.get('G', 0)
-        if total_games < 5:
+        # Use the comprehensive lookup chain with the batter's fullName
+        # CRITICAL: Prioritize roster fullName over CSV-derived fullName_resolved
+        player_full_name = roster_info.get('fullName') or roster_info.get('fullName_resolved', '')
+        if not player_full_name:
+            logger.warning(f"No fullName found for batter {batter_id}")
             return None
         
-        # This is a simplified version - in production would use actual daily game data
-        return {
-            'total_games': min(total_games, 10),  # Last 10 games
-            'total_ab': stats_2025.get('AB', 0),
-            'total_hits': stats_2025.get('H', 0),
-            'total_hrs': stats_2025.get('HR', 0),
-            'total_bb': stats_2025.get('BB', 0),
-            'total_k': stats_2025.get('K', 0),
-            'total_pa_approx': stats_2025.get('PA_approx', 0),
-            'hit_rate': stats_2025.get('H', 0) / stats_2025.get('AB', 1) if stats_2025.get('AB', 0) > 0 else 0,
-            'hr_per_pa': stats_2025.get('HR', 0) / stats_2025.get('PA_approx', 1) if stats_2025.get('PA_approx', 0) > 0 else 0,
-            'avg_avg': stats_2025.get('H', 0) / stats_2025.get('AB', 1) if stats_2025.get('AB', 0) > 0 else 0,
-            'trend_direction': 'stable',  # Would be calculated from actual recent games
-            'trend_magnitude': 0.0
-        }
+        try:
+            # Call the comprehensive lookup chain with correct parameter order
+            # Function signature: get_last_n_games_performance(player_full_name_resolved, daily_data, roster_data_list, n_games=7)
+            logger.info(f"🔍 COMPREHENSIVE LOOKUP: Searching for '{player_full_name}' in daily data...")
+            logger.info(f"📊 Available data: {len(self.daily_game_data)} daily dates, {len(self.roster_data)} roster entries")
+            
+            last_games, at_bats = get_last_n_games_performance(
+                player_full_name, self.daily_game_data, self.roster_data, 7
+            )
+            
+            if not last_games:
+                logger.debug(f"No recent games found for {player_full_name} - will use FALLBACK")
+                return None
+            
+            # Calculate recent performance from actual games
+            total_ab = sum(game.get('AB', 0) for game in last_games)
+            total_hits = sum(game.get('H', 0) for game in last_games)
+            total_hrs = sum(game.get('HR', 0) for game in last_games)
+            total_bb = sum(game.get('BB', 0) for game in last_games)
+            total_k = sum(game.get('K', 0) for game in last_games)
+            
+            # Calculate derived stats
+            hit_rate = total_hits / total_ab if total_ab > 0 else 0
+            hr_per_ab = total_hrs / total_ab if total_ab > 0 else 0
+            total_pa = total_ab + total_bb  # Simplified PA calculation
+            hr_per_pa = total_hrs / total_pa if total_pa > 0 else 0
+            
+            # USE EXACT PINHEAD-CLAUDE CALCULATION
+            from pinhead_ported_scoring import calculate_recent_trends_exact_pinhead
+            
+            # This returns the EXACT same structure as Pinhead-Claude analyzer.py
+            pinhead_trends = calculate_recent_trends_exact_pinhead(last_games)
+            trend_direction = pinhead_trends.get('trend_direction', 'stable')
+            trend_magnitude = pinhead_trends.get('trend_magnitude', 0.0)
+            recent_avg = pinhead_trends.get('avg_avg', hit_rate)  # EXACT Pinhead-Claude avg_avg calculation
+            logger.info(f"✅ RECENT PERFORMANCE SUCCESS: {player_full_name} - {len(last_games)} games, {total_hits}/{total_ab} (Recent Avg: {recent_avg:.3f}, HR Rate: {hr_per_ab:.1%})")
+            logger.info(f"📊 DETAILED STATS: AB Due: {total_ab - total_hits}, PA: {total_pa}, BB: {total_bb}, K: {total_k}")
+            
+            return {
+                'last_7_games': last_games,  # Include the actual games data
+                'total_games': len(last_games),
+                'total_ab': total_ab,
+                'total_hits': total_hits,
+                'total_hrs': total_hrs,
+                'total_bb': total_bb,
+                'total_k': total_k,
+                'total_pa_approx': total_pa,
+                'hit_rate': hit_rate,
+                'hr_per_pa': hr_per_pa,
+                'avg_avg': recent_avg,  # EXACT Pinhead-Claude avg_avg calculation
+                'hr_rate': pinhead_trends.get('hr_rate', hr_per_ab),  # EXACT Pinhead-Claude hr_rate (AB-based decimal)
+                'trend_direction': trend_direction,  # EXACT Pinhead-Claude trend calculation
+                'trend_magnitude': trend_magnitude,  # EXACT Pinhead-Claude magnitude
+                'pinhead_trends_full': pinhead_trends,  # Include full Pinhead-Claude trends for debugging
+                'data_source': 'pinhead_claude_ported'  # Mark as using ported Pinhead-Claude logic
+            }
+            
+        except Exception as e:
+            logger.error(f"Error in comprehensive lookup for {player_full_name}: {e}")
+            return None
+    
+    def _get_pitcher_trend_analysis(self, pitcher_id: str, pitcher_name: str) -> Dict[str, Any]:
+        """
+        PORTED FROM PINHEAD-CLAUDE: Use proven pitcher trend calculation
+        """
+        from pinhead_ported_functions import get_last_n_games_performance_pitcher_ported, calculate_recent_trends_pitcher_ported
+        
+        try:
+            # Get pitcher data from master_player_data
+            pitcher_master_data = self.master_player_data.get(str(pitcher_id))
+            if not pitcher_master_data:
+                logger.warning(f"⚠️ PITCHER TREND: {pitcher_name} not found in master data - using defaults")
+                return {
+                    'trend_direction': 'stable',
+                    'trend_magnitude': 0.0,
+                    'data_source': 'none',
+                    'p_games_found': 0
+                }
+            
+            pitcher_roster_info = pitcher_master_data.get('roster_info', {})
+            pitcher_full_name = pitcher_roster_info.get('fullName') or pitcher_name
+            
+            # USE PORTED PINHEAD-CLAUDE FUNCTIONS
+            last_games, _ = get_last_n_games_performance_pitcher_ported(
+                pitcher_full_name, self.daily_game_data, self.roster_data, 7
+            )
+            
+            if not last_games:
+                logger.warning(f"⚠️ PITCHER TREND: {pitcher_name} not found in roster data - using defaults")
+                return {
+                    'trend_direction': 'stable',
+                    'trend_magnitude': 0.0,
+                    'data_source': 'none',
+                    'p_games_found': 0
+                }
+            
+            # USE PORTED PINHEAD-CLAUDE TREND CALCULATION
+            pitcher_trends = calculate_recent_trends_pitcher_ported(last_games)
+            
+            trend_direction = pitcher_trends.get('trend_direction', 'stable')
+            logger.info(f"📈 PITCHER TREND: {pitcher_name} - Direction: {trend_direction}")
+            
+            return {
+                'trend_direction': trend_direction,
+                'trend_magnitude': pitcher_trends.get('trend_magnitude', 0.0),
+                'data_source': 'pinhead_claude_ported',
+                'p_games_found': len(last_games),
+                'recent_era': pitcher_trends.get('trend_recent_val', 0.0),
+                'early_era': pitcher_trends.get('trend_early_val', 0.0)
+            }
+            
+        except Exception as e:
+            logger.error(f"Error in ported pitcher trend calculation for {pitcher_name}: {e}")
+            return {
+                'trend_direction': 'stable',
+                'trend_magnitude': 0.0,
+                'data_source': 'error',
+                'p_games_found': 0
+            }
+    
+    def _calculate_comprehensive_pitcher_stats(self, pitcher_id: str, pitcher_name: str) -> Dict[str, Any]:
+        """Calculate comprehensive pitcher home game stats from ALL available daily data"""
+        try:
+            pitcher_data = self.master_player_data.get(pitcher_id, {})
+            pitcher_roster_info = pitcher_data.get('roster_info', {})
+            
+            logger.info(f"🏠 Calculating home stats for: {pitcher_name} (ID: {pitcher_id})")
+            roster_short_name = pitcher_roster_info.get('name', '')
+            roster_full_name = pitcher_roster_info.get('fullName', '')
+            
+            # Search through ALL daily game data for this pitcher
+            all_home_games = []
+            all_away_games = []
+            total_pitcher_entries = 0
+            
+            for date_key, date_data in self.daily_game_data.items():
+                if not isinstance(date_data, dict):
+                    continue
+                    
+                # Get games for this date
+                games = date_data.get('games', [])
+                players = date_data.get('players', [])
+                
+                # Create game lookup by gameId (which matches originalId in games)
+                game_lookup = {}
+                for game in games:
+                    if isinstance(game, dict) and 'originalId' in game:
+                        game_lookup[str(game['originalId'])] = game
+                
+                # Check pitcher stats in players array
+                for player in players:
+                    if not isinstance(player, dict):
+                        continue
+                        
+                    # Match pitcher by name and type
+                    player_name = player.get('name', '').strip()
+                    player_type = player.get('playerType', '').strip()
+                    
+                    if player_type == 'pitcher':
+                        total_pitcher_entries += 1
+                    
+                    # Create multiple name variants for matching
+                    csv_format_name = ""
+                    if roster_full_name and ' ' in roster_full_name:
+                        name_parts = roster_full_name.split(' ')
+                        if len(name_parts) >= 2:
+                            csv_format_name = f"{name_parts[-1]}, {name_parts[0]}"
+                    
+                    pitcher_names_to_check = [
+                        pitcher_name.lower(),
+                        roster_short_name.lower(),
+                        roster_full_name.lower(),
+                        csv_format_name.lower(),
+                    ]
+                    
+                    name_matches = any(
+                        player_name.lower() == name for name in pitcher_names_to_check if name
+                    )
+                    
+                    if (player_type == 'pitcher' and 
+                        (name_matches or str(player.get('player_id', '')) == str(pitcher_id))):
+                        
+                        logger.debug(f"✅ Found pitcher match: '{player_name}' on {date_key}")
+                        
+                        # Get the game info for this player
+                        game_id = player.get('gameId')
+                        game_info = game_lookup.get(game_id, {})
+                        
+                        if game_info:
+                            # Determine if this is a home game for the pitcher
+                            pitcher_team = player.get('team', '').upper()
+                            home_team = game_info.get('homeTeam', '').upper()
+                            is_home = pitcher_team == home_team
+                            
+                            # Extract pitcher stats
+                            try:
+                                game_stats = {
+                                    'h': int(player.get('H', 0)),
+                                    'hr': int(player.get('HR', 0)), 
+                                    'k': int(player.get('K', 0)),
+                                    'ip': float(player.get('IP', 0)),
+                                    'r': int(player.get('R', 0)),
+                                    'er': int(player.get('ER', 0)),
+                                    'bb': int(player.get('BB', 0)),
+                                    'date': date_key,
+                                    'team': pitcher_team
+                                }
+                                
+                                if is_home:
+                                    all_home_games.append(game_stats)
+                                    logger.debug(f"🏠 Home game: {date_key}, H={game_stats['h']}, HR={game_stats['hr']}, K={game_stats['k']}")
+                                else:
+                                    all_away_games.append(game_stats)
+                                    
+                            except (ValueError, TypeError) as e:
+                                logger.warning(f"⚠️ Error parsing stats for {player_name} on {date_key}: {e}")
+                                continue
+            
+            # Calculate comprehensive home stats
+            home_stats = {
+                'total_games': len(all_home_games),
+                'total_h': sum(g['h'] for g in all_home_games),
+                'total_hr': sum(g['hr'] for g in all_home_games),
+                'total_k': sum(g['k'] for g in all_home_games),
+                'total_ip': sum(g['ip'] for g in all_home_games),
+            }
+            
+            logger.info(f"🏠 HOME STATS: {pitcher_name} - {home_stats['total_games']} games, {home_stats['total_h']} H, {home_stats['total_hr']} HR, {home_stats['total_k']} K")
+            
+            return {
+                'pitcher_home_h_total': home_stats['total_h'],
+                'pitcher_home_hr_total': home_stats['total_hr'],
+                'pitcher_home_k_total': home_stats['total_k'],
+                'pitcher_home_games': home_stats['total_games'],
+                'comprehensive_data_available': len(all_home_games) > 0
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error calculating comprehensive pitcher stats: {e}")
+            return {
+                'pitcher_home_h_total': 0,
+                'pitcher_home_hr_total': 0,
+                'pitcher_home_k_total': 0,
+                'pitcher_home_games': 0,
+                'comprehensive_data_available': False
+            }
+    
+    def _calculate_comprehensive_hitter_stats(self, batter_id: str, batter_name: str) -> Dict[str, Any]:
+        """Calculate comprehensive hitter stats from ALL available daily data - similar to pitcher stats"""
+        try:
+            batter_data = self.master_player_data.get(batter_id, {})
+            batter_roster_info = batter_data.get('roster_info', {})
+            
+            logger.info(f"🏏 Calculating comprehensive hitter stats for: {batter_name} (ID: {batter_id})")
+            roster_short_name = batter_roster_info.get('name', '')  # "P. Alonso"
+            roster_full_name = batter_roster_info.get('fullName', '')  # "Pete Alonso"
+            
+            # Search through ALL daily game data for this hitter (same logic as pitcher)
+            all_games = []
+            total_hitter_entries = 0
+            last_hr_game_index = -1  # Track position of last HR
+            
+            for date_key, date_data in self.daily_game_data.items():
+                if not isinstance(date_data, dict):
+                    continue
+                    
+                # Get players for this date
+                players = date_data.get('players', [])
+                
+                # Check hitter stats in players array
+                for player in players:
+                    if not isinstance(player, dict):
+                        continue
+                        
+                    # Match hitter by name and type
+                    player_name = player.get('name', '').strip()
+                    player_type = player.get('playerType', '').strip()
+                    
+                    if player_type == 'hitter':
+                        total_hitter_entries += 1
+                    
+                    # Create multiple name variants for matching (same as pitcher logic)
+                    csv_format_name = ""
+                    if roster_full_name and ' ' in roster_full_name:
+                        name_parts = roster_full_name.split(' ')
+                        if len(name_parts) >= 2:
+                            csv_format_name = f"{name_parts[-1]}, {name_parts[0]}"  # "Alonso, Pete"
+                    
+                    hitter_names_to_check = [
+                        batter_name.lower(),  # API request name
+                        roster_short_name.lower(),  # "p. alonso"
+                        roster_full_name.lower(),  # "pete alonso"
+                        csv_format_name.lower(),  # "alonso, pete"
+                    ]
+                    
+                    name_matches = any(
+                        player_name.lower() == name for name in hitter_names_to_check if name
+                    )
+                    
+                    if (player_type == 'hitter' and 
+                        (name_matches or str(player.get('player_id', '')) == str(batter_id))):
+                        
+                        logger.debug(f"✅ Found hitter match: '{player_name}' on {date_key}")
+                        
+                        # Extract hitter stats using correct field names
+                        try:
+                            game_stats = {
+                                'ab': int(player.get('AB', 0)),
+                                'h': int(player.get('H', 0)),
+                                'hr': int(player.get('HR', 0)),
+                                '2b': int(player.get('2B', 0)),
+                                '3b': int(player.get('3B', 0)),
+                                'rbi': int(player.get('RBI', 0)),
+                                'bb': int(player.get('BB', 0)),
+                                'k': int(player.get('K', 0)),
+                                'avg': float(player.get('AVG', 0)) if player.get('AVG') else 0,
+                                'obp': float(player.get('OBP', 0)) if player.get('OBP') else 0,
+                                'slg': float(player.get('SLG', 0)) if player.get('SLG') else 0,
+                                'date': date_key,
+                                'team': player.get('team', '').upper()
+                            }
+                            
+                            all_games.append(game_stats)
+                            
+                            # Track last HR for "H since HR" calculation
+                            if game_stats['hr'] > 0:
+                                last_hr_game_index = len(all_games) - 1
+                            
+                            logger.debug(f"🏏 Hitter game: {date_key}, H={game_stats['h']}, HR={game_stats['hr']}, SLG={game_stats['slg']}")
+                                
+                        except (ValueError, TypeError) as e:
+                            logger.warning(f"⚠️ Error parsing hitter stats for {player_name} on {date_key}: {e}")
+                            continue
+            
+            # Sort games by date to ensure chronological order
+            all_games.sort(key=lambda x: x['date'])
+            
+            # Calculate comprehensive hitter stats
+            if len(all_games) == 0:
+                logger.warning(f"⚠️ No hitter game data found for {batter_name}")
+                return {
+                    'hitter_slg': 0,
+                    'h_since_hr': 0,
+                    'hitter_total_games': 0,
+                    'hitter_total_ab': 0,
+                    'hitter_total_h': 0,
+                    'hitter_total_hr': 0,
+                    'heating_up': 0,
+                    'cold': 0,
+                    'comprehensive_data_available': False
+                }
+            
+            # Basic totals
+            total_games = len(all_games)
+            total_ab = sum(g['ab'] for g in all_games)
+            total_h = sum(g['h'] for g in all_games)
+            total_hr = sum(g['hr'] for g in all_games)
+            total_2b = sum(g['2b'] for g in all_games)
+            total_3b = sum(g['3b'] for g in all_games)
+            total_bb = sum(g['bb'] for g in all_games)
+            total_k = sum(g['k'] for g in all_games)
+            
+            # Calculate slugging percentage (total bases / at bats)
+            singles = total_h - total_2b - total_3b - total_hr
+            total_bases = singles + (total_2b * 2) + (total_3b * 3) + (total_hr * 4)
+            hitter_slg = total_bases / total_ab if total_ab > 0 else 0
+            
+            # Calculate hits since last HR
+            h_since_hr = 0
+            if last_hr_game_index >= 0:
+                # Count hits in games after the last HR
+                for i in range(last_hr_game_index + 1, len(all_games)):
+                    h_since_hr += all_games[i]['h']
+            else:
+                # No HR found, count all hits
+                h_since_hr = total_h
+            
+            # Calculate heating up / cold factors (recent 10 games vs previous 10 games)
+            heating_up = 0
+            cold = 0
+            if len(all_games) >= 20:  # Need at least 20 games for comparison
+                recent_10 = all_games[-10:]
+                previous_10 = all_games[-20:-10]
+                
+                recent_avg = sum(g['h'] for g in recent_10) / sum(g['ab'] for g in recent_10) if sum(g['ab'] for g in recent_10) > 0 else 0
+                previous_avg = sum(g['h'] for g in previous_10) / sum(g['ab'] for g in previous_10) if sum(g['ab'] for g in previous_10) > 0 else 0
+                
+                avg_diff = recent_avg - previous_avg
+                if avg_diff > 0.05:  # Significant improvement
+                    heating_up = min(10, avg_diff * 100)  # Scale to 0-10
+                elif avg_diff < -0.05:  # Significant decline
+                    cold = min(10, abs(avg_diff) * 100)  # Scale to 0-10
+            
+            logger.info(f"🏏 HITTER STATS: {batter_name} - {total_games} games, SLG: {hitter_slg:.3f}, H since HR: {h_since_hr}, Heating up: {heating_up:.1f}")
+            
+            return {
+                'hitter_slg': round(hitter_slg, 3),
+                'h_since_hr': h_since_hr,
+                'hitter_total_games': total_games,
+                'hitter_total_ab': total_ab,
+                'hitter_total_h': total_h,
+                'hitter_total_hr': total_hr,
+                'heating_up': round(heating_up, 1),
+                'cold': round(cold, 1),
+                'comprehensive_data_available': True
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Error calculating comprehensive hitter stats: {e}")
+            return {
+                'hitter_slg': 0,
+                'h_since_hr': 0,
+                'hitter_total_games': 0,
+                'hitter_total_ab': 0,
+                'hitter_total_h': 0,
+                'hitter_total_hr': 0,
+                'heating_up': 0,
+                'cold': 0,
+                'comprehensive_data_available': False
+            }
     
     def _calculate_confidence_distribution(self, analyses: List[Dict[str, Any]]) -> Dict[str, int]:
         """Calculate distribution of confidence levels."""

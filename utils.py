@@ -118,37 +118,84 @@ def get_approximated_pa(stats_dict):
            stats_dict.get('SF', 0) + stats_dict.get('SAC', 0)
 
 def match_player_name_to_roster(short_name_cleaned, roster_data_list):
-    """Match a short/abbreviated player name to full roster name."""
+    """
+    Enhanced player name matching to fix 0 statistics issue.
+    Matches a short/abbreviated player name to full roster name with multiple strategies.
+    """
     if not short_name_cleaned:
         return None
     
-    # Direct match first
+    # Strategy 1: Direct exact match (case sensitive)
     for player in roster_data_list:
         if player.get('name_cleaned') == short_name_cleaned:
             return player.get('fullName_cleaned')
     
-    # Handle abbreviated names (e.g., "J. Smith" -> "John Smith")
-    if '.' in short_name_cleaned or (len(short_name_cleaned.split()) == 2 and len(short_name_cleaned.split()[0]) <= 2):
-        parts = short_name_cleaned.split()
-        if len(parts) >= 2:
-            first_initial_part = parts[0].replace('.', '').upper()
-            last_name_query_part = " ".join(parts[1:]).title()
-            
-            potential_matches = []
-            for player in roster_data_list:
-                full_name_roster_cleaned = player.get('fullName_cleaned', '')
-                if full_name_roster_cleaned:
-                    full_parts_roster = full_name_roster_cleaned.split()
-                    if len(full_parts_roster) >= 2:
-                        roster_first_name = full_parts_roster[0]
-                        roster_last_name = " ".join(full_parts_roster[1:]).title()
-                        if roster_first_name.upper().startswith(first_initial_part) and roster_last_name == last_name_query_part:
-                            potential_matches.append(full_name_roster_cleaned)
-            
-            if len(potential_matches) == 1:
-                return potential_matches[0]
+    # Strategy 2: Case-insensitive direct match
+    short_name_lower = short_name_cleaned.lower()
+    for player in roster_data_list:
+        name_cleaned = player.get('name_cleaned', '')
+        if name_cleaned.lower() == short_name_lower:
+            return player.get('fullName_cleaned')
     
-    # Fuzzy match on short names
+    # Strategy 3: Match against original name field (before cleaning)
+    for player in roster_data_list:
+        original_name = player.get('name', '')
+        if original_name == short_name_cleaned:
+            return player.get('fullName_cleaned')
+        # Also try case-insensitive match on original name
+        if original_name.lower() == short_name_lower:
+            return player.get('fullName_cleaned')
+    
+    # Strategy 4: Enhanced abbreviated name handling with period flexibility
+    # Handle names like "A. Garcia", "A Garcia", "A.Garcia"
+    if ('.' in short_name_cleaned or 
+        (len(short_name_cleaned.split()) == 2 and len(short_name_cleaned.split()[0]) <= 2)):
+        
+        # Create multiple variants of the short name
+        variants = []
+        
+        # Original
+        variants.append(short_name_cleaned)
+        
+        # With/without periods
+        with_period = short_name_cleaned.replace(' ', '. ', 1) if '.' not in short_name_cleaned else short_name_cleaned
+        without_period = short_name_cleaned.replace('.', '')
+        variants.extend([with_period, without_period])
+        
+        # Different spacing
+        variants.append(short_name_cleaned.replace(' ', ''))
+        variants.append(short_name_cleaned.replace('.', '. '))
+        
+        for variant in variants:
+            parts = variant.replace('.', '').split()
+            if len(parts) >= 2:
+                first_initial_part = parts[0].upper()
+                last_name_query_part = " ".join(parts[1:]).title()
+                
+                potential_matches = []
+                for player in roster_data_list:
+                    full_name_roster_cleaned = player.get('fullName_cleaned', '')
+                    if full_name_roster_cleaned:
+                        full_parts_roster = full_name_roster_cleaned.split()
+                        if len(full_parts_roster) >= 2:
+                            roster_first_name = full_parts_roster[0]
+                            roster_last_name = " ".join(full_parts_roster[1:]).title()
+                            
+                            # Enhanced matching: check if first name starts with initial
+                            if (roster_first_name.upper().startswith(first_initial_part) and 
+                                roster_last_name.lower() == last_name_query_part.lower()):
+                                potential_matches.append(full_name_roster_cleaned)
+                
+                if len(potential_matches) == 1:
+                    return potential_matches[0]
+                elif len(potential_matches) > 1:
+                    # Multiple matches - return first one (could be enhanced with team matching)
+                    return potential_matches[0]
+    
+    # Strategy 5: Fuzzy match on multiple name fields
+    from difflib import get_close_matches
+    
+    # Try fuzzy matching on name_cleaned
     roster_short_names = [p.get('name_cleaned', '') for p in roster_data_list if p.get('name_cleaned')]
     matches = get_close_matches(short_name_cleaned, roster_short_names, n=1, cutoff=0.8)
     if matches:
@@ -156,11 +203,27 @@ def match_player_name_to_roster(short_name_cleaned, roster_data_list):
             if player.get('name_cleaned') == matches[0]:
                 return player.get('fullName_cleaned')
     
-    # Fuzzy match on full names
+    # Try fuzzy matching on original name field
+    roster_original_names = [p.get('name', '') for p in roster_data_list if p.get('name')]
+    original_matches = get_close_matches(short_name_cleaned, roster_original_names, n=1, cutoff=0.8)
+    if original_matches:
+        for player in roster_data_list:
+            if player.get('name') == original_matches[0]:
+                return player.get('fullName_cleaned')
+    
+    # Strategy 6: Fuzzy match on full names (lower cutoff for more flexibility)
     roster_full_names = [p.get('fullName_cleaned', '') for p in roster_data_list if p.get('fullName_cleaned')]
-    full_matches = get_close_matches(short_name_cleaned, roster_full_names, n=1, cutoff=0.75)
+    full_matches = get_close_matches(short_name_cleaned, roster_full_names, n=1, cutoff=0.7)
     if full_matches:
         return full_matches[0]
+    
+    # Strategy 7: Last resort - partial matching
+    for player in roster_data_list:
+        full_name = player.get('fullName_cleaned', '')
+        if full_name and short_name_cleaned.lower() in full_name.lower():
+            # Basic sanity check - make sure it's not too broad a match
+            if len(short_name_cleaned) >= 4:  # Don't match very short strings
+                return full_name
     
     return None
 
