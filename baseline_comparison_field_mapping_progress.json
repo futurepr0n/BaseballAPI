@@ -1,0 +1,35 @@
+🔍 PINHEAD-CLAUDE vs PINHEADSPLAYHOUSE COMPARISON
+================================================================================
+📊 Loading Pinhead-Claude baseline data...
+✅ Loaded 125 baseline predictions
+📈 Found 13 unique pitcher-team matchups in baseline
+
+🎯 COMPARING: Andre Pallante vs CHC
+------------------------------------------------------------
+❌ API Error for Andre Pallante vs CHC: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /analyze/pitcher-vs-team (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10c3ceae0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+❌ API failed for Andre Pallante vs CHC
+
+🎯 COMPARING: Emerson Hancock vs MIN
+------------------------------------------------------------
+❌ API Error for Emerson Hancock vs MIN: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /analyze/pitcher-vs-team (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10c9dbb30>: Failed to establish a new connection: [Errno 61] Connection refused'))
+❌ API failed for Emerson Hancock vs MIN
+
+🎯 COMPARING: Grant Holmes vs NYM
+------------------------------------------------------------
+❌ API Error for Grant Holmes vs NYM: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /analyze/pitcher-vs-team (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10ca2c2c0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+❌ API failed for Grant Holmes vs NYM
+
+🎯 COMPARING: Griffin Canning vs ATL
+------------------------------------------------------------
+❌ API Error for Griffin Canning vs ATL: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /analyze/pitcher-vs-team (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10ca2c9b0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+❌ API failed for Griffin Canning vs ATL
+
+🎯 COMPARING: Hayden Birdsong vs MIA
+------------------------------------------------------------
+❌ API Error for Hayden Birdsong vs MIA: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: /analyze/pitcher-vs-team (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10c9dbe90>: Failed to establish a new connection: [Errno 61] Connection refused'))
+❌ API failed for Hayden Birdsong vs MIA
+
+================================================================================
+📊 PINHEAD-CLAUDE vs PINHEADSPLAYHOUSE COMPARISON REPORT
+================================================================================
+❌ No comparison results available

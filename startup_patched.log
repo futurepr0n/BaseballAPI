@@ -1,0 +1,82 @@
+/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_main.py:149: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [80413]
+INFO:     Waiting for application startup.
+INFO:enhanced_main:Starting enhanced data initialization...
+INFO:enhanced_data_handler:Enhanced data handler initialized with 671 players
+INFO:enhanced_main:Enhanced data initialization completed successfully
+INFO:enhanced_main:- Players loaded: 671
+INFO:enhanced_main:- Daily game dates: 184
+INFO:enhanced_main:- Enhanced handler ready with fallback strategies
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('127.0.0.1', 8000): [errno 48] address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+🚀 Starting Enhanced Baseball Analysis API...
+🔗 API will be available at: http://127.0.0.1:8000
+📚 Documentation at: http://127.0.0.1:8000/docs
+⚡ Enhanced features: Missing data fallbacks, confidence scoring, team-based estimates
+📋 Comprehensive sorting: 26+ sorting options available
+
+=== Initializing Baseball Analysis System ===
+
+--- Building Master Player ID Map from reference CSVs ---
+Built Initial ID Map: 727 name->ID entries, 728 ID->name entries.
+Searching for daily JSON files with pattern: ../BaseballTracker/build/data/2025/**/*_*_2025.json
+
+Loading daily game data from 184 files found...
+Successfully loaded daily data for 184 dates.
+✅ Daily data loaded: 184 dates, sample date 2025-04-01 has 380 players
+
+--- Rosters Processed into Master Data ---
+Created/Updated entries for 671 players. 471 unmapped from roster.json.
+Final ID Map: 1395 name->ID entries, 728 ID->name entries.
+
+--- Merging Detailed 2025 CSV Stats into Master Player Data ---
+Processed bbb_LHB_vs_LHP (batters-batted-ball-bat-left-pitch-hand-left-2025.csv): merged data for 87 players.
+Processed bbb_LHB_vs_RHP (batters-batted-ball-bat-left-pitch-hand-right-2025.csv): merged data for 115 players.
+Processed bbb_RHB_vs_LHP (batters-batted-ball-bat-right-pitch-hand-left-2025.csv): merged data for 148 players.
+Processed bbb_RHB_vs_RHP (batters-batted-ball-bat-right-pitch-hand-right-2025.csv): merged data for 121 players.
+Processed hitter_overall_ev_stats (hitter_exit_velocity_2025.csv): merged data for 238 players.
+Processed pitcher_overall_ev_stats (pitcher_exit_velocity_2025.csv): merged data for 336 players.
+Processed hitter_pitch_arsenal_stats (hitterpitcharsenalstats_2025.csv): merged data for 323 players.
+Processed pitcher_pitch_arsenal_stats (pitcherpitcharsenalstats_2025.csv): merged data for 287 players.
+
+--- Aggregating 2025 Player Stats from Daily Files ---
+Aggregated 2025 stats for 360 players.
+
+--- Calculating 2025 League Averages ---
+Calculated 2025 League Averages (from 318 hitters with >= 30 PA):
+  AVG: 0.245
+  SLG: 0.342
+  ISO: 0.097
+  AVG_K_PERCENT: 0.224
+  AVG_BB_PERCENT: 0.088
+  AVG_HARD_HIT_PERCENT: 0.350
+  AVG_BRL_PERCENT: 0.093
+  AVG_BRL_PA_PERCENT: 0.035
+
+--- Loading Multi-Year Historical Data (CSVs) ---
+Loading 2022 data...
+  Loaded 2022 hitter_arsenal (898 rows)
+  Loaded 2022 pitcher_arsenal (567 rows)
+Loading 2023 data...
+  Loaded 2023 hitter_arsenal (875 rows)
+  Loaded 2023 pitcher_arsenal (550 rows)
+Loading 2024 data...
+  Loaded 2024 hitter_arsenal (856 rows)
+  Loaded 2024 pitcher_arsenal (531 rows)
+Multi-year historical data loading complete.
+
+Calculating metric ranges for normalization...
+Metric ranges calculation complete.
+
+--- Data Initialization Complete ---
+🧪 Comprehensive lookup testing: Available but skipped during startup
+Calculating real-time league averages by pitch type...
+Calculated league averages for 8 pitch types

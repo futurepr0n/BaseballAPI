@@ -1,0 +1,204 @@
+/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_main.py:169: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [5677]
+INFO:     Waiting for application startup.
+INFO:enhanced_main:Starting enhanced data initialization...
+INFO:enhanced_data_handler:Enhanced data handler initialized with 671 players
+INFO:enhanced_main:Enhanced data initialization completed successfully
+INFO:enhanced_main:- Players loaded: 671
+INFO:enhanced_main:- Daily game dates: 184
+INFO:enhanced_main:- Enhanced handler ready with fallback strategies
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+🚀 Starting Enhanced Baseball Analysis API...
+🔗 API will be available at: http://127.0.0.1:8000
+📚 Documentation at: http://127.0.0.1:8000/docs
+⚡ Enhanced features: Missing data fallbacks, confidence scoring, team-based estimates
+📋 Comprehensive sorting: 26+ sorting options available
+
+=== Initializing Baseball Analysis System ===
+
+--- Building Master Player ID Map from reference CSVs ---
+Built Initial ID Map: 727 name->ID entries, 728 ID->name entries.
+Searching for daily JSON files with pattern: ../BaseballTracker/build/data/2025/**/*_*_2025.json
+
+Loading daily game data from 184 files found...
+Successfully loaded daily data for 184 dates.
+✅ Daily data loaded: 184 dates, sample date 2025-04-01 has 380 players
+
+--- Rosters Processed into Master Data ---
+Created/Updated entries for 671 players. 471 unmapped from roster.json.
+Final ID Map: 1395 name->ID entries, 728 ID->name entries.
+
+--- Merging Detailed 2025 CSV Stats into Master Player Data ---
+Processed bbb_LHB_vs_LHP (batters-batted-ball-bat-left-pitch-hand-left-2025.csv): merged data for 87 players.
+Processed bbb_LHB_vs_RHP (batters-batted-ball-bat-left-pitch-hand-right-2025.csv): merged data for 115 players.
+Processed bbb_RHB_vs_LHP (batters-batted-ball-bat-right-pitch-hand-left-2025.csv): merged data for 148 players.
+Processed bbb_RHB_vs_RHP (batters-batted-ball-bat-right-pitch-hand-right-2025.csv): merged data for 121 players.
+Processed hitter_overall_ev_stats (hitter_exit_velocity_2025.csv): merged data for 238 players.
+Processed pitcher_overall_ev_stats (pitcher_exit_velocity_2025.csv): merged data for 336 players.
+Processed hitter_pitch_arsenal_stats (hitterpitcharsenalstats_2025.csv): merged data for 323 players.
+Processed pitcher_pitch_arsenal_stats (pitcherpitcharsenalstats_2025.csv): merged data for 287 players.
+
+--- Aggregating 2025 Player Stats from Daily Files ---
+Aggregated 2025 stats for 360 players.
+
+--- Calculating 2025 League Averages ---
+Calculated 2025 League Averages (from 318 hitters with >= 30 PA):
+  AVG: 0.245
+  SLG: 0.342
+  ISO: 0.097
+  AVG_K_PERCENT: 0.224
+  AVG_BB_PERCENT: 0.088
+  AVG_HARD_HIT_PERCENT: 0.350
+  AVG_BRL_PERCENT: 0.093
+  AVG_BRL_PA_PERCENT: 0.035
+
+--- Loading Multi-Year Historical Data (CSVs) ---
+Loading 2022 data...
+  Loaded 2022 hitter_arsenal (898 rows)
+  Loaded 2022 pitcher_arsenal (567 rows)
+Loading 2023 data...
+  Loaded 2023 hitter_arsenal (875 rows)
+  Loaded 2023 pitcher_arsenal (550 rows)
+Loading 2024 data...
+  Loaded 2024 hitter_arsenal (856 rows)
+  Loaded 2024 pitcher_arsenal (531 rows)
+Multi-year historical data loading complete.
+
+Calculating metric ranges for normalization...
+Metric ranges calculation complete.
+
+--- Data Initialization Complete ---
+🧪 Comprehensive lookup testing: Available but skipped during startup
+Calculating real-time league averages by pitch type...
+Calculated league averages for 8 pitch types
+INFO:     127.0.0.1:51097 - "GET /health HTTP/1.1" 200 OK
+INFO:enhanced_data_handler:✅ PITCHER FOUND: Andre Pallante (ID: 669467, Team: STL)
+INFO:pinhead_ported_functions:🎯 PORTED PITCHER LOOKUP: Andre Pallante
+INFO:pinhead_ported_functions:✅ PORTED: Found pitcher in daily data as: A. Pallante
+INFO:pinhead_ported_functions:✅ PORTED: Returning 7 recent pitcher games
+INFO:pinhead_ported_functions:🎯 PORTED: Calculating pitcher trends for 7 games
+INFO:pinhead_ported_functions:🎯 PORTED PITCHER TREND: declining (4.357 -> 4.687)
+INFO:enhanced_data_handler:📈 PITCHER TREND: Andre Pallante - Direction: declining
+INFO:enhanced_data_handler:📈 PITCHER TREND: Andre Pallante - Direction: declining
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Carson Kelly' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Carson Kelly - 7 games, 5/19 (Recent Avg: 0.245, HR Rate: 0.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 14, PA: 20, BB: 1, K: 7
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Dansby Swanson' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Dansby Swanson - 7 games, 6/27 (Recent Avg: 0.240, HR Rate: 3.7%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 21, PA: 29, BB: 2, K: 4
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Ian Happ' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Ian Happ - 7 games, 6/28 (Recent Avg: 0.247, HR Rate: 14.3%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 22, PA: 32, BB: 4, K: 7
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Jon Berti' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Jon Berti - 7 games, 0/6 (Recent Avg: 0.210, HR Rate: 0.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 6, PA: 6, BB: 0, K: 2
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Justin Turner' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Justin Turner - 7 games, 2/17 (Recent Avg: 0.207, HR Rate: 0.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 15, PA: 18, BB: 1, K: 1
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Kyle Tucker' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Kyle Tucker - 7 games, 11/28 (Recent Avg: 0.283, HR Rate: 7.1%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 17, PA: 32, BB: 4, K: 4
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Michael Busch' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Michael Busch - 7 games, 8/25 (Recent Avg: 0.268, HR Rate: 4.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 17, PA: 28, BB: 3, K: 4
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Matt Shaw' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Matt Shaw - 7 games, 3/19 (Recent Avg: 0.223, HR Rate: 0.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 16, PA: 20, BB: 1, K: 4
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Nico Hoerner' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Nico Hoerner - 7 games, 9/25 (Recent Avg: 0.288, HR Rate: 4.0%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 16, PA: 25, BB: 0, K: 2
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Pete Crow-Armstrong' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Pete Crow-Armstrong - 7 games, 8/24 (Recent Avg: 0.270, HR Rate: 12.5%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 16, PA: 25, BB: 1, K: 5
+INFO:enhanced_data_handler:🔍 COMPREHENSIVE LOOKUP: Searching for 'Seiya Suzuki' in daily data...
+INFO:enhanced_data_handler:📊 Available data: 184 daily dates, 1180 roster entries
+INFO:enhanced_data_handler:✅ RECENT PERFORMANCE SUCCESS: Seiya Suzuki - 7 games, 8/30 (Recent Avg: 0.257, HR Rate: 13.3%)
+INFO:enhanced_data_handler:📊 DETAILED STATS: AB Due: 22, PA: 31, BB: 1, K: 10
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Carson Kelly'
+   Matched roster fullName: 'Carson Kelly'
+   Using roster name for daily lookup: 'C. Kelly'
+   Player team: CHC
+📈 Found 50 total games for 'C. Kelly', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Dansby Swanson'
+   Matched roster fullName: 'Dansby Swanson'
+   Using roster name for daily lookup: 'D. Swanson'
+   Player team: CHC
+📈 Found 78 total games for 'D. Swanson', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Ian Happ'
+   Matched roster fullName: 'Ian Happ'
+   Using roster name for daily lookup: 'I. Happ'
+   Player team: CHC
+📈 Found 70 total games for 'I. Happ', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Jon Berti'
+   Matched roster fullName: 'Jon Berti'
+   Using roster name for daily lookup: 'J. Berti'
+   Player team: CHC
+📈 Found 38 total games for 'J. Berti', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Justin Turner'
+   Matched roster fullName: 'Justin Turner'
+   Using roster name for daily lookup: 'J. Turner'
+   Player team: CHC
+📈 Found 42 total games for 'J. Turner', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Kyle Tucker'
+   Matched roster fullName: 'Kyle Tucker'
+   Using roster name for daily lookup: 'K. Tucker'
+   Player team: CHC
+📈 Found 78 total games for 'K. Tucker', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Michael Busch'
+   Matched roster fullName: 'Michael Busch'
+   Using roster name for daily lookup: 'M. Busch'
+   Player team: CHC
+📈 Found 73 total games for 'M. Busch', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Matt Shaw'
+   Matched roster fullName: 'Matt Shaw'
+   Using roster name for daily lookup: 'M. Shaw'
+   Player team: CHC
+📈 Found 49 total games for 'M. Shaw', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Nico Hoerner'
+   Matched roster fullName: 'Nico Hoerner'
+   Using roster name for daily lookup: 'N. Hoerner'
+   Player team: CHC
+📈 Found 75 total games for 'N. Hoerner', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Pete Crow-Armstrong'
+   Matched roster fullName: 'Pete Crow-Armstrong'
+   Using roster name for daily lookup: 'P. Crow-Armstrong'
+   Player team: CHC
+📈 Found 78 total games for 'P. Crow-Armstrong', returning last 7 games
+✅ COMPREHENSIVE LOOKUP SUCCESS:
+   Input fullName: 'Seiya Suzuki'
+   Matched roster fullName: 'Seiya Suzuki'
+   Using roster name for daily lookup: 'S. Suzuki'
+   Player team: CHC
+📈 Found 75 total games for 'S. Suzuki', returning last 7 games
+INFO:     127.0.0.1:51367 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5677]

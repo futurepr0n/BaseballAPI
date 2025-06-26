@@ -1,0 +1,217 @@
+/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_main.py:100: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [43682]
+INFO:     Waiting for application startup.
+INFO:enhanced_main:Starting enhanced data initialization...
+INFO:enhanced_data_handler:Enhanced data handler initialized with 671 players
+INFO:enhanced_main:Enhanced data initialization completed successfully
+INFO:enhanced_main:- Players loaded: 671
+INFO:enhanced_main:- Daily game dates: 184
+INFO:enhanced_main:- Enhanced handler ready with fallback strategies
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+🚀 Starting Enhanced Baseball Analysis API...
+🔗 API will be available at: http://127.0.0.1:8000
+📚 Documentation at: http://127.0.0.1:8000/docs
+⚡ Enhanced features: Missing data fallbacks, confidence scoring, team-based estimates
+📋 Comprehensive sorting: 26+ sorting options available
+
+=== Initializing Baseball Analysis System ===
+
+--- Building Master Player ID Map from reference CSVs ---
+Built Initial ID Map: 727 name->ID entries, 728 ID->name entries.
+Searching for daily JSON files with pattern: ../BaseballTracker/build/data/2025/**/*_*_2025.json
+
+Loading daily game data from 184 files found...
+Successfully loaded daily data for 184 dates.
+✅ Daily data loaded: 184 dates, sample date 2025-04-01 has 380 players
+
+--- Rosters Processed into Master Data ---
+Created/Updated entries for 671 players. 471 unmapped from roster.json.
+Final ID Map: 1395 name->ID entries, 728 ID->name entries.
+
+--- Merging Detailed 2025 CSV Stats into Master Player Data ---
+Processed bbb_LHB_vs_LHP (batters-batted-ball-bat-left-pitch-hand-left-2025.csv): merged data for 87 players.
+Processed bbb_LHB_vs_RHP (batters-batted-ball-bat-left-pitch-hand-right-2025.csv): merged data for 115 players.
+Processed bbb_RHB_vs_LHP (batters-batted-ball-bat-right-pitch-hand-left-2025.csv): merged data for 148 players.
+Processed bbb_RHB_vs_RHP (batters-batted-ball-bat-right-pitch-hand-right-2025.csv): merged data for 121 players.
+Processed hitter_overall_ev_stats (hitter_exit_velocity_2025.csv): merged data for 238 players.
+Processed pitcher_overall_ev_stats (pitcher_exit_velocity_2025.csv): merged data for 336 players.
+Processed hitter_pitch_arsenal_stats (hitterpitcharsenalstats_2025.csv): merged data for 323 players.
+Processed pitcher_pitch_arsenal_stats (pitcherpitcharsenalstats_2025.csv): merged data for 287 players.
+
+--- Aggregating 2025 Player Stats from Daily Files ---
+Aggregated 2025 stats for 360 players.
+
+--- Calculating 2025 League Averages ---
+Calculated 2025 League Averages (from 318 hitters with >= 30 PA):
+  AVG: 0.245
+  SLG: 0.342
+  ISO: 0.097
+  AVG_K_PERCENT: 0.224
+  AVG_BB_PERCENT: 0.088
+  AVG_HARD_HIT_PERCENT: 0.350
+  AVG_BRL_PERCENT: 0.093
+  AVG_BRL_PA_PERCENT: 0.035
+
+--- Loading Multi-Year Historical Data (CSVs) ---
+Loading 2022 data...
+  Loaded 2022 hitter_arsenal (898 rows)
+  Loaded 2022 pitcher_arsenal (567 rows)
+Loading 2023 data...
+  Loaded 2023 hitter_arsenal (875 rows)
+  Loaded 2023 pitcher_arsenal (550 rows)
+Loading 2024 data...
+  Loaded 2024 hitter_arsenal (856 rows)
+  Loaded 2024 pitcher_arsenal (531 rows)
+Multi-year historical data loading complete.
+
+Calculating metric ranges for normalization...
+Metric ranges calculation complete.
+
+--- Data Initialization Complete ---
+Calculating real-time league averages by pitch type...
+Calculated league averages for 8 pitch types
+INFO:     127.0.0.1:57028 - "POST /predict/home-run HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57127 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57273 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57380 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57493 - "POST /players/search HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57590 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57686 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "OPTIONS /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "OPTIONS /sort-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "GET /sort-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "OPTIONS /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57804 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57804 - "OPTIONS /pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57799 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58042 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62197 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62197 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62197 - "OPTIONS /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62199 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62199 - "OPTIONS /sort-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62197 - "GET /sort-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "GET /sort-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "OPTIONS /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62423 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62423 - "OPTIONS /pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /pitcher-vs-team HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62453 - "POST /analyze/pitcher-vs-team HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [43682]

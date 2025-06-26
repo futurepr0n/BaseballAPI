@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_main_fixed.py", line 20, in <module>
+    from enhanced_analyzer import initialize_enhanced_analyzer, ENHANCED_WEIGHTS, SORTING_FACTORS
+ImportError: cannot import name 'initialize_enhanced_analyzer' from 'enhanced_analyzer' (/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_analyzer.py)

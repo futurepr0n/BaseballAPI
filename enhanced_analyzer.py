@@ -637,6 +637,19 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
         'hitter_total_ab': hitter_comprehensive_stats.get('hitter_total_ab', 0) if hitter_comprehensive_stats else 0,
         'hitter_total_h': hitter_comprehensive_stats.get('hitter_total_h', 0) if hitter_comprehensive_stats else 0,
         'hitter_total_hr': hitter_comprehensive_stats.get('hitter_total_hr', 0) if hitter_comprehensive_stats else 0,
+        # CRITICAL FIX: Add missing pitcher SLG field
+        'pitcher_slg': pitcher_ev_stats.get('slg_percent', 0) / 100.0 if pitcher_ev_stats and pitcher_ev_stats.get('slg_percent') else 0,
+        # CRITICAL FIX: Add AB since HR calculation (frontend expects 'ab_since_last_hr')
+        'ab_since_last_hr': max(0, hitter_comprehensive_stats.get('hitter_total_ab', 0) - (hitter_comprehensive_stats.get('hitter_total_h', 0) - hitter_comprehensive_stats.get('h_since_hr', 0))) if hitter_comprehensive_stats else 0,
+        # CRITICAL FIX: Add expected AB/HR ratio (frontend expects 'expected_ab_per_hr')
+        'expected_ab_per_hr': round(hitter_comprehensive_stats.get('hitter_total_ab', 0) / max(1, hitter_comprehensive_stats.get('hitter_total_hr', 1)), 1) if hitter_comprehensive_stats and hitter_comprehensive_stats.get('hitter_total_hr', 0) > 0 else 0,
+        # CRITICAL FIX: Add H since HR (frontend expects 'h_since_last_hr')
+        'h_since_last_hr': hitter_comprehensive_stats.get('h_since_hr', 0) if hitter_comprehensive_stats else 0,
+        # CRITICAL FIX: Add expected H/HR ratio (frontend expects 'expected_h_per_hr')
+        'expected_h_per_hr': round(hitter_comprehensive_stats.get('hitter_total_h', 0) / max(1, hitter_comprehensive_stats.get('hitter_total_hr', 1)), 1) if hitter_comprehensive_stats and hitter_comprehensive_stats.get('hitter_total_hr', 0) > 0 else 0,
+        # CRITICAL FIX: Add ISO calculations for 2024 and 2025
+        'iso_2024': round(batter_data.get('stats_2024_aggregated', {}).get('ISO', 0), 3) if batter_data.get('stats_2024_aggregated', {}).get('ISO') else 0,
+        'iso_2025': round(batter_stats_2025_agg.get('ISO', 0), 3) if batter_stats_2025_agg.get('ISO') else 0,
         'component_breakdown': {
             'arsenal_matchup': round(arsenal_score, 1),
             'batter_overall': round(batter_overall_score, 1),

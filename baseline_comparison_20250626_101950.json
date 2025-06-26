@@ -1,0 +1,4297 @@
+[
+  {
+    "pitcher": "Andre Pallante",
+    "team": "CHC",
+    "baseline_count": 10,
+    "api_count": 11,
+    "player_matches": [
+      {
+        "name": "pete crow-armstrong",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.27,
+            "api": 0,
+            "difference": 0.27
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.074,
+            "api": 0,
+            "difference": 0.074
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 69.78,
+            "api": 69.8,
+            "difference": 0.01999999999999602
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.27,
+            "api": 0,
+            "difference": 0.27
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.074,
+            "api": 0,
+            "difference": 0.074
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 69.78,
+            "api": 69.8,
+            "difference": 0.01999999999999602
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "michael busch",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.268,
+            "api": 0,
+            "difference": 0.268
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 66.41,
+            "api": 73.47,
+            "difference": 7.060000000000002
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.268,
+            "api": 0,
+            "difference": 0.268
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 66.41,
+            "api": 73.47,
+            "difference": 7.060000000000002
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "seiya suzuki",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.257,
+            "api": 0,
+            "difference": 0.257
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.1,
+            "api": 0,
+            "difference": 0.1
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 75.26,
+            "api": 80.2,
+            "difference": 4.939999999999998
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.257,
+            "api": 0,
+            "difference": 0.257
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.1,
+            "api": 0,
+            "difference": 0.1
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 75.26,
+            "api": 80.2,
+            "difference": 4.939999999999998
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "nico hoerner",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.288,
+            "api": 0,
+            "difference": 0.288
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 38.42,
+            "api": 38.31,
+            "difference": 0.10999999999999943
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.288,
+            "api": 0,
+            "difference": 0.288
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 38.42,
+            "api": 38.31,
+            "difference": 0.10999999999999943
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "dansby swanson",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.24,
+            "api": 0,
+            "difference": 0.24
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.036,
+            "api": 0,
+            "difference": 0.036
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 59.4,
+            "api": 58.36,
+            "difference": 1.0399999999999991
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.24,
+            "api": 0,
+            "difference": 0.24
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.036,
+            "api": 0,
+            "difference": 0.036
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 59.4,
+            "api": 58.36,
+            "difference": 1.0399999999999991
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "ian happ",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.247,
+            "api": 0,
+            "difference": 0.247
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.172,
+            "api": 0,
+            "difference": 0.172
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 48.83,
+            "api": 48.98,
+            "difference": 0.14999999999999858
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.247,
+            "api": 0,
+            "difference": 0.247
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.172,
+            "api": 0,
+            "difference": 0.172
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 48.83,
+            "api": 48.98,
+            "difference": 0.14999999999999858
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "jon berti",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.209,
+            "api": 0,
+            "difference": 0.209
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 48.4,
+            "api": 50.96,
+            "difference": 2.5600000000000023
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.209,
+            "api": 0,
+            "difference": 0.209
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 48.4,
+            "api": 50.96,
+            "difference": 2.5600000000000023
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "justin turner",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.207,
+            "api": 0,
+            "difference": 0.207
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 49.7,
+            "api": 51.47,
+            "difference": 1.769999999999996
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.207,
+            "api": 0,
+            "difference": 0.207
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 49.7,
+            "api": 51.47,
+            "difference": 1.769999999999996
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "carson kelly",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.245,
+            "api": 0,
+            "difference": 0.245
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.4,
+            "api": 59.77,
+            "difference": 2.6299999999999955
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 10.9,
+            "api": 0,
+            "difference": 10.9
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.245,
+            "api": 0,
+            "difference": 0.245
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.4,
+            "api": 59.77,
+            "difference": 2.6299999999999955
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 10.9,
+            "api": 0,
+            "difference": 10.9
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "kyle tucker",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.284,
+            "api": 0,
+            "difference": 0.284
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.107,
+            "api": 0,
+            "difference": 0.107
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 72.23,
+            "api": 74.48,
+            "difference": 2.25
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.284,
+            "api": 0,
+            "difference": 0.284
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.107,
+            "api": 0,
+            "difference": 0.107
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 4.499,
+            "api": 4.687,
+            "difference": 0.1880000000000006
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 72.23,
+            "api": 74.48,
+            "difference": 2.25
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      }
+    ],
+    "field_comparisons": {},
+    "discrepancies": []
+  },
+  {
+    "pitcher": "Emerson Hancock",
+    "team": "MIN",
+    "baseline_count": 9,
+    "api_count": 11,
+    "player_matches": [
+      {
+        "name": "harrison bader",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 60.35,
+            "api": 59.84,
+            "difference": 0.509999999999998
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 60.35,
+            "api": 59.84,
+            "difference": 0.509999999999998
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "trevor larnach",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.255,
+            "api": 0,
+            "difference": 0.255
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 59.96,
+            "api": 59.82,
+            "difference": 0.14000000000000057
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.255,
+            "api": 0,
+            "difference": 0.255
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 59.96,
+            "api": 59.82,
+            "difference": 0.14000000000000057
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "ty france",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.264,
+            "api": 0,
+            "difference": 0.264
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 49.2,
+            "api": 56.15,
+            "difference": 6.949999999999996
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.264,
+            "api": 0,
+            "difference": 0.264
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 49.2,
+            "api": 56.15,
+            "difference": 6.949999999999996
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "willi castro",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.282,
+            "api": 0,
+            "difference": 0.282
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 58.05,
+            "api": 53.26,
+            "difference": 4.789999999999999
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.282,
+            "api": 0,
+            "difference": 0.282
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 58.05,
+            "api": 53.26,
+            "difference": 4.789999999999999
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "brooks lee",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.271,
+            "api": 0,
+            "difference": 0.271
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 50.91,
+            "api": 49.49,
+            "difference": 1.4199999999999946
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.271,
+            "api": 0,
+            "difference": 0.271
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 50.91,
+            "api": 49.49,
+            "difference": 1.4199999999999946
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "carlos correa",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.254,
+            "api": 0,
+            "difference": 0.254
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.037,
+            "api": 0,
+            "difference": 0.037
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 55.18,
+            "api": 53.9,
+            "difference": 1.2800000000000011
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.254,
+            "api": 0,
+            "difference": 0.254
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.037,
+            "api": 0,
+            "difference": 0.037
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 55.18,
+            "api": 53.9,
+            "difference": 1.2800000000000011
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "ryan jeffers",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.25,
+            "api": 0,
+            "difference": 0.25
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.08,
+            "api": 0,
+            "difference": 0.08
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 56.65,
+            "api": 56.01,
+            "difference": 0.6400000000000006
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.25,
+            "api": 0,
+            "difference": 0.25
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.08,
+            "api": 0,
+            "difference": 0.08
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 56.65,
+            "api": 56.01,
+            "difference": 0.6400000000000006
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "byron buxton",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.28,
+            "api": 0,
+            "difference": 0.28
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.143,
+            "api": 0,
+            "difference": 0.143
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "improving",
+            "api": "improving",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 75.91,
+            "api": 74.52,
+            "difference": 1.3900000000000006
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.28,
+            "api": 0,
+            "difference": 0.28
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.143,
+            "api": 0,
+            "difference": 0.143
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 5.42,
+            "api": 4.983,
+            "difference": 0.4370000000000003
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 75.91,
+            "api": 74.52,
+            "difference": 1.3900000000000006
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      }
+    ],
+    "field_comparisons": {},
+    "discrepancies": []
+  },
+  {
+    "pitcher": "Grant Holmes",
+    "team": "NYM",
+    "baseline_count": 11,
+    "api_count": 10,
+    "player_matches": [
+      {
+        "name": "luis torrens",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.226,
+            "api": 0,
+            "difference": 0.226
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 55.6,
+            "api": 56.18,
+            "difference": 0.5799999999999983
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 19.2,
+            "api": 0,
+            "difference": 19.2
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.226,
+            "api": 0,
+            "difference": 0.226
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 55.6,
+            "api": 56.18,
+            "difference": 0.5799999999999983
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 19.2,
+            "api": 0,
+            "difference": 19.2
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "starling marte",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.255,
+            "api": 0,
+            "difference": 0.255
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 60.67,
+            "api": 60.93,
+            "difference": 0.259999999999998
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.255,
+            "api": 0,
+            "difference": 0.255
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 60.67,
+            "api": 60.93,
+            "difference": 0.259999999999998
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "mark vientos",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.233,
+            "api": 0,
+            "difference": 0.233
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.053,
+            "api": 0,
+            "difference": 0.053
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 52.21,
+            "api": 52.1,
+            "difference": 0.10999999999999943
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.233,
+            "api": 0,
+            "difference": 0.233
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.053,
+            "api": 0,
+            "difference": 0.053
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 52.21,
+            "api": 52.1,
+            "difference": 0.10999999999999943
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "pete alonso",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.289,
+            "api": 0,
+            "difference": 0.289
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 82.76,
+            "api": 82.11,
+            "difference": 0.6500000000000057
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.289,
+            "api": 0,
+            "difference": 0.289
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 82.76,
+            "api": 82.11,
+            "difference": 0.6500000000000057
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "francisco lindor",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.268,
+            "api": 0,
+            "difference": 0.268
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.069,
+            "api": 0,
+            "difference": 0.069
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.92,
+            "api": 67.28,
+            "difference": 4.359999999999999
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.268,
+            "api": 0,
+            "difference": 0.268
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.069,
+            "api": 0,
+            "difference": 0.069
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.92,
+            "api": 67.28,
+            "difference": 4.359999999999999
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "brett baty",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.217,
+            "api": 0,
+            "difference": 0.217
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.76,
+            "api": 65.64,
+            "difference": 2.8800000000000026
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.217,
+            "api": 0,
+            "difference": 0.217
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.76,
+            "api": 65.64,
+            "difference": 2.8800000000000026
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "francisco alvarez",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.241,
+            "api": 0,
+            "difference": 0.241
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.077,
+            "api": 0,
+            "difference": 0.077
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.06,
+            "api": 63.74,
+            "difference": 1.6799999999999997
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.241,
+            "api": 0,
+            "difference": 0.241
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.077,
+            "api": 0,
+            "difference": 0.077
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.06,
+            "api": 63.74,
+            "difference": 1.6799999999999997
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "jeff mcneil",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 61.58,
+            "api": 53.78,
+            "difference": 7.799999999999997
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.04,
+            "api": 0,
+            "difference": 0.04
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 61.58,
+            "api": 53.78,
+            "difference": 7.799999999999997
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "juan soto",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.217,
+            "api": 0,
+            "difference": 0.217
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 89.11,
+            "api": 81.61,
+            "difference": 7.5
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.253,
+            "api": 0,
+            "difference": 0.253
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.217,
+            "api": 0,
+            "difference": 0.217
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 89.11,
+            "api": 81.61,
+            "difference": 7.5
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "brandon nimmo",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.077,
+            "api": 0,
+            "difference": 0.077
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.55,
+            "api": 62.54,
+            "difference": 0.00999999999999801
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.077,
+            "api": 0,
+            "difference": 0.077
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.887,
+            "api": 3.917,
+            "difference": 0.029999999999999805
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.55,
+            "api": 62.54,
+            "difference": 0.00999999999999801
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      }
+    ],
+    "field_comparisons": {},
+    "discrepancies": []
+  },
+  {
+    "pitcher": "Griffin Canning",
+    "team": "ATL",
+    "baseline_count": 8,
+    "api_count": 9,
+    "player_matches": [
+      {
+        "name": "matt olson",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.254,
+            "api": 0,
+            "difference": 0.254
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 82.39,
+            "api": 79.69,
+            "difference": 2.700000000000003
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 1.0,
+            "api": 0,
+            "difference": 1.0
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.254,
+            "api": 0,
+            "difference": 0.254
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 82.39,
+            "api": 79.69,
+            "difference": 2.700000000000003
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 1.0,
+            "api": 0,
+            "difference": 1.0
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "ozzie albies",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.224,
+            "api": 0,
+            "difference": 0.224
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 36.88,
+            "api": 37.58,
+            "difference": 0.6999999999999957
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 19.1,
+            "api": 0,
+            "difference": 19.1
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 1.5,
+            "api": 0,
+            "difference": 1.5
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.224,
+            "api": 0,
+            "difference": 0.224
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 36.88,
+            "api": 37.58,
+            "difference": 0.6999999999999957
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 19.1,
+            "api": 0,
+            "difference": 19.1
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 1.5,
+            "api": 0,
+            "difference": 1.5
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "eli white",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.243,
+            "api": 0,
+            "difference": 0.243
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 59.82,
+            "api": 52.99,
+            "difference": 6.829999999999998
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.243,
+            "api": 0,
+            "difference": 0.243
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 59.82,
+            "api": 52.99,
+            "difference": 6.829999999999998
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "sean murphy",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.223,
+            "api": 0,
+            "difference": 0.223
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 66.14,
+            "api": 64.68,
+            "difference": 1.4599999999999937
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 8.5,
+            "api": 0,
+            "difference": 8.5
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 4.2,
+            "api": 0,
+            "difference": 4.2
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.223,
+            "api": 0,
+            "difference": 0.223
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 66.14,
+            "api": 64.68,
+            "difference": 1.4599999999999937
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 8.5,
+            "api": 0,
+            "difference": 8.5
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 4.2,
+            "api": 0,
+            "difference": 4.2
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "marcell ozuna",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.252,
+            "api": 0,
+            "difference": 0.252
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 66.11,
+            "api": 64.07,
+            "difference": 2.0400000000000063
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 3.1,
+            "api": 0,
+            "difference": 3.1
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.252,
+            "api": 0,
+            "difference": 0.252
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 66.11,
+            "api": 64.07,
+            "difference": 2.0400000000000063
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 3.1,
+            "api": 0,
+            "difference": 3.1
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "nick allen",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.228,
+            "api": 0,
+            "difference": 0.228
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 31.66,
+            "api": 31.97,
+            "difference": 0.3099999999999987
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 16.9,
+            "api": 0,
+            "difference": 16.9
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 19.9,
+            "api": 0,
+            "difference": 19.9
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.228,
+            "api": 0,
+            "difference": 0.228
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 31.66,
+            "api": 31.97,
+            "difference": 0.3099999999999987
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 16.9,
+            "api": 0,
+            "difference": 16.9
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 19.9,
+            "api": 0,
+            "difference": 19.9
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "alex verdugo",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 36.91,
+            "api": 38.8,
+            "difference": 1.8900000000000006
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 20.0,
+            "api": 0,
+            "difference": 20.0
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 36.91,
+            "api": 38.8,
+            "difference": 1.8900000000000006
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 20.0,
+            "api": 0,
+            "difference": 20.0
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "austin riley",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.274,
+            "api": 0,
+            "difference": 0.274
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.034,
+            "api": 0,
+            "difference": 0.034
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 62.91,
+            "api": 64.27,
+            "difference": 1.3599999999999994
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.274,
+            "api": 0,
+            "difference": 0.274
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.034,
+            "api": 0,
+            "difference": 0.034
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 3.201,
+            "api": 3.643,
+            "difference": 0.4419999999999997
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 62.91,
+            "api": 64.27,
+            "difference": 1.3599999999999994
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      }
+    ],
+    "field_comparisons": {},
+    "discrepancies": []
+  },
+  {
+    "pitcher": "Hayden Birdsong",
+    "team": "MIA",
+    "baseline_count": 10,
+    "api_count": 13,
+    "player_matches": [
+      {
+        "name": "connor norby",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.242,
+            "api": 0,
+            "difference": 0.242
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.045,
+            "api": 0,
+            "difference": 0.045
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 44.76,
+            "api": 45.78,
+            "difference": 1.0200000000000031
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.242,
+            "api": 0,
+            "difference": 0.242
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.045,
+            "api": 0,
+            "difference": 0.045
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 44.76,
+            "api": 45.78,
+            "difference": 1.0200000000000031
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "kyle stowers",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.272,
+            "api": 0,
+            "difference": 0.272
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.053,
+            "api": 0,
+            "difference": 0.053
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 79.33,
+            "api": 78.68,
+            "difference": 0.6499999999999915
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.272,
+            "api": 0,
+            "difference": 0.272
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.053,
+            "api": 0,
+            "difference": 0.053
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "improving",
+            "api": "stable",
+            "difference": "'improving' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 79.33,
+            "api": 78.68,
+            "difference": 0.6499999999999915
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "otto lopez",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.239,
+            "api": 0,
+            "difference": 0.239
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 51.69,
+            "api": 50.0,
+            "difference": 1.6899999999999977
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 4.4,
+            "api": 0,
+            "difference": 4.4
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 5.0,
+            "api": 0,
+            "difference": 5.0
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.239,
+            "api": 0,
+            "difference": 0.239
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 51.69,
+            "api": 50.0,
+            "difference": 1.6899999999999977
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 4.4,
+            "api": 0,
+            "difference": 4.4
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 5.0,
+            "api": 0,
+            "difference": 5.0
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "eric wagaman",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.251,
+            "api": 0,
+            "difference": 0.251
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 47.4,
+            "api": 46.7,
+            "difference": 0.6999999999999957
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.251,
+            "api": 0,
+            "difference": 0.251
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 47.4,
+            "api": 46.7,
+            "difference": 0.6999999999999957
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "jes\u00fas s\u00e1nchez",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          "Recent_HR_Rate": {
+            "matches": false,
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          "Recent_Trend_Dir": {
+            "matches": false,
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 61.31,
+            "api": 61.53,
+            "difference": 0.21999999999999886
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.249,
+            "api": 0,
+            "difference": 0.249
+          },
+          {
+            "field": "Recent_HR_Rate",
+            "baseline": 0.038,
+            "api": 0,
+            "difference": 0.038
+          },
+          {
+            "field": "Recent_Trend_Dir",
+            "baseline": "declining",
+            "api": "stable",
+            "difference": "'declining' vs 'stable'"
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 61.31,
+            "api": 61.53,
+            "difference": 0.21999999999999886
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "dane myers",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.32,
+            "api": 0,
+            "difference": 0.32
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 56.82,
+            "api": 56.05,
+            "difference": 0.7700000000000031
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.32,
+            "api": 0,
+            "difference": 0.32
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 56.82,
+            "api": 56.05,
+            "difference": 0.7700000000000031
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "xavier edwards",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.289,
+            "api": 0,
+            "difference": 0.289
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 35.34,
+            "api": 34.46,
+            "difference": 0.8800000000000026
+          },
+          "AB_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "H_Due_Score": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.289,
+            "api": 0,
+            "difference": 0.289
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 35.34,
+            "api": 34.46,
+            "difference": 0.8800000000000026
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "graham pauley",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.207,
+            "api": 0,
+            "difference": 0.207
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 51.11,
+            "api": 52.27,
+            "difference": 1.1600000000000037
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 11.0,
+            "api": 0,
+            "difference": 11.0
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 20.0,
+            "api": 0,
+            "difference": 20.0
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.207,
+            "api": 0,
+            "difference": 0.207
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 51.11,
+            "api": 52.27,
+            "difference": 1.1600000000000037
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 11.0,
+            "api": 0,
+            "difference": 11.0
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 20.0,
+            "api": 0,
+            "difference": 20.0
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      },
+      {
+        "name": "matt mervis",
+        "field_matches": {
+          "Recent_AVG": {
+            "matches": false,
+            "baseline": 0.179,
+            "api": 0,
+            "difference": 0.179
+          },
+          "Recent_HR_Rate": {
+            "matches": true,
+            "baseline": 0.0,
+            "api": 0,
+            "difference": null
+          },
+          "Recent_Trend_Dir": {
+            "matches": true,
+            "baseline": "stable",
+            "api": "stable",
+            "difference": null
+          },
+          "Pitcher_Trend_Dir": {
+            "matches": true,
+            "baseline": "declining",
+            "api": "declining",
+            "difference": null
+          },
+          "Pitcher_Recent_ERA": {
+            "matches": false,
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          "HR_Score": {
+            "matches": false,
+            "baseline": 52.26,
+            "api": 52.7,
+            "difference": 0.44000000000000483
+          },
+          "AB_Due_Score": {
+            "matches": false,
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          "H_Due_Score": {
+            "matches": false,
+            "baseline": 9.0,
+            "api": 0,
+            "difference": 9.0
+          },
+          "Recent_Games": {
+            "matches": false,
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        },
+        "significant_differences": [
+          {
+            "field": "Recent_AVG",
+            "baseline": 0.179,
+            "api": 0,
+            "difference": 0.179
+          },
+          {
+            "field": "Pitcher_Recent_ERA",
+            "baseline": 2.523,
+            "api": 2.863,
+            "difference": 0.33999999999999986
+          },
+          {
+            "field": "HR_Score",
+            "baseline": 52.26,
+            "api": 52.7,
+            "difference": 0.44000000000000483
+          },
+          {
+            "field": "AB_Due_Score",
+            "baseline": 25.0,
+            "api": 0,
+            "difference": 25.0
+          },
+          {
+            "field": "H_Due_Score",
+            "baseline": 9.0,
+            "api": 0,
+            "difference": 9.0
+          },
+          {
+            "field": "Recent_Games",
+            "baseline": 7,
+            "api": 0,
+            "difference": 7
+          }
+        ]
+      }
+    ],
+    "field_comparisons": {},
+    "discrepancies": []
+  }
+]

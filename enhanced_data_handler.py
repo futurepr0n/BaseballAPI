@@ -586,23 +586,31 @@ class EnhancedDataHandler:
                     if player_type == 'hitter':
                         total_hitter_entries += 1
                     
-                    # Create multiple name variants for matching (same as pitcher logic)
+                    # Create multiple name variants for matching (enhanced to match pitcher logic)
                     csv_format_name = ""
+                    initial_lastname_format = ""
                     if roster_full_name and ' ' in roster_full_name:
                         name_parts = roster_full_name.split(' ')
                         if len(name_parts) >= 2:
                             csv_format_name = f"{name_parts[-1]}, {name_parts[0]}"  # "Alonso, Pete"
+                            # CRITICAL FIX: Create "A. Lastname" format that daily JSON files use
+                            initial_lastname_format = f"{name_parts[0][0]}. {name_parts[-1]}"  # "P. Alonso"
                     
                     hitter_names_to_check = [
                         batter_name.lower(),  # API request name
-                        roster_short_name.lower(),  # "p. alonso"
-                        roster_full_name.lower(),  # "pete alonso"
-                        csv_format_name.lower(),  # "alonso, pete"
+                        roster_short_name.lower(),  # "p. alonso" from roster
+                        roster_full_name.lower(),  # "pete alonso" from roster
+                        csv_format_name.lower(),  # "alonso, pete" (CSV format)
+                        initial_lastname_format.lower(),  # "p. alonso" (daily JSON format) - CRITICAL FIX
                     ]
                     
+                    # ENHANCED DEBUG: Log name matching attempts
                     name_matches = any(
                         player_name.lower() == name for name in hitter_names_to_check if name
                     )
+                    
+                    if player_type == 'hitter' and any(hitter_names_to_check):
+                        logger.debug(f"🔍 HITTER NAME MATCH: Checking '{player_name}' against {[n for n in hitter_names_to_check if n]} -> Match: {name_matches}")
                     
                     if (player_type == 'hitter' and 
                         (name_matches or str(player.get('player_id', '')) == str(batter_id))):
