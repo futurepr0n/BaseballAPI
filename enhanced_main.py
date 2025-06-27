@@ -97,6 +97,19 @@ class PlayerSearchRequest(BaseModel):
     name: str
     player_type: Optional[str] = None  # "hitter" or "pitcher"
 
+class EnhancedOpportunityPlayer(BaseModel):
+    playerName: str
+    team: str
+    venue: Optional[str] = None
+    score: Optional[float] = 0.0
+    isHome: Optional[bool] = None
+    gameId: Optional[str] = None
+
+class EnhancedOpportunitiesRequest(BaseModel):
+    players: List[EnhancedOpportunityPlayer]
+    currentDate: str
+    analysisType: Optional[str] = "opportunities"  # "opportunities" or "warnings"
+
 # Helper function to transform predictions for UI compatibility
 def transform_prediction_for_ui(prediction):
     """Transform API prediction to match Pinhead-Claude baseline format"""
@@ -747,6 +760,80 @@ async def refresh_lineups():
     except Exception as e:
         logger.error(f"❌ Lineup refresh error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to refresh lineups: {str(e)}")
+
+@app.post("/analyze/enhanced-opportunities")
+async def analyze_enhanced_opportunities(request: EnhancedOpportunitiesRequest):
+    """
+    Generate enhanced opportunity insights for players using server-side processing.
+    This endpoint replaces the client-side JavaScript processing for better performance.
+    """
+    if global_data['initialization_status'] != 'completed':
+        raise HTTPException(
+            status_code=503, 
+            detail=f"Data not ready. Status: {global_data['initialization_status']}"
+        )
+    
+    try:
+        logger.info(f"🎯 Processing enhanced opportunities for {len(request.players)} players")
+        
+        # Import the enhanced opportunities analyzer
+        from enhanced_opportunities_analyzer import EnhancedOpportunitiesAnalyzer
+        
+        # Initialize the analyzer with global data
+        analyzer = EnhancedOpportunitiesAnalyzer(
+            data_handler=global_data['enhanced_data_handler'],
+            current_date=request.currentDate
+        )
+        
+        # Process all players
+        enhanced_players = []
+        for player in request.players:
+            try:
+                enhanced_insight = await analyzer.get_player_comprehensive_insight(
+                    player_name=player.playerName,
+                    team=player.team,
+                    venue=player.venue,
+                    base_score=player.score,
+                    is_home=player.isHome,
+                    game_id=player.gameId
+                )
+                enhanced_players.append(enhanced_insight)
+                
+            except Exception as player_error:
+                logger.warning(f"Failed to analyze {player.playerName}: {player_error}")
+                # Add player with minimal data to maintain list integrity
+                enhanced_players.append({
+                    **player.dict(),
+                    'enhancedInsights': {
+                        'error': str(player_error),
+                        'hasData': False
+                    }
+                })
+        
+        result = {
+            'players': enhanced_players,
+            'generatedAt': datetime.now().isoformat(),
+            'totalOpportunities': len(enhanced_players),
+            'analysisType': request.analysisType,
+            'processingTime': 'server-side',
+            'dataQuality': 'enhanced'
+        }
+        
+        logger.info(f"✅ Successfully processed {len(enhanced_players)} enhanced opportunities")
+        return result
+        
+    except ImportError as e:
+        logger.error(f"Missing enhanced opportunities analyzer: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail="Enhanced opportunities analyzer not available"
+        )
+    except Exception as e:
+        logger.error(f"Error processing enhanced opportunities: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Enhanced opportunities processing error: {str(e)}"
+        )
 
 if __name__ == "__main__":
     import argparse
