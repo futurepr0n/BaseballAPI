@@ -16,6 +16,7 @@ import uvicorn
 import logging
 import traceback
 import subprocess
+import requests
 
 # Import enhanced modules
 try:
@@ -639,6 +640,63 @@ async def get_sort_options():
             {"key": "confidence", "label": "Confidence", "description": "Analysis confidence level"}
         ]
     }
+
+# TinyURL shortening endpoint
+@app.post("/api/shorten-url")
+async def shorten_url(url_request: Dict[str, str]):
+    """
+    Create a shortened URL using TinyURL service.
+    This endpoint acts as a proxy to avoid CORS issues from the frontend.
+    """
+    try:
+        long_url = url_request.get('url')
+        if not long_url:
+            raise HTTPException(status_code=400, detail="URL is required")
+        
+        logger.info(f"Creating TinyURL for: {long_url[:100]}...")
+        
+        # Call TinyURL API
+        response = requests.get(
+            f'https://tinyurl.com/api-create.php',
+            params={'url': long_url},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            short_url = response.text.strip()
+            if short_url and not short_url.startswith('Error'):
+                return {
+                    'success': True,
+                    'shortUrl': short_url,
+                    'alias': short_url.replace('https://tinyurl.com/', ''),
+                    'method': 'tinyurl-proxy'
+                }
+        
+        # If TinyURL fails, try alternative approach
+        logger.warning("TinyURL API failed, trying alternative...")
+        
+        # You could implement a fallback here, such as:
+        # - Using a different URL shortening service
+        # - Creating a simple hash-based shortener
+        # - Storing in a local database
+        
+        raise HTTPException(
+            status_code=503, 
+            detail="URL shortening service temporarily unavailable"
+        )
+        
+    except requests.RequestException as e:
+        logger.error(f"TinyURL request error: {e}")
+        raise HTTPException(
+            status_code=503,
+            detail="Unable to connect to URL shortening service"
+        )
+    except Exception as e:
+        logger.error(f"URL shortening error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to shorten URL: {str(e)}"
+        )
 
 @app.post("/refresh-lineups")
 async def refresh_lineups():
