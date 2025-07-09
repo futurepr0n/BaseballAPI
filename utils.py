@@ -5,35 +5,62 @@ import os
 import json
 from difflib import get_close_matches
 from collections import defaultdict
+import unicodedata
 
 def clean_player_name(name_input):
     """
-    Standardize player names for consistent matching.
-    Handles last name, first name format and suffix standardization.
+    Bulletproof player name normalization for special characters.
+    Converts ANY international character to English equivalent.
+    Ensures rosters.json compatibility.
     """
     if pd.isna(name_input):
         return None
     
     name = str(name_input)
     
+    # Comprehensive character mapping for all international characters
+    accent_map = {
+        # Spanish/Latin characters
+        'á': 'a', 'à': 'a', 'ä': 'a', 'â': 'a', 'ā': 'a', 'ą': 'a', 'å': 'a', 'ã': 'a',
+        'é': 'e', 'è': 'e', 'ë': 'e', 'ê': 'e', 'ē': 'e', 'ę': 'e',
+        'í': 'i', 'ì': 'i', 'ï': 'i', 'î': 'i', 'ī': 'i', 'į': 'i',
+        'ó': 'o', 'ò': 'o', 'ö': 'o', 'ô': 'o', 'ō': 'o', 'ø': 'o', 'õ': 'o',
+        'ú': 'u', 'ù': 'u', 'ü': 'u', 'û': 'u', 'ū': 'u', 'ų': 'u',
+        'ñ': 'n', 'ń': 'n', 'ç': 'c', 'č': 'c', 'ć': 'c',
+        'ř': 'r', 'ś': 's', 'š': 's', 'ť': 't', 'ý': 'y', 'ž': 'z', 'ź': 'z',
+        # Capital letters
+        'Á': 'A', 'À': 'A', 'Ä': 'A', 'Â': 'A', 'Ā': 'A', 'Ą': 'A', 'Å': 'A', 'Ã': 'A',
+        'É': 'E', 'È': 'E', 'Ë': 'E', 'Ê': 'E', 'Ē': 'E', 'Ę': 'E',
+        'Í': 'I', 'Ì': 'I', 'Ï': 'I', 'Î': 'I', 'Ī': 'I', 'Į': 'I',
+        'Ó': 'O', 'Ò': 'O', 'Ö': 'O', 'Ô': 'O', 'Ō': 'O', 'Ø': 'O', 'Õ': 'O',
+        'Ú': 'U', 'Ù': 'U', 'Ü': 'U', 'Û': 'U', 'Ū': 'U', 'Ų': 'U',
+        'Ñ': 'N', 'Ń': 'N', 'Ç': 'C', 'Č': 'C', 'Ć': 'C',
+        'Ř': 'R', 'Ś': 'S', 'Š': 'S', 'Ť': 'T', 'Ý': 'Y', 'Ž': 'Z', 'Ź': 'Z'
+    }
+    
+    # Replace each character using our mapping
+    normalized = ''
+    for char in name:
+        normalized += accent_map.get(char, char)
+    
     # Handle "LastName, FirstName" format
-    if ',' in name: 
-        parts = name.split(',', 1)
+    if ',' in normalized: 
+        parts = normalized.split(',', 1)
         if len(parts) == 2:
-            name = f"{parts[1].strip()} {parts[0].strip()}"
+            normalized = f"{parts[1].strip()} {parts[0].strip()}"
     
     # Standardize whitespace
-    name = re.sub(r'\s+', ' ', name).strip().title()
+    normalized = re.sub(r'\s+', ' ', normalized).strip().title()
     
     # Standardize suffixes (Jr, Sr, I, II, III, IV)
-    name = re.sub(r'\s+(Jr|Sr|Ii|Iii|Iv)\.?$', 
-                  lambda m: f" {m.group(1).upper().replace('II','II').replace('III','III').replace('IV','IV')}", 
-                  name, flags=re.IGNORECASE)
+    normalized = re.sub(r'\s+(Jr|Sr|Ii|Iii|Iv)\.?$', 
+                       lambda m: f" {m.group(1).upper().replace('II','II').replace('III','III').replace('IV','IV')}", 
+                       normalized, flags=re.IGNORECASE)
     
     # Remove periods from initials
-    name = re.sub(r'(?<=\b[A-Z])\.(?=\s|$)', '', name)
+    normalized = re.sub(r'(?<=\b[A-Z])\.(?=\s|$)', '', normalized)
     
-    return name
+    return normalized
 
 def robust_json_load(file_path):
     """Safely load a JSON file with error handling."""
@@ -121,20 +148,30 @@ def match_player_name_to_roster(short_name_cleaned, roster_data_list):
     """
     Enhanced player name matching to fix 0 statistics issue.
     Matches a short/abbreviated player name to full roster name with multiple strategies.
+    Now handles special characters by normalizing them.
     """
     if not short_name_cleaned:
         return None
     
-    # Strategy 1: Direct exact match (case sensitive)
+    # Normalize the input name to handle special characters
+    short_name_normalized = unicodedata.normalize('NFD', short_name_cleaned)
+    short_name_normalized = ''.join(char for char in short_name_normalized if unicodedata.category(char) != 'Mn')
+    
+    # Strategy 1: Direct exact match (case sensitive) - try both original and normalized
     for player in roster_data_list:
         if player.get('name_cleaned') == short_name_cleaned:
+            return player.get('fullName_cleaned')
+        # Also try normalized comparison
+        if player.get('name_cleaned') == short_name_normalized:
             return player.get('fullName_cleaned')
     
     # Strategy 2: Case-insensitive direct match
     short_name_lower = short_name_cleaned.lower()
+    short_name_normalized_lower = short_name_normalized.lower()
     for player in roster_data_list:
         name_cleaned = player.get('name_cleaned', '')
-        if name_cleaned.lower() == short_name_lower:
+        name_cleaned_lower = name_cleaned.lower()
+        if name_cleaned_lower == short_name_lower or name_cleaned_lower == short_name_normalized_lower:
             return player.get('fullName_cleaned')
     
     # Strategy 3: Match against original name field (before cleaning)

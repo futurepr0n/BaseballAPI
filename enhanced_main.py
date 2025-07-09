@@ -53,7 +53,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://192.168.1.92:3000","http://localhost:3000", "http://localhost:5173", "http://0.0.0.0:3000"],  # React development server
+    allow_origins=["http://192.168.1.92:3000","http://localhost:3000", "http://localhost:5173", "http://0.0.0.0:3000", "http://192.168.1.88:3000", "http://192.168.1.41:3000"],  # React development server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -839,7 +839,7 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description="Enhanced Baseball Analysis API")
-    parser.add_argument("--host", default="127.0.0.1", help="Host to bind to")
+    parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
     parser.add_argument("--port", type=int, default=8000, help="Port to bind to")
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload")
     parser.add_argument("--log-level", default="info", help="Log level")

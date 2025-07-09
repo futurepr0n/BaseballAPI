@@ -209,13 +209,14 @@ class EnhancedDataHandler:
         return result
     
     def _find_pitcher_by_name(self, pitcher_name: str) -> Optional[Dict[str, Any]]:
-        """Find pitcher by name in master player data with comprehensive matching."""
+        """Find pitcher by name in master player data with comprehensive Unicode normalization."""
         from utils import clean_player_name
         from difflib import get_close_matches
         
         pitcher_clean = clean_player_name(pitcher_name)
+        logger.info(f"🔍 PITCHER SEARCH: '{pitcher_name}' → normalized: '{pitcher_clean}'")
         
-        # Strategy 1: Exact matching (original approach)
+        # Strategy 1: Enhanced exact matching with Unicode normalization
         for pid, pdata in self.master_player_data.items():
             roster_info = pdata.get('roster_info', {})
             if roster_info.get('type') == 'pitcher':
@@ -228,16 +229,23 @@ class EnhancedDataHandler:
                 ]
                 
                 for name in names_to_check:
-                    if name and (name.lower() == pitcher_name.lower() or 
-                               name.lower() == pitcher_clean.lower()):
-                        return {
-                            'pitcher_id': pid,
-                            'name': roster_info.get('fullName_resolved', pitcher_name),
-                            'team': roster_info.get('team', 'UNK')
-                        }
+                    if name:
+                        # Apply same normalization to database names
+                        name_clean = clean_player_name(name)
+                        if (name.lower() == pitcher_name.lower() or 
+                            name.lower() == pitcher_clean.lower() or
+                            name_clean.lower() == pitcher_clean.lower() or
+                            name_clean.lower() == pitcher_name.lower()):
+                            logger.info(f"✅ PITCHER EXACT MATCH: '{pitcher_name}' → '{name}' (normalized: '{name_clean}')")
+                            return {
+                                'pitcher_id': pid,
+                                'name': roster_info.get('fullName_resolved', pitcher_name),
+                                'team': roster_info.get('team', 'UNK')
+                            }
         
-        # Strategy 2: Fuzzy matching for accented characters and variations
+        # Strategy 2: Enhanced fuzzy matching with normalized names
         all_pitcher_names = []
+        all_pitcher_names_normalized = []
         pitcher_name_to_data = {}
         
         for pid, pdata in self.master_player_data.items():
@@ -246,26 +254,37 @@ class EnhancedDataHandler:
                 for field in ['fullName_resolved', 'fullName_cleaned', 'fullName', 'name_cleaned', 'name']:
                     name = roster_info.get(field, '')
                     if name:
+                        name_normalized = clean_player_name(name)
                         all_pitcher_names.append(name)
+                        all_pitcher_names_normalized.append(name_normalized)
+                        # Store both original and normalized as keys
                         pitcher_name_to_data[name] = {
                             'pitcher_id': pid,
                             'name': roster_info.get('fullName_resolved', name),
                             'team': roster_info.get('team', 'UNK')
                         }
+                        pitcher_name_to_data[name_normalized] = {
+                            'pitcher_id': pid,
+                            'name': roster_info.get('fullName_resolved', name),
+                            'team': roster_info.get('team', 'UNK')
+                        }
         
-        # Try fuzzy matching
+        # Try fuzzy matching on normalized names first
+        close_matches = get_close_matches(pitcher_clean, all_pitcher_names_normalized, n=1, cutoff=0.8)
+        if close_matches:
+            matched_name = close_matches[0]
+            logger.info(f"🔍 FUZZY NORMALIZED MATCH: '{pitcher_name}' → '{matched_name}'")
+            return pitcher_name_to_data[matched_name]
+        
+        # Try fuzzy matching on original names as fallback
         close_matches = get_close_matches(pitcher_name, all_pitcher_names, n=1, cutoff=0.8)
         if close_matches:
             matched_name = close_matches[0]
-            logger.info(f"🔍 FUZZY PITCHER MATCH: '{pitcher_name}' → '{matched_name}'")
+            logger.info(f"🔍 FUZZY ORIGINAL MATCH: '{pitcher_name}' → '{matched_name}'")
             return pitcher_name_to_data[matched_name]
         
-        # Strategy 3: Handle accented characters
-        pitcher_ascii = pitcher_name.encode('ascii', 'ignore').decode('ascii')
-        if pitcher_ascii != pitcher_name:
-            return self._find_pitcher_by_name(pitcher_ascii)  # Recursive call with ASCII version
-        
-        logger.warning(f"❌ Pitcher not found: '{pitcher_name}'")
+        logger.warning(f"❌ Pitcher not found: '{pitcher_name}' (normalized: '{pitcher_clean}')")
+        logger.info(f"📋 Available pitchers: {[clean_player_name(name) for name in all_pitcher_names[:10]]}")
         return None
     
     def _find_team_batters(self, team_abbr: str) -> List[Dict[str, Any]]:
