@@ -1,4 +1,4 @@
-venv/
+venv/*
 __pycache__/analyzer.cpython-312.pyc
 __pycache__/data_loader.cpython-312.pyc
 __pycache__/debug_main.cpython-312.pyc
@@ -9,3 +9,16 @@ __pycache__/sort_utils.cpython-312.pyc
 __pycache__/sorting_help.cpython-312.pyc
 __pycache__/utils.cpython-312.pyc
 __pycache__/
+venv/pyvenv.cfg
+venv/bin/activate
+venv/bin/activate.csh
+venv/bin/activate.fish
+venv/bin/Activate.ps1
+venv/bin/f2py
+venv/bin/fastapi
+venv/bin/httpx
+venv/bin/numpy-config
+venv/bin/pip
+venv/bin/pip3
+venv/bin/uvicorn
+api.log
