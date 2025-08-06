@@ -3,11 +3,50 @@ Configuration settings for the Baseball HR Prediction System.
 Contains weights, thresholds, and constants used throughout the analysis.
 """
 
+import os
+from pathlib import Path
+
 # Years to analyze
 YEARS = [2022, 2023, 2024, 2025]
 
-# Data path
-DATA_PATH = "../BaseballTracker/build/data/stats"
+# Centralized data path configuration
+# Determine if we're in production based on environment
+IS_PRODUCTION = os.environ.get('NODE_ENV') == 'production' or os.path.exists('/app')
+
+# Get the base directory of BaseballAPI
+API_DIR = Path(__file__).parent
+
+# Environment-aware data path resolution
+def get_data_path():
+    """Get the centralized data path from environment or defaults"""
+    # First check for explicit environment variable
+    if env_path := os.environ.get('BASEBALL_DATA_PATH'):
+        return Path(env_path).resolve()
+    
+    # Fallback to defaults based on environment
+    if IS_PRODUCTION:
+        return Path('/app/BaseballData/data')
+    else:
+        # Development fallback - relative to BaseballAPI
+        return API_DIR.parent / 'BaseballData' / 'data'
+
+# Base data path using environment-aware resolution
+BASE_DATA_PATH = get_data_path()
+
+# Data path for stats (maintains backward compatibility)
+DATA_PATH = str(BASE_DATA_PATH / 'stats')
+
+# Additional data paths for BaseballAPI
+DATA_PATHS = {
+    'stats': DATA_PATH,
+    'rosters': str(BASE_DATA_PATH / 'rosters.json'),
+    'game_data': str(BASE_DATA_PATH),
+    'rolling_stats': str(BASE_DATA_PATH / 'rolling_stats'),
+    'multi_hit_stats': str(BASE_DATA_PATH / 'multi_hit_stats'),
+}
+
+# Legacy paths for migration period
+LEGACY_DATA_PATH = "../BaseballTracker/build/data/stats"
 
 # Thresholds
 K_CONFIDENCE_PA = 100  # Plate appearances needed for full confidence in stats
