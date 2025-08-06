@@ -3,6 +3,7 @@ import glob
 import pandas as pd
 import numpy as np
 from collections import defaultdict
+from config import BASE_DATA_PATH
 from utils import (
     robust_json_load, robust_csv_load, clean_player_name, match_player_name_to_roster,
     get_approximated_pa, adjust_stat_with_confidence, calculate_metric_ranges
@@ -11,13 +12,17 @@ import re
 # Assuming you have a robust_json_load function defined elsewhere
 # from your_utils import robust_json_load 
 
-def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
+def load_daily_game_data(data_path=None):
     """
     Load all available daily game JSON files from the data directory.
     Searches recursively for files matching the pattern.
     Returns a dictionary with dates as keys and game data as values.
     """
     daily_data = {}
+    
+    # Use centralized data path if not provided
+    if data_path is None:
+        data_path = str(BASE_DATA_PATH / "2025")
     
     # Use '**' to search recursively in all subdirectories
     json_pattern = os.path.join(data_path, "**", "*_*_2025.json")
@@ -69,12 +74,17 @@ def load_daily_game_data(data_path="../BaseballTracker/build/data/2025/"):
     print(f"Successfully loaded daily data for {loaded_count} dates.")
     return daily_data
 
-def load_multi_year_data(years, data_path="../BaseballTracker/build/data/stats/"):
+def load_multi_year_data(years, data_path=None):
     """
     Load historical CSV data for multiple years.
     Returns a dictionary with years as keys and data types as sub-keys.
     """
     print("\n--- Loading Multi-Year Historical Data (CSVs) ---")
+    
+    # Use centralized data path if not provided
+    if data_path is None:
+        data_path = str(BASE_DATA_PATH / "stats")
+    
     historical_data = {}
     
     relevant_historical_years = [y for y in years if y < 2025]
@@ -269,11 +279,14 @@ def calculate_league_averages_2025(master_player_data, k_pa_threshold=30):
     
     return league_avg_stats
 
-def initialize_data(data_path="../BaseballTracker/build/data/", years=None):
+def initialize_data(data_path=None, years=None):
     """
     Initialize all data for analysis.
     Returns master_player_data, name mapping dictionaries, and other required global data.
     """
+    # Use centralized data path if not provided
+    if data_path is None:
+        data_path = str(BASE_DATA_PATH)
     if years is None:
         years = [2022, 2023, 2024, 2025]
     
