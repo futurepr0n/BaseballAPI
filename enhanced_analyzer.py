@@ -639,8 +639,8 @@ def enhanced_hr_score_with_missing_data_handling(batter_mlbam_id, pitcher_mlbam_
         'hitter_total_hr': hitter_comprehensive_stats.get('hitter_total_hr', 0) if hitter_comprehensive_stats else 0,
         # CRITICAL FIX: Add missing pitcher SLG field
         'pitcher_slg': pitcher_ev_stats.get('slg_percent', 0) / 100.0 if pitcher_ev_stats and pitcher_ev_stats.get('slg_percent') else 0,
-        # CRITICAL FIX: Add AB since HR calculation (frontend expects 'ab_since_last_hr')
-        'ab_since_last_hr': max(0, hitter_comprehensive_stats.get('hitter_total_ab', 0) - (hitter_comprehensive_stats.get('hitter_total_h', 0) - hitter_comprehensive_stats.get('h_since_hr', 0))) if hitter_comprehensive_stats else 0,
+        # CRITICAL FIX: Use actual AB since HR calculation (frontend expects 'ab_since_last_hr')
+        'ab_since_last_hr': hitter_comprehensive_stats.get('ab_since_hr', 0) if hitter_comprehensive_stats else 0,
         # CRITICAL FIX: Add expected AB/HR ratio (frontend expects 'expected_ab_per_hr')
         'expected_ab_per_hr': round(hitter_comprehensive_stats.get('hitter_total_ab', 0) / max(1, hitter_comprehensive_stats.get('hitter_total_hr', 1)), 1) if hitter_comprehensive_stats and hitter_comprehensive_stats.get('hitter_total_hr', 0) > 0 else 0,
         # CRITICAL FIX: Add H since HR (frontend expects 'h_since_last_hr')
