@@ -778,7 +778,10 @@ class EnhancedDataHandler:
             total_hitter_entries = 0
             last_hr_game_index = -1  # Track position of last HR
             
-            for date_key, date_data in self.daily_game_data.items():
+            # CRITICAL FIX: Process games in chronological order for correct "last HR" detection
+            sorted_dates = sorted(self.daily_game_data.keys())
+            for date_key in sorted_dates:
+                date_data = self.daily_game_data[date_key]
                 if not isinstance(date_data, dict):
                     continue
                     
@@ -851,6 +854,7 @@ class EnhancedDataHandler:
                             # Track last HR for "H since HR" calculation
                             if game_stats['hr'] > 0:
                                 last_hr_game_index = len(all_games) - 1
+                                logger.debug(f"🎯 HR FOUND: {batter_name} on {date_key} (HR={game_stats['hr']}, new last_hr_index={last_hr_game_index})")
                             
                             logger.debug(f"🏏 Hitter game: {date_key}, H={game_stats['h']}, HR={game_stats['hr']}, SLG={game_stats['slg']}")
                                 
@@ -859,7 +863,27 @@ class EnhancedDataHandler:
                             continue
             
             # Sort games by date to ensure chronological order
-            all_games.sort(key=lambda x: x['date'])
+            # CRITICAL FIX: Add robust date sorting with debugging
+            def safe_date_sort_key(game):
+                date_str = game.get('date', '1900-01-01')  # Default to very old date if missing
+                try:
+                    # Ensure date is in YYYY-MM-DD format for proper sorting
+                    if len(date_str) == 10 and date_str.count('-') == 2:
+                        return date_str
+                    else:
+                        logger.warning(f"⚠️ Malformed date for {batter_name}: '{date_str}'")
+                        return '1900-01-01'  # Sort malformed dates to beginning
+                except Exception as e:
+                    logger.warning(f"⚠️ Date sorting error for {batter_name}: {e}")
+                    return '1900-01-01'
+            
+            all_games.sort(key=safe_date_sort_key)
+            
+            # DEBUG: Log first few and last few games to verify chronological order
+            if len(all_games) >= 5:
+                logger.debug(f"🗓️ CHRONOLOGICAL CHECK for {batter_name}:")
+                logger.debug(f"   First games: {[(g['date'], g.get('ab', 0), g.get('hr', 0)) for g in all_games[:3]]}")
+                logger.debug(f"   Last games: {[(g['date'], g.get('ab', 0), g.get('hr', 0)) for g in all_games[-3:]]}")
             
             # Calculate comprehensive hitter stats
             if len(all_games) == 0:
@@ -867,6 +891,7 @@ class EnhancedDataHandler:
                 return {
                     'hitter_slg': 0,
                     'h_since_hr': 0,
+                    'ab_since_hr': 0,  # CRITICAL FIX: Include in fallback case
                     'hitter_total_games': 0,
                     'hitter_total_ab': 0,
                     'hitter_total_h': 0,
@@ -893,13 +918,31 @@ class EnhancedDataHandler:
             
             # Calculate hits since last HR
             h_since_hr = 0
+            ab_since_hr = 0  # CRITICAL FIX: Track AB since HR as well
+            
+            # DEBUG: Show which HR was found as the "last" HR
             if last_hr_game_index >= 0:
-                # Count hits in games after the last HR
+                last_hr_game = all_games[last_hr_game_index]
+                logger.info(f"🎯 LAST HR DETECTED for {batter_name}: {last_hr_game['date']} (index {last_hr_game_index}/{len(all_games)}, HR={last_hr_game.get('hr', 0)})")
+                
+                # Count hits and AB in games after the last HR
+                games_after_hr = 0
                 for i in range(last_hr_game_index + 1, len(all_games)):
                     h_since_hr += all_games[i]['h']
+                    ab_since_hr += all_games[i]['ab']  # CRITICAL FIX: Track actual AB since HR
+                    games_after_hr += 1
+                    
+                logger.info(f"📊 GAMES AFTER LAST HR: {games_after_hr} games, {ab_since_hr} AB, {h_since_hr} H")
+                
+                # DEBUG: Show the games after the last HR for verification
+                if games_after_hr <= 10:  # Only show if reasonable number
+                    games_after = [(all_games[i]['date'], all_games[i]['ab'], all_games[i]['h']) for i in range(last_hr_game_index + 1, len(all_games))]
+                    logger.debug(f"   Games since last HR: {games_after}")
             else:
-                # No HR found, count all hits
+                # No HR found, count all hits and AB
                 h_since_hr = total_h
+                ab_since_hr = total_ab  # CRITICAL FIX: No HR this season, so all AB are since "last" HR
+                logger.warning(f"❌ NO HR FOUND for {batter_name} - using total stats as 'since HR'")
             
             # Calculate heating up / cold factors (recent 10 games vs previous 10 games)
             heating_up = 0
@@ -917,11 +960,12 @@ class EnhancedDataHandler:
                 elif avg_diff < -0.05:  # Significant decline
                     cold = min(10, abs(avg_diff) * 100)  # Scale to 0-10
             
-            logger.info(f"🏏 HITTER STATS: {batter_name} - {total_games} games, SLG: {hitter_slg:.3f}, H since HR: {h_since_hr}, Heating up: {heating_up:.1f}")
+            logger.info(f"🏏 HITTER STATS: {batter_name} - {total_games} games, SLG: {hitter_slg:.3f}, H since HR: {h_since_hr}, AB since HR: {ab_since_hr}, Heating up: {heating_up:.1f}")
             
             return {
                 'hitter_slg': round(hitter_slg, 3),
                 'h_since_hr': h_since_hr,
+                'ab_since_hr': ab_since_hr,  # CRITICAL FIX: Include actual AB since HR
                 'hitter_total_games': total_games,
                 'hitter_total_ab': total_ab,
                 'hitter_total_h': total_h,
@@ -936,6 +980,7 @@ class EnhancedDataHandler:
             return {
                 'hitter_slg': 0,
                 'h_since_hr': 0,
+                'ab_since_hr': 0,  # CRITICAL FIX: Include in error case
                 'hitter_total_games': 0,
                 'hitter_total_ab': 0,
                 'hitter_total_h': 0,
