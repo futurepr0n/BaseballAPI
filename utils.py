@@ -82,12 +82,15 @@ def robust_csv_load(filename, year=None,
     """
     Safely load a CSV file with standardized column handling.
     Supports loading different year versions of the same file.
+    Uses centralized data path from config.
     """
+    from config import DATA_PATH  # Import centralized path
+    
     if year:
         base_name = filename.replace('2025', str(year))
-        file_path = os.path.join("../BaseballTracker/build/data/stats/", base_name)
+        file_path = os.path.join(DATA_PATH, base_name)
     else:
-        file_path = os.path.join("../BaseballTracker/build/data/stats/", filename)
+        file_path = os.path.join(DATA_PATH, filename)
     
     if not os.path.exists(file_path):
         print(f"Warning: CSV File not found - {file_path}")

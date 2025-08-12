@@ -149,10 +149,20 @@ def transform_prediction_for_ui(prediction):
     # Calculate contact quality factors
     contact_factors = {'heating_up_factor': 0, 'cold_factor': 0, 'contact_trend_description': 'N/A'}
     
+    # Store important fields before formatting
+    original_batter_name = prediction.get('batter_name', 'Unknown Player')
+    original_player_name = prediction.get('player_name')
+    
     # Apply Pinhead-Claude baseline formatting
     formatted_prediction = format_pinhead_baseline_compatible_result(
         prediction, recent_stats, due_factors, contact_factors
     )
+    
+    # Restore important fields that might have been lost
+    if 'batter_name' not in formatted_prediction or formatted_prediction.get('batter_name') is None:
+        formatted_prediction['batter_name'] = original_batter_name
+    if 'player_name' not in formatted_prediction or formatted_prediction.get('player_name') is None:
+        formatted_prediction['player_name'] = original_player_name or original_batter_name
     
     # Ensure UI compatibility by maintaining expected nested structure
     if 'recent_N_games_raw_data' not in formatted_prediction:
@@ -193,6 +203,18 @@ def transform_prediction_for_ui(prediction):
     # Recent games count
     if 'recent_games' in formatted_prediction:
         trends_obj['recent_games'] = formatted_prediction['recent_games']
+    
+    # Fix field name mappings for Daily-Matchup-Analysis compatibility
+    # FORCE player_name to be set from batter_name
+    if formatted_prediction.get('batter_name'):
+        formatted_prediction['player_name'] = formatted_prediction['batter_name']
+    else:
+        formatted_prediction['player_name'] = 'Unknown Player'
+    
+    # Ensure pitcher field is available for grouping function
+    if 'pitcher_name' not in formatted_prediction and 'pitcher' not in formatted_prediction:
+        # Try to get pitcher name from context
+        formatted_prediction['pitcher'] = 'Unknown Pitcher'
     
     return formatted_prediction
 
@@ -331,7 +353,14 @@ async def analyze_pitcher_vs_team(request: PredictionRequest):
         
         # Transform predictions to match UI expectations
         if result.get('predictions'):
-            result['predictions'] = [transform_prediction_for_ui(pred) for pred in result['predictions']]
+            transformed_predictions = []
+            for pred in result['predictions']:
+                transformed_pred = transform_prediction_for_ui(pred)
+                # Force field mapping after transformation
+                if transformed_pred.get('batter_name') and not transformed_pred.get('player_name'):
+                    transformed_pred['player_name'] = transformed_pred['batter_name']
+                transformed_predictions.append(transformed_pred)
+            result['predictions'] = transformed_predictions
         
         # Limit results if requested
         if request.max_results and result.get('predictions'):
