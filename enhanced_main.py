@@ -30,6 +30,7 @@ try:
     from enhanced_data_handler import EnhancedDataHandler, create_enhanced_analysis_report
     from sort_utils import sort_predictions, get_sort_description
     from filter_utils import filter_predictions
+    from playbyplay_analyzer import PlayByPlayAnalyzer
     
     # Import original modules as fallback
     from analyzer import calculate_recent_trends, enhanced_hr_likelihood_score
@@ -110,6 +111,14 @@ class EnhancedOpportunitiesRequest(BaseModel):
     players: List[EnhancedOpportunityPlayer]
     currentDate: str
     analysisType: Optional[str] = "opportunities"  # "opportunities" or "warnings"
+
+class WeakspotAnalysisRequest(BaseModel):
+    away_pitcher: str
+    away_team: str
+    home_pitcher: str
+    home_team: str
+    date: str
+    venue: Optional[str] = None
 
 # Helper function to transform predictions for UI compatibility
 def transform_prediction_for_ui(prediction):
@@ -892,6 +901,140 @@ async def analyze_enhanced_opportunities(request: EnhancedOpportunitiesRequest):
             status_code=500, 
             detail=f"Enhanced opportunities processing error: {str(e)}"
         )
+
+@app.post("/api/weakspot-analysis")
+async def analyze_pitcher_weakspots(request: WeakspotAnalysisRequest):
+    """
+    Comprehensive pitcher weakness analysis using play-by-play data.
+    Identifies vulnerabilities, patterns, and timing windows for optimal exploitation.
+    """
+    if global_data['initialization_status'] != 'completed':
+        raise HTTPException(
+            status_code=503, 
+            detail=f"Data not ready. Status: {global_data['initialization_status']}"
+        )
+    
+    try:
+        logger.info(f"🎯 Analyzing weakspots: {request.away_pitcher} vs {request.home_team}, {request.home_pitcher} vs {request.away_team}")
+        
+        # Initialize play-by-play analyzer
+        analyzer = PlayByPlayAnalyzer()
+        
+        # Analyze both pitchers
+        away_pitcher_analysis = analyzer.analyze_pitcher_vulnerabilities(
+            pitcher_name=request.away_pitcher,
+            limit_games=15  # Look at last 15 games for comprehensive analysis
+        )
+        
+        home_pitcher_analysis = analyzer.analyze_pitcher_vulnerabilities(
+            pitcher_name=request.home_pitcher,
+            limit_games=15
+        )
+        
+        # Build comprehensive matchup analysis
+        analysis_result = {
+            "matchup": {
+                "away_pitcher": request.away_pitcher,
+                "away_team": request.away_team,
+                "home_pitcher": request.home_pitcher,
+                "home_team": request.home_team,
+                "date": request.date,
+                "venue": request.venue
+            },
+            "away_pitcher_analysis": {
+                **away_pitcher_analysis,
+                "opposing_team": request.home_team
+            },
+            "home_pitcher_analysis": {
+                **home_pitcher_analysis,
+                "opposing_team": request.away_team
+            },
+            "overall_matchup_assessment": _assess_overall_matchup(away_pitcher_analysis, home_pitcher_analysis),
+            "generated_at": datetime.now().isoformat(),
+            "analysis_type": "comprehensive_weakspot_analysis",
+            "data_source": "play_by_play_historical"
+        }
+        
+        logger.info(f"✅ Weakspot analysis complete: {away_pitcher_analysis['games_analyzed'] + home_pitcher_analysis['games_analyzed']} total games analyzed")
+        return analysis_result
+        
+    except Exception as e:
+        logger.error(f"Error in weakspot analysis: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Weakspot analysis error: {str(e)}"
+        )
+
+def _assess_overall_matchup(away_analysis: Dict, home_analysis: Dict) -> Dict:
+    """Assess the overall matchup dynamics between both pitchers"""
+    
+    # Calculate vulnerability comparison
+    away_vulnerability = away_analysis.get("overall_vulnerability_score", 0)
+    home_vulnerability = home_analysis.get("overall_vulnerability_score", 0)
+    
+    # Determine which pitcher is more vulnerable
+    if away_vulnerability > home_vulnerability + 10:
+        advantage = "home_team"
+        advantage_type = "significant" if away_vulnerability > home_vulnerability + 25 else "moderate"
+        vulnerable_pitcher = away_analysis.get("pitcher_name", "away")
+    elif home_vulnerability > away_vulnerability + 10:
+        advantage = "away_team"
+        advantage_type = "significant" if home_vulnerability > away_vulnerability + 25 else "moderate"
+        vulnerable_pitcher = home_analysis.get("pitcher_name", "home")
+    else:
+        advantage = "balanced"
+        advantage_type = "even"
+        vulnerable_pitcher = "neither"
+    
+    # Identify key patterns
+    patterns = []
+    
+    # Check for predictability patterns
+    away_predictability = away_analysis.get("pattern_recognition", {}).get("predictability_score", 0)
+    home_predictability = home_analysis.get("pattern_recognition", {}).get("predictability_score", 0)
+    
+    if away_predictability > 15:
+        patterns.append(f"{away_analysis.get('pitcher_name', 'Away pitcher')} shows predictable pitch sequences")
+    if home_predictability > 15:
+        patterns.append(f"{home_analysis.get('pitcher_name', 'Home pitcher')} shows predictable pitch sequences")
+    
+    # Check for timing windows
+    for analysis, side in [(away_analysis, "away"), (home_analysis, "home")]:
+        timing_windows = analysis.get("timing_windows", {})
+        vulnerable_windows = [window for window, data in timing_windows.items() 
+                             if data.get("vulnerability_score", 0) > 20]
+        if vulnerable_windows:
+            patterns.append(f"{analysis.get('pitcher_name', f'{side} pitcher')} vulnerable in pitch counts: {', '.join(vulnerable_windows)}")
+    
+    return {
+        "advantage": advantage,
+        "advantage_type": advantage_type,
+        "vulnerable_pitcher": vulnerable_pitcher,
+        "vulnerability_difference": abs(away_vulnerability - home_vulnerability),
+        "key_patterns": patterns,
+        "away_pitcher_vulnerability": away_vulnerability,
+        "home_pitcher_vulnerability": home_vulnerability,
+        "recommended_strategy": _generate_strategy_recommendation(advantage, advantage_type, patterns)
+    }
+
+def _generate_strategy_recommendation(advantage: str, advantage_type: str, patterns: List[str]) -> str:
+    """Generate strategic recommendation based on matchup analysis"""
+    
+    if advantage == "balanced":
+        return "Even matchup - look for situational advantages and recent form indicators"
+    
+    base_strategy = f"Target {advantage.replace('_', ' ')} batting lineup"
+    
+    if advantage_type == "significant":
+        strategy = f"{base_strategy} aggressively - significant pitcher vulnerability detected"
+    else:
+        strategy = f"{base_strategy} with moderate confidence"
+    
+    if patterns:
+        strategy += f". Key exploitable patterns identified: {'; '.join(patterns[:2])}"
+    
+    return strategy
 
 if __name__ == "__main__":
     import argparse
