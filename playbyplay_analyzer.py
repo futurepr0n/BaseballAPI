@@ -434,9 +434,12 @@ class PlayByPlayAnalyzer:
         return estimated_position
     
     def _analyze_pitch_patterns(self, games: List[Dict], pitcher_name: str) -> Dict:
-        """Analyze predictable pitch sequences with enhanced matching"""
-        sequences = defaultdict(int)
+        """Analyze predictable pitch sequences with enhanced matching - requires 3+ pitch sequences for true predictability"""
+        # Track both 2-pitch and 3+ pitch sequences
+        two_pitch_sequences = defaultdict(int)
+        three_pitch_sequences = defaultdict(int)
         sequence_outcomes = defaultdict(lambda: {"total": 0, "successful": 0})
+        contextual_sequences = defaultdict(lambda: {"innings": set(), "counts": set(), "frequency": 0})
         
         for game in games:
             for play in game.get("plays", []):
@@ -444,43 +447,118 @@ class PlayByPlayAnalyzer:
                     continue
                     
                 pitch_sequence = play.get("pitch_sequence", [])
+                inning = play.get("inning", 0)
+                count = play.get("count", "0-0")
+                
+                # Analyze 2-pitch sequences (for baseline)
                 if len(pitch_sequence) >= 2:
                     for i in range(len(pitch_sequence) - 1):
                         seq = f"{pitch_sequence[i].get('pitch_type', 'Unknown')} -> {pitch_sequence[i+1].get('pitch_type', 'Unknown')}"
-                        sequences[seq] += 1
+                        two_pitch_sequences[seq] += 1
                         
                         # Track if sequence was successful (resulted in strike/out)
                         result = pitch_sequence[i+1].get("result", "").lower()
                         sequence_outcomes[seq]["total"] += 1
                         if any(good in result for good in ["strike", "foul", "out"]):
                             sequence_outcomes[seq]["successful"] += 1
+                
+                # Analyze 3+ pitch sequences (higher predictability value)
+                if len(pitch_sequence) >= 3:
+                    for i in range(len(pitch_sequence) - 2):
+                        three_seq = f"{pitch_sequence[i].get('pitch_type', 'Unknown')} -> {pitch_sequence[i+1].get('pitch_type', 'Unknown')} -> {pitch_sequence[i+2].get('pitch_type', 'Unknown')}"
+                        three_pitch_sequences[three_seq] += 1
+                        
+                        # Track contextual information for confidence scoring
+                        contextual_sequences[three_seq]["innings"].add(inning)
+                        contextual_sequences[three_seq]["counts"].add(count)
+                        contextual_sequences[three_seq]["frequency"] += 1
+                        
+                        # Track success rate for 3-pitch sequences
+                        result = pitch_sequence[i+2].get("result", "").lower()
+                        sequence_outcomes[three_seq]["total"] += 1
+                        if any(good in result for good in ["strike", "foul", "out"]):
+                            sequence_outcomes[three_seq]["successful"] += 1
         
-        # Calculate predictability score
-        total_sequences = sum(sequences.values())
+        # Calculate enhanced predictability score (heavily weight 3+ pitch sequences)
+        total_two_pitch = sum(two_pitch_sequences.values())
+        total_three_pitch = sum(three_pitch_sequences.values())
         predictability_score = 0
         top_sequences = []
+        confidence_score = 0
         
-        if total_sequences > 0:
-            # High frequency sequences indicate predictability
-            for seq, count in sorted(sequences.items(), key=lambda x: x[1], reverse=True)[:5]:
-                frequency = count / total_sequences
-                success_rate = sequence_outcomes[seq]["successful"] / sequence_outcomes[seq]["total"] if sequence_outcomes[seq]["total"] > 0 else 0
-                
-                # More predictable if high frequency but low success rate
-                predictability_contribution = frequency * (1 - success_rate) * 100
-                predictability_score += predictability_contribution
-                
-                top_sequences.append({
-                    "sequence": seq,
-                    "frequency": frequency,
-                    "success_rate": success_rate,
-                    "count": count
-                })
+        # Prioritize 3+ pitch sequences for true predictability analysis
+        if total_three_pitch > 0:
+            # Analyze 3+ pitch sequences (more meaningful for prediction)
+            for seq, count in sorted(three_pitch_sequences.items(), key=lambda x: x[1], reverse=True)[:5]:
+                if count >= 3:  # Require minimum 3 occurrences for reliable pattern
+                    frequency = count / total_three_pitch
+                    success_rate = sequence_outcomes[seq]["successful"] / sequence_outcomes[seq]["total"] if sequence_outcomes[seq]["total"] > 0 else 0
+                    
+                    # Enhanced predictability calculation for 3+ sequences
+                    base_predictability = frequency * (1 - success_rate) * 100
+                    
+                    # Confidence boosters
+                    inning_consistency = len(contextual_sequences[seq]["innings"]) <= 3  # Appears in few innings = more predictable
+                    count_consistency = len(contextual_sequences[seq]["counts"]) <= 2   # Specific counts = more predictable
+                    
+                    confidence_multiplier = 1.0
+                    if inning_consistency:
+                        confidence_multiplier += 0.3
+                    if count_consistency:
+                        confidence_multiplier += 0.3
+                    if count >= 5:  # Frequent usage
+                        confidence_multiplier += 0.4
+                    
+                    predictability_contribution = base_predictability * confidence_multiplier
+                    predictability_score += predictability_contribution
+                    
+                    top_sequences.append({
+                        "sequence": seq,
+                        "frequency": frequency,
+                        "success_rate": success_rate,
+                        "count": count,
+                        "confidence_multiplier": confidence_multiplier,
+                        "inning_consistency": inning_consistency,
+                        "count_consistency": count_consistency,
+                        "sequence_type": "3-pitch"
+                    })
+            
+            # Calculate confidence score based on sample size and pattern consistency
+            if top_sequences:
+                avg_confidence = sum(seq["confidence_multiplier"] for seq in top_sequences) / len(top_sequences)
+                sample_confidence = min(1.0, total_three_pitch / 20)  # Full confidence at 20+ sequences
+                confidence_score = avg_confidence * sample_confidence * 100
+        
+        # Fallback to 2-pitch analysis if insufficient 3-pitch data
+        elif total_two_pitch > 0:
+            for seq, count in sorted(two_pitch_sequences.items(), key=lambda x: x[1], reverse=True)[:3]:
+                if count >= 2:
+                    frequency = count / total_two_pitch
+                    success_rate = sequence_outcomes[seq]["successful"] / sequence_outcomes[seq]["total"] if sequence_outcomes[seq]["total"] > 0 else 0
+                    
+                    # Reduced predictability for 2-pitch sequences
+                    predictability_contribution = frequency * (1 - success_rate) * 50  # 50% weight vs 3-pitch
+                    predictability_score += predictability_contribution
+                    
+                    top_sequences.append({
+                        "sequence": seq,
+                        "frequency": frequency,
+                        "success_rate": success_rate,
+                        "count": count,
+                        "confidence_multiplier": 0.6,  # Lower confidence for 2-pitch
+                        "sequence_type": "2-pitch"
+                    })
+            
+            confidence_score = 30 if top_sequences else 0  # Lower baseline confidence for 2-pitch
         
         return {
-            "predictability_score": min(100, predictability_score * 10),  # Scale to 0-100
+            "predictability_score": min(100, predictability_score),
+            "confidence_score": min(100, confidence_score),
             "top_sequences": top_sequences,
-            "total_sequences_analyzed": total_sequences
+            "total_sequences_analyzed": total_three_pitch + total_two_pitch,
+            "three_pitch_sequences": total_three_pitch,
+            "two_pitch_sequences": total_two_pitch,
+            "analysis_reliability": "high" if total_three_pitch >= 10 else "medium" if total_three_pitch >= 5 else "low"
         }
     
     def _analyze_timing_windows(self, games: List[Dict], pitcher_name: str) -> Dict:
