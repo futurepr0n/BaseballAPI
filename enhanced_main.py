@@ -739,11 +739,12 @@ async def shorten_url(url_request: Dict[str, str]):
 @app.post("/refresh-lineups")
 async def refresh_lineups():
     """
-    Fetch fresh starting lineup data from MLB Stats API and MLB.com
-    Runs both fetch_starting_lineups.py (for pitcher data) and enhanced_lineup_scraper.py (for batting orders)
+    Fetch comprehensive starting lineup data from MLB Stats API
+    Uses the comprehensive fetch_starting_lineups.py script for complete game context, 
+    pitcher information, lineup details, and roster enhancement
     """
     try:
-        logger.info("🔄 Starting lineup refresh request")
+        logger.info("🔄 Starting comprehensive lineup refresh request")
         
         # Path to the baseball scraper script (relative to current working directory)
         scraper_dir = "../BaseballScraper"
@@ -760,93 +761,78 @@ async def refresh_lineups():
         env = os.environ.copy()
         env['PYTHONDONTWRITEBYTECODE'] = '1'
         
-        # Step 1: Run fetch_starting_lineups.py (for pitcher data and game info)
+        # Run comprehensive fetch_starting_lineups.py (includes pitcher data, game info, and lineup details)
         script_path = "fetch_starting_lineups.py"
-        logger.info(f"🐍 Step 1: Executing {python_cmd} {script_path} (cwd: {scraper_dir})")
+        logger.info(f"🐍 Executing comprehensive {python_cmd} {script_path} (cwd: {scraper_dir})")
         
-        result1 = subprocess.run(
+        result = subprocess.run(
             [python_cmd, script_path],
             cwd=scraper_dir,
             capture_output=True,
             text=True,
-            timeout=120,  # 2 minute timeout
+            timeout=180,  # 3 minute timeout for comprehensive API calls
             env=env
         )
         
         games_found = 0
         lineups_found = 0
+        roster_updates = 0
         
-        if result1.returncode == 0:
-            logger.info("✅ Step 1: Basic lineup data fetch completed successfully")
+        if result.returncode == 0:
+            logger.info("✅ Comprehensive lineup fetch completed successfully")
             
-            # Parse output for game count
-            output1 = result1.stdout
-            for line in output1.split('\n'):
+            # Parse output for statistics
+            output = result.stdout
+            for line in output.split('\n'):
                 if "Found" in line and "games" in line:
                     try:
+                        # Match pattern like "Found 15 games with 12 having lineup info"
                         parts = line.split()
-                        games_found = int([p for p in parts if p.isdigit()][0])
+                        numbers = [p for p in parts if p.isdigit()]
+                        if len(numbers) >= 2:
+                            games_found = int(numbers[0])
+                            lineups_found = int(numbers[1])
+                        elif len(numbers) == 1:
+                            games_found = int(numbers[0])
                     except:
                         pass
-                if "having lineup info" in line:
+                        
+                if "Updated roster data with" in line:
                     try:
+                        # Match pattern like "Updated roster data with 5 entries"
                         parts = line.split()
-                        lineups_found = int([p for p in parts if p.isdigit()][1])
+                        for i, part in enumerate(parts):
+                            if part.isdigit() and i + 1 < len(parts) and parts[i + 1] == "entries":
+                                roster_updates = int(part)
+                                break
                     except:
                         pass
         else:
-            logger.error(f"❌ Step 1 failed with return code {result1.returncode}")
+            logger.error(f"❌ Comprehensive lineup fetch failed with return code {result.returncode}")
             return {
                 "success": False,
-                "message": "Basic lineup fetch failed",
-                "error": result1.stderr.strip() or result1.stdout.strip()
+                "message": "Comprehensive lineup fetch failed",
+                "error": result.stderr.strip() or result.stdout.strip()
             }
-        
-        # Step 2: Run enhanced_lineup_scraper.py (for batting orders) if available
-        enhanced_script_path = "enhanced_lineup_scraper.py"
-        enhanced_script_full_path = os.path.join(scraper_dir, enhanced_script_path)
-        
-        enhanced_output = ""
-        enhanced_success = False
-        
-        if os.path.exists(enhanced_script_full_path):
-            logger.info(f"🐍 Step 2: Executing {python_cmd} {enhanced_script_path} (cwd: {scraper_dir})")
-            
-            result2 = subprocess.run(
-                [python_cmd, enhanced_script_path],
-                cwd=scraper_dir,
-                capture_output=True,
-                text=True,
-                timeout=180,  # 3 minute timeout for web scraping
-                env=env
-            )
-            
-            if result2.returncode == 0:
-                logger.info("✅ Step 2: Enhanced batting order fetch completed successfully")
-                enhanced_output = result2.stdout
-                enhanced_success = True
-            else:
-                logger.warning(f"⚠️ Step 2: Enhanced scraper failed (return code {result2.returncode})")
-                enhanced_output = f"Enhanced scraper failed: {result2.stderr.strip() or result2.stdout.strip()}"
-        else:
-            logger.info("ℹ️ Step 2: Enhanced lineup scraper not found, skipping batting order extraction")
-            enhanced_output = "Enhanced lineup scraper not available"
-        
-        # Combine results
-        combined_output = f"=== BASIC LINEUP FETCH ===\n{result1.stdout.strip()}"
-        if enhanced_success:
-            combined_output += f"\n\n=== ENHANCED BATTING ORDERS ===\n{enhanced_output.strip()}"
-        else:
-            combined_output += f"\n\n=== ENHANCED SCRAPER STATUS ===\n{enhanced_output}"
         
         return {
             "success": True,
-            "message": "Lineup refresh completed" + (" with batting orders" if enhanced_success else " (basic data only)"),
+            "message": "Comprehensive lineup refresh completed successfully",
             "timestamp": datetime.now().isoformat(),
             "games_found": games_found,
             "lineups_found": lineups_found,
-            "enhanced_lineups": enhanced_success,
-            "output": combined_output
+            "roster_updates": roster_updates,
+            "script_used": "fetch_starting_lineups.py",
+            "features": [
+                "MLB Stats API integration",
+                "Complete game context with venue/weather",
+                "Pitcher statistics and handedness",
+                "Team records and standings",
+                "Roster enhancement with name matching", 
+                "Quick lookup tables for team/pitcher data",
+                "Batting order information when available"
+            ],
+            "output": result.stdout.strip()
         }
             
     except subprocess.TimeoutExpired:
