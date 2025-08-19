@@ -7,6 +7,9 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 import logging
+import json
+import os
+from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any
 
 from enhanced_analyzer import (
@@ -48,6 +51,9 @@ class EnhancedDataHandler:
         }
         
         logger.info(f"Enhanced data handler initialized with {len(master_player_data)} players")
+        
+        # Load today's lineup data for position lookup
+        self.lineup_data = self._load_lineup_data()
     
     def analyze_team_matchup_with_fallbacks(self, pitcher_name: str, team_abbr: str, 
                                           sort_by: str = 'score', min_score: float = 0,
@@ -143,6 +149,13 @@ class EnhancedDataHandler:
                 if analysis.get('score', 0) >= min_score:
                     analysis['player_id'] = batter['batter_id']
                     analysis['team'] = team_abbr.upper()
+                    
+                    # ADD LINEUP POSITION DATA
+                    lineup_position = self._get_player_lineup_position(batter['name'], team_abbr.upper())
+                    analysis['position'] = lineup_position
+                    analysis['batting_position'] = lineup_position  # Alternative field name
+                    analysis['lineup_position'] = lineup_position   # Alternative field name
+                    
                     batter_analyses.append(analysis)
                     
                     # Track statistics
@@ -1085,6 +1098,118 @@ class EnhancedDataHandler:
             recommendations.append("Low percentage of full-data analyses - prioritize complete pitcher arsenal data")
         
         return recommendations
+    
+    def _load_lineup_data(self) -> Dict[str, Any]:
+        """Load today's lineup data from JSON file"""
+        try:
+            today = datetime.now().strftime('%Y-%m-%d')
+            lineup_file = f'../BaseballData/data/lineups/starting_lineups_{today}.json'
+            
+            if os.path.exists(lineup_file):
+                with open(lineup_file, 'r') as f:
+                    lineup_data = json.load(f)
+                logger.info(f"✅ Loaded lineup data for {today}: {lineup_data.get('totalGames', 0)} games")
+                return lineup_data
+            else:
+                logger.warning(f"⚠️ No lineup file found: {lineup_file}")
+                return {}
+                
+        except Exception as e:
+            logger.error(f"❌ Error loading lineup data: {e}")
+            return {}
+    
+    def _get_player_lineup_position(self, player_name: str, team_abbr: str) -> str:
+        """Get player's lineup position from today's lineup data"""
+        if not self.lineup_data or 'games' not in self.lineup_data:
+            return 'Unknown'
+            
+        try:
+            # Find the game for this team
+            for game in self.lineup_data['games']:
+                home_team = game.get('teams', {}).get('home', {}).get('abbr', '')
+                away_team = game.get('teams', {}).get('away', {}).get('abbr', '')
+                
+                if home_team == team_abbr:
+                    lineup = game.get('lineups', {}).get('home', {}).get('batting_order', [])
+                elif away_team == team_abbr:
+                    lineup = game.get('lineups', {}).get('away', {}).get('batting_order', [])
+                else:
+                    continue
+                    
+                # Search for player in lineup
+                for batter in lineup:
+                    batter_name = batter.get('name', '').strip()
+                    if self._names_match(player_name, batter_name):
+                        position = batter.get('position', 0)
+                        logger.info(f"🎯 LINEUP POSITION FOUND: {player_name} → {position} (Team: {team_abbr})")
+                        return str(position)
+                        
+            logger.warning(f"⚠️ Player not found in lineup: {player_name} (Team: {team_abbr})")
+            return 'Unknown'
+            
+        except Exception as e:
+            logger.error(f"❌ Error getting lineup position for {player_name}: {e}")
+            return 'Unknown'
+    
+    def _names_match(self, name1: str, name2: str) -> bool:
+        """Check if two player names match with various normalization"""
+        if not name1 or not name2:
+            return False
+            
+        # Direct match
+        if name1.lower().strip() == name2.lower().strip():
+            return True
+            
+        # Remove common suffixes and try again
+        def clean_name(name):
+            name = name.lower().strip()
+            suffixes = [' jr.', ' jr', ' sr.', ' sr', ' iii', ' ii']
+            for suffix in suffixes:
+                if name.endswith(suffix):
+                    name = name[:-len(suffix)].strip()
+            return name
+            
+        clean1 = clean_name(name1)
+        clean2 = clean_name(name2)
+        
+        if clean1 == clean2:
+            return True
+            
+        # Handle "First Initial. Last" vs "Full First Last" matching
+        # e.g., "W. Contreras" should match "William Contreras"
+        def expand_initials(name):
+            parts = name.split()
+            if len(parts) == 2 and len(parts[0]) == 2 and parts[0].endswith('.'):
+                initial = parts[0][0].lower()
+                lastname = parts[1].lower()
+                return (initial, lastname)
+            return None
+            
+        # Check if name1 is initial format and name2 is full format
+        initial_parts1 = expand_initials(name1)
+        if initial_parts1:
+            initial, lastname = initial_parts1
+            name2_parts = name2.lower().split()
+            if (len(name2_parts) >= 2 and 
+                name2_parts[0].startswith(initial) and 
+                lastname in name2_parts[-1]):
+                return True
+                
+        # Check if name2 is initial format and name1 is full format
+        initial_parts2 = expand_initials(name2)
+        if initial_parts2:
+            initial, lastname = initial_parts2
+            name1_parts = name1.lower().split()
+            if (len(name1_parts) >= 2 and 
+                name1_parts[0].startswith(initial) and 
+                lastname in name1_parts[-1]):
+                return True
+            
+        # Check if one name contains the other (for partial matches)
+        if clean1 in clean2 or clean2 in clean1:
+            return True
+            
+        return False
 
 def create_enhanced_analysis_report(analysis_result: Dict[str, Any]) -> str:
     """
