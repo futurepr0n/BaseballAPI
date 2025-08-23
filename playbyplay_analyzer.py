@@ -20,9 +20,13 @@ class PlayByPlayAnalyzer:
         self.vulnerability_cache = {}
         self.pattern_cache = {}
         
-    def analyze_pitcher_vulnerabilities(self, pitcher_name: str, limit_games: int = 50) -> Dict[str, Any]:
+    def analyze_pitcher_vulnerabilities(self, pitcher_name: str, limit_games: int = None) -> Dict[str, Any]:
         """
-        Analyze a pitcher's vulnerabilities from recent play-by-play data
+        Analyze a pitcher's vulnerabilities from play-by-play data
+        
+        Args:
+            pitcher_name: Name of the pitcher to analyze
+            limit_games: Number of games to analyze (None = use all available season data)
         
         Returns comprehensive vulnerability analysis including:
         - Pitch type vulnerabilities
@@ -53,15 +57,21 @@ class PlayByPlayAnalyzer:
         
         return analysis
     
-    def _find_pitcher_games(self, pitcher_name: str, limit: int) -> List[Dict]:
-        """Find recent games where the pitcher appeared"""
+    def _find_pitcher_games(self, pitcher_name: str, limit: int = None) -> List[Dict]:
+        """Find games where the pitcher appeared
+        
+        Args:
+            pitcher_name: Name of the pitcher to search for
+            limit: Maximum number of games to return (None = return all available)
+        """
         pitcher_games = []
         
         # Get all play-by-play files sorted by date (most recent first)
         pbp_files = sorted(self.data_path.glob("*.json"), reverse=True)
         
         for file_path in pbp_files:
-            if len(pitcher_games) >= limit:
+            # If limit is None, process all games; otherwise check limit
+            if limit is not None and len(pitcher_games) >= limit:
                 break
                 
             try:

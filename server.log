@@ -1,0 +1,138 @@
+/Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballAPI/enhanced_main.py:222: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [21355]
+INFO:     Waiting for application startup.
+INFO:enhanced_main:Starting enhanced data initialization...
+INFO:enhanced_data_handler:Enhanced data handler initialized with 694 players
+INFO:enhanced_data_handler:✅ Loaded lineup data for 2025-08-22: 15 games
+INFO:enhanced_main:Enhanced data initialization completed successfully
+INFO:enhanced_main:- Players loaded: 694
+INFO:enhanced_main:- Daily game dates: 184
+INFO:enhanced_main:- Enhanced handler ready with fallback strategies
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+🚀 Starting Enhanced Baseball Analysis API...
+🔗 API will be available at: http://0.0.0.0:8000
+📚 Documentation at: http://0.0.0.0:8000/docs
+⚡ Enhanced features: Missing data fallbacks, confidence scoring, team-based estimates
+📋 Comprehensive sorting: 26+ sorting options available
+
+=== Initializing Baseball Analysis System ===
+
+--- Building Master Player ID Map from reference CSVs ---
+Built Initial ID Map: 742 name->ID entries, 743 ID->name entries.
+Searching for daily JSON files with pattern: /Users/futurepr0n/Development/Capping.Pro/Claude-Code/BaseballData/data/2025/**/*_*_2025.json
+
+Loading daily game data from 184 files found...
+Successfully loaded daily data for 184 dates.
+✅ Daily data loaded: 184 dates, sample date 2025-04-01 has 380 players
+
+--- Rosters Processed into Master Data ---
+Created/Updated entries for 694 players. 600 unmapped from roster.json.
+Final ID Map: 1449 name->ID entries, 743 ID->name entries.
+
+--- Merging Detailed 2025 CSV Stats into Master Player Data ---
+Processed bbb_LHB_vs_LHP (batters-batted-ball-bat-left-pitch-hand-left-2025.csv): merged data for 90 players.
+Processed bbb_LHB_vs_RHP (batters-batted-ball-bat-left-pitch-hand-right-2025.csv): merged data for 118 players.
+Processed bbb_RHB_vs_LHP (batters-batted-ball-bat-right-pitch-hand-left-2025.csv): merged data for 149 players.
+Processed bbb_RHB_vs_RHP (batters-batted-ball-bat-right-pitch-hand-right-2025.csv): merged data for 122 players.
+Processed hitter_overall_ev_stats (hitter_exit_velocity_2025.csv): merged data for 241 players.
+Processed pitcher_overall_ev_stats (pitcher_exit_velocity_2025.csv): merged data for 337 players.
+Processed hitter_pitch_arsenal_stats (hitterpitcharsenalstats_2025.csv): merged data for 331 players.
+Processed pitcher_pitch_arsenal_stats (pitcherpitcharsenalstats_2025.csv): merged data for 292 players.
+
+--- Aggregating 2025 Player Stats from Daily Files ---
+Aggregated 2025 stats for 386 players.
+
+--- Calculating 2025 League Averages ---
+Calculated 2025 League Averages (from 324 hitters with >= 30 PA):
+  AVG: 0.247
+  SLG: 0.349
+  ISO: 0.102
+  AVG_K_PERCENT: 0.222
+  AVG_BB_PERCENT: 0.086
+  AVG_HARD_HIT_PERCENT: 0.350
+  AVG_BRL_PERCENT: 0.091
+  AVG_BRL_PA_PERCENT: 0.035
+
+--- Loading Multi-Year Historical Data (CSVs) ---
+Loading 2022 data...
+  Loaded 2022 hitter_arsenal (898 rows)
+  Loaded 2022 pitcher_arsenal (567 rows)
+Loading 2023 data...
+  Loaded 2023 hitter_arsenal (875 rows)
+  Loaded 2023 pitcher_arsenal (550 rows)
+Loading 2024 data...
+  Loaded 2024 hitter_arsenal (856 rows)
+  Loaded 2024 pitcher_arsenal (531 rows)
+Multi-year historical data loading complete.
+
+Calculating metric ranges for normalization...
+Metric ranges calculation complete.
+
+--- Data Initialization Complete ---
+🧪 Comprehensive lookup testing: Available but skipped during startup
+Calculating real-time league averages by pitch type...
+Calculated league averages for 8 pitch types
+INFO:     127.0.0.1:56412 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56549 - "POST /analyze/weakspot-analysis HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56664 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56666 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57098 - "POST /api/weakspot-analysis HTTP/1.1" 422 Unprocessable Entity
+INFO:enhanced_main:🎯 Analyzing weakspots: Corbin Burnes vs DET, Keider Montero vs BAL
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 1009 total pitches for Corbin Burnes across 11 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 265 total plays for Corbin Burnes across 11 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Corbin Burnes: {'position_1': {'total': 46, 'hits': 9, 'hrs': 0}, 'position_2': {'total': 33, 'hits': 8, 'hrs': 1}, 'position_4': {'total': 31, 'hits': 8, 'hrs': 3}, 'position_5': {'total': 29, 'hits': 3, 'hrs': 1}, 'position_6': {'total': 26, 'hits': 2, 'hrs': 0}, 'position_7': {'total': 28, 'hits': 7, 'hrs': 1}, 'position_8': {'total': 24, 'hits': 4, 'hrs': 1}, 'position_9': {'total': 23, 'hits': 5, 'hrs': 0}, 'position_3': {'total': 25, 'hits': 3, 'hrs': 0}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Corbin Burnes: {'position_1': {'vulnerability_score': 7.8, 'hr_rate': 0.0, 'hit_rate': 0.196, 'sample_size': 46}, 'position_2': {'vulnerability_score': 12.1, 'hr_rate': 0.03, 'hit_rate': 0.242, 'sample_size': 33}, 'position_3': {'vulnerability_score': 4.8, 'hr_rate': 0.0, 'hit_rate': 0.12, 'sample_size': 25}, 'position_4': {'vulnerability_score': 18.1, 'hr_rate': 0.097, 'hit_rate': 0.258, 'sample_size': 31}, 'position_5': {'vulnerability_score': 6.9, 'hr_rate': 0.034, 'hit_rate': 0.103, 'sample_size': 29}, 'position_6': {'vulnerability_score': 3.1, 'hr_rate': 0.0, 'hit_rate': 0.077, 'sample_size': 26}, 'position_7': {'vulnerability_score': 12.9, 'hr_rate': 0.036, 'hit_rate': 0.25, 'sample_size': 28}, 'position_8': {'vulnerability_score': 10.0, 'hr_rate': 0.042, 'hit_rate': 0.167, 'sample_size': 24}, 'position_9': {'vulnerability_score': 8.7, 'hr_rate': 0.0, 'hit_rate': 0.217, 'sample_size': 23}}
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 999 total pitches for Keider Montero across 13 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 270 total plays for Keider Montero across 13 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Keider Montero: {'position_1': {'total': 42, 'hits': 10, 'hrs': 0}, 'position_2': {'total': 38, 'hits': 10, 'hrs': 2}, 'position_3': {'total': 31, 'hits': 9, 'hrs': 2}, 'position_5': {'total': 29, 'hits': 7, 'hrs': 1}, 'position_6': {'total': 27, 'hits': 8, 'hrs': 3}, 'position_7': {'total': 25, 'hits': 5, 'hrs': 1}, 'position_8': {'total': 26, 'hits': 5, 'hrs': 1}, 'position_9': {'total': 23, 'hits': 5, 'hrs': 1}, 'position_4': {'total': 29, 'hits': 12, 'hrs': 1}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Keider Montero: {'position_1': {'vulnerability_score': 9.5, 'hr_rate': 0.0, 'hit_rate': 0.238, 'sample_size': 42}, 'position_2': {'vulnerability_score': 14.7, 'hr_rate': 0.053, 'hit_rate': 0.263, 'sample_size': 38}, 'position_3': {'vulnerability_score': 16.8, 'hr_rate': 0.065, 'hit_rate': 0.29, 'sample_size': 31}, 'position_4': {'vulnerability_score': 19.3, 'hr_rate': 0.034, 'hit_rate': 0.414, 'sample_size': 29}, 'position_5': {'vulnerability_score': 12.4, 'hr_rate': 0.034, 'hit_rate': 0.241, 'sample_size': 29}, 'position_6': {'vulnerability_score': 20.7, 'hr_rate': 0.111, 'hit_rate': 0.296, 'sample_size': 27}, 'position_7': {'vulnerability_score': 11.2, 'hr_rate': 0.04, 'hit_rate': 0.2, 'sample_size': 25}, 'position_8': {'vulnerability_score': 10.8, 'hr_rate': 0.038, 'hit_rate': 0.192, 'sample_size': 26}, 'position_9': {'vulnerability_score': 12.2, 'hr_rate': 0.043, 'hit_rate': 0.217, 'sample_size': 23}}
+INFO:enhanced_main:✅ Weakspot analysis complete: 24 total games analyzed
+INFO:     127.0.0.1:57259 - "POST /api/weakspot-analysis HTTP/1.1" 200 OK
+INFO:enhanced_main:🎯 Analyzing weakspots: Corbin Burnes vs DET, Keider Montero vs BAL
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 1009 total pitches for Corbin Burnes across 11 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 265 total plays for Corbin Burnes across 11 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Corbin Burnes: {'position_1': {'total': 46, 'hits': 9, 'hrs': 0}, 'position_2': {'total': 33, 'hits': 8, 'hrs': 1}, 'position_4': {'total': 31, 'hits': 8, 'hrs': 3}, 'position_5': {'total': 29, 'hits': 3, 'hrs': 1}, 'position_6': {'total': 26, 'hits': 2, 'hrs': 0}, 'position_7': {'total': 28, 'hits': 7, 'hrs': 1}, 'position_8': {'total': 24, 'hits': 4, 'hrs': 1}, 'position_9': {'total': 23, 'hits': 5, 'hrs': 0}, 'position_3': {'total': 25, 'hits': 3, 'hrs': 0}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Corbin Burnes: {'position_1': {'vulnerability_score': 7.8, 'hr_rate': 0.0, 'hit_rate': 0.196, 'sample_size': 46}, 'position_2': {'vulnerability_score': 12.1, 'hr_rate': 0.03, 'hit_rate': 0.242, 'sample_size': 33}, 'position_3': {'vulnerability_score': 4.8, 'hr_rate': 0.0, 'hit_rate': 0.12, 'sample_size': 25}, 'position_4': {'vulnerability_score': 18.1, 'hr_rate': 0.097, 'hit_rate': 0.258, 'sample_size': 31}, 'position_5': {'vulnerability_score': 6.9, 'hr_rate': 0.034, 'hit_rate': 0.103, 'sample_size': 29}, 'position_6': {'vulnerability_score': 3.1, 'hr_rate': 0.0, 'hit_rate': 0.077, 'sample_size': 26}, 'position_7': {'vulnerability_score': 12.9, 'hr_rate': 0.036, 'hit_rate': 0.25, 'sample_size': 28}, 'position_8': {'vulnerability_score': 10.0, 'hr_rate': 0.042, 'hit_rate': 0.167, 'sample_size': 24}, 'position_9': {'vulnerability_score': 8.7, 'hr_rate': 0.0, 'hit_rate': 0.217, 'sample_size': 23}}
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 999 total pitches for Keider Montero across 13 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 270 total plays for Keider Montero across 13 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Keider Montero: {'position_1': {'total': 42, 'hits': 10, 'hrs': 0}, 'position_2': {'total': 38, 'hits': 10, 'hrs': 2}, 'position_3': {'total': 31, 'hits': 9, 'hrs': 2}, 'position_5': {'total': 29, 'hits': 7, 'hrs': 1}, 'position_6': {'total': 27, 'hits': 8, 'hrs': 3}, 'position_7': {'total': 25, 'hits': 5, 'hrs': 1}, 'position_8': {'total': 26, 'hits': 5, 'hrs': 1}, 'position_9': {'total': 23, 'hits': 5, 'hrs': 1}, 'position_4': {'total': 29, 'hits': 12, 'hrs': 1}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Keider Montero: {'position_1': {'vulnerability_score': 9.5, 'hr_rate': 0.0, 'hit_rate': 0.238, 'sample_size': 42}, 'position_2': {'vulnerability_score': 14.7, 'hr_rate': 0.053, 'hit_rate': 0.263, 'sample_size': 38}, 'position_3': {'vulnerability_score': 16.8, 'hr_rate': 0.065, 'hit_rate': 0.29, 'sample_size': 31}, 'position_4': {'vulnerability_score': 19.3, 'hr_rate': 0.034, 'hit_rate': 0.414, 'sample_size': 29}, 'position_5': {'vulnerability_score': 12.4, 'hr_rate': 0.034, 'hit_rate': 0.241, 'sample_size': 29}, 'position_6': {'vulnerability_score': 20.7, 'hr_rate': 0.111, 'hit_rate': 0.296, 'sample_size': 27}, 'position_7': {'vulnerability_score': 11.2, 'hr_rate': 0.04, 'hit_rate': 0.2, 'sample_size': 25}, 'position_8': {'vulnerability_score': 10.8, 'hr_rate': 0.038, 'hit_rate': 0.192, 'sample_size': 26}, 'position_9': {'vulnerability_score': 12.2, 'hr_rate': 0.043, 'hit_rate': 0.217, 'sample_size': 23}}
+INFO:enhanced_main:✅ Weakspot analysis complete: 24 total games analyzed
+INFO:     127.0.0.1:57417 - "POST /api/weakspot-analysis HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57867 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "OPTIONS /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:57865 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57995 - "OPTIONS /api/weakspot-analysis HTTP/1.1" 200 OK
+INFO:enhanced_main:🎯 Analyzing weakspots: Antonio Senzatela vs PIT, Braxton Ashcraft vs COL
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 1826 total pitches for Antonio Senzatela across 22 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 494 total plays for Antonio Senzatela across 22 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Antonio Senzatela: {'position_1': {'total': 84, 'hits': 24, 'hrs': 1}, 'position_2': {'total': 65, 'hits': 20, 'hrs': 4}, 'position_3': {'total': 53, 'hits': 24, 'hrs': 1}, 'position_4': {'total': 51, 'hits': 22, 'hrs': 5}, 'position_5': {'total': 54, 'hits': 17, 'hrs': 2}, 'position_7': {'total': 45, 'hits': 14, 'hrs': 2}, 'position_8': {'total': 48, 'hits': 11, 'hrs': 1}, 'position_9': {'total': 41, 'hits': 6, 'hrs': 1}, 'position_6': {'total': 53, 'hits': 19, 'hrs': 2}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Antonio Senzatela: {'position_1': {'vulnerability_score': 12.4, 'hr_rate': 0.012, 'hit_rate': 0.286, 'sample_size': 84}, 'position_2': {'vulnerability_score': 17.2, 'hr_rate': 0.062, 'hit_rate': 0.308, 'sample_size': 65}, 'position_3': {'vulnerability_score': 19.6, 'hr_rate': 0.019, 'hit_rate': 0.453, 'sample_size': 53}, 'position_4': {'vulnerability_score': 25.1, 'hr_rate': 0.098, 'hit_rate': 0.431, 'sample_size': 51}, 'position_5': {'vulnerability_score': 15.6, 'hr_rate': 0.037, 'hit_rate': 0.315, 'sample_size': 54}, 'position_6': {'vulnerability_score': 17.4, 'hr_rate': 0.038, 'hit_rate': 0.358, 'sample_size': 53}, 'position_7': {'vulnerability_score': 16.0, 'hr_rate': 0.044, 'hit_rate': 0.311, 'sample_size': 45}, 'position_8': {'vulnerability_score': 10.8, 'hr_rate': 0.021, 'hit_rate': 0.229, 'sample_size': 48}, 'position_9': {'vulnerability_score': 7.8, 'hr_rate': 0.024, 'hit_rate': 0.146, 'sample_size': 41}}
+INFO:playbyplay_analyzer:🎯 PITCH ANALYSIS: Analyzed 538 total pitches for Braxton Ashcraft across 17 games
+INFO:playbyplay_analyzer:🎯 POSITION ANALYSIS: Analyzed 144 total plays for Braxton Ashcraft across 17 games with batting data
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - RAW OUTCOMES for Braxton Ashcraft: {'position_1': {'total': 30, 'hits': 3, 'hrs': 0}, 'position_2': {'total': 21, 'hits': 6, 'hrs': 0}, 'position_3': {'total': 17, 'hits': 3, 'hrs': 0}, 'position_4': {'total': 18, 'hits': 5, 'hrs': 0}, 'position_5': {'total': 16, 'hits': 5, 'hrs': 1}, 'position_6': {'total': 9, 'hits': 0, 'hrs': 0}, 'position_7': {'total': 13, 'hits': 4, 'hrs': 0}, 'position_8': {'total': 11, 'hits': 3, 'hrs': 0}, 'position_9': {'total': 9, 'hits': 4, 'hrs': 0}}
+INFO:playbyplay_analyzer:🎯 POSITION DEBUG - FINAL VULNERABILITIES for Braxton Ashcraft: {'position_1': {'vulnerability_score': 4.0, 'hr_rate': 0.0, 'hit_rate': 0.1, 'sample_size': 30}, 'position_2': {'vulnerability_score': 11.4, 'hr_rate': 0.0, 'hit_rate': 0.286, 'sample_size': 21}, 'position_3': {'vulnerability_score': 7.1, 'hr_rate': 0.0, 'hit_rate': 0.176, 'sample_size': 17}, 'position_4': {'vulnerability_score': 11.1, 'hr_rate': 0.0, 'hit_rate': 0.278, 'sample_size': 18}, 'position_5': {'vulnerability_score': 17.5, 'hr_rate': 0.062, 'hit_rate': 0.312, 'sample_size': 16}, 'position_6': {'vulnerability_score': 0.0, 'hr_rate': 0.0, 'hit_rate': 0.0, 'sample_size': 9}, 'position_7': {'vulnerability_score': 12.3, 'hr_rate': 0.0, 'hit_rate': 0.308, 'sample_size': 13}, 'position_8': {'vulnerability_score': 10.9, 'hr_rate': 0.0, 'hit_rate': 0.273, 'sample_size': 11}, 'position_9': {'vulnerability_score': 17.8, 'hr_rate': 0.0, 'hit_rate': 0.444, 'sample_size': 9}}
+INFO:enhanced_main:✅ Weakspot analysis complete: 39 total games analyzed
+INFO:     127.0.0.1:57995 - "POST /api/weakspot-analysis HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50237 - "OPTIONS /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "OPTIONS /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "GET /data/status HTTP/1.1" 200 OK
+INFO:     192.168.1.88:50233 - "GET /data/status HTTP/1.1" 200 OK

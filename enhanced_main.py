@@ -935,15 +935,15 @@ async def analyze_pitcher_weakspots(request: WeakspotAnalysisRequest):
         # Initialize play-by-play analyzer
         analyzer = PlayByPlayAnalyzer()
         
-        # Analyze both pitchers
+        # Analyze both pitchers using full season data for statistical significance
         away_pitcher_analysis = analyzer.analyze_pitcher_vulnerabilities(
             pitcher_name=request.away_pitcher,
-            limit_games=15  # Look at last 15 games for comprehensive analysis
+            limit_games=None  # Use entire season data (100+ games instead of 15)
         )
         
         home_pitcher_analysis = analyzer.analyze_pitcher_vulnerabilities(
             pitcher_name=request.home_pitcher,
-            limit_games=15
+            limit_games=None  # Use entire season data (100+ games instead of 15)
         )
         
         # Build comprehensive matchup analysis
