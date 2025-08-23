@@ -58,10 +58,9 @@ def download_mlb_stats():
         }
     ]
     
-    # Define the target directories relative to the script's location
+    # Define the centralized target directory
     target_dirs = [
-        "../BaseballTracker/public/data/stats",
-        "../BaseballTracker/build/data/stats"
+        "../BaseballData/data/stats"
     ]
     
     for target_dir in target_dirs:
