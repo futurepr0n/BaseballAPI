@@ -654,6 +654,47 @@ class PlayByPlayAnalyzer:
                 games_with_data += 1
         
         if games_with_data == 0 or total_batters_faced < 5:
+            # Try to extract metrics from pattern recognition data as fallback
+            print(f"🏟️ RECENT FORM FALLBACK: {pitcher_name} - games_with_data: {games_with_data}, batters_faced: {total_batters_faced}")
+            
+            # Check if we have any timing windows data to use as fallback
+            timing_analysis = self._analyze_timing_windows(games, pitcher_name)
+            if timing_analysis and len(timing_analysis) > 0:
+                print(f"🏟️ FALLBACK: Using timing windows data for {pitcher_name}")
+                
+                # Extract data from timing windows to estimate recent form
+                total_pitches = sum(window.get("pitch_count", 0) for window in timing_analysis.values())
+                total_hits = sum(window.get("hits", 0) for window in timing_analysis.values())
+                total_hrs = sum(window.get("home_runs", 0) for window in timing_analysis.values())
+                
+                if total_pitches > 50:  # We have substantial pitch data
+                    estimated_batters = total_pitches // 4  # Rough estimate: ~4 pitches per batter
+                    hit_rate = total_hits / estimated_batters if estimated_batters > 0 else 0
+                    hr_rate = total_hrs / max(1, estimated_batters // 25) if estimated_batters > 25 else 0  # Estimate games
+                    
+                    # Determine trend based on estimated metrics
+                    if hr_rate > 1.5 or hit_rate > 0.35:
+                        trend = "concerning"
+                    elif hr_rate > 1.0 or hit_rate > 0.30:
+                        trend = "declining"
+                    elif hr_rate < 0.5 and hit_rate < 0.25:
+                        trend = "strong"
+                    else:
+                        trend = "stable"
+                    
+                    print(f"🏟️ FALLBACK CALCULATED: {pitcher_name} - trend: {trend}, hr_rate: {hr_rate:.2f}, hit_rate: {hit_rate:.3f}")
+                    
+                    return {
+                        "trend": trend,
+                        "hr_rate_per_game": round(hr_rate, 2),
+                        "hit_rate": round(hit_rate, 3),
+                        "games_analyzed": max(1, estimated_batters // 25),
+                        "sample_quality": "estimated_from_patterns",
+                        "batters_faced": estimated_batters,
+                        "fallback_used": True
+                    }
+            
+            # Ultimate fallback - return insufficient data
             return {
                 "trend": "insufficient_data", 
                 "games_analyzed": games_with_data,
